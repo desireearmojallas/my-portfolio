@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { profile } from '../config/cloudinaryAssets';
 import { 
   ArrowRight,
   Eye,
@@ -215,7 +216,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
               className="flex justify-center"
             >
               <img
-                src="/src/assets/des-formal-pic.jpg"
+                src={profile.formal}
                 alt="Desiree Armojallas - Software Developer & UX/UI Designer"
                 className="w-72 h-96 md:w-80 md:h-[420px] lg:w-96 lg:h-[500px] rounded-3xl object-cover shadow-2xl shadow-pink-500/30 [mask-image:radial-gradient(ellipse_at_center,black_95%,transparent_100%)]"
               />

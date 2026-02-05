@@ -82,7 +82,7 @@ export interface CloudinaryAssets {
 // Replace these placeholder URLs with your actual Cloudinary URLs
 export const cloudinaryAssets: CloudinaryAssets = {
   profile: {
-    formal: 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/profile/des-formal-pic.jpg',
+    formal: 'https://res.cloudinary.com/du4nug3uk/image/upload/v1770309344/des-formal-pic_yybba8.jpg',
     casual: 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/profile/des-casual.jpg',
     avatar: 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/profile/avatar.jpg',
   },
