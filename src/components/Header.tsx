@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
-export default function Header() {
+interface HeaderProps {
+  onNavigate: (sectionId: string) => void;
+}
+
+export default function Header({ onNavigate }: HeaderProps) {
   const [scrollY, setScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -32,10 +36,8 @@ export default function Header() {
   const scrollToSection = (sectionId: string) => {
     setIsMobileMenuOpen(false);
     
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Use the navigation handler from App component
+    onNavigate(sectionId);
   };
 
   return (
@@ -63,7 +65,7 @@ export default function Header() {
             <div className="hidden md:flex space-x-8">
               {[
                 { id: 'home', label: 'Home' },
-                { id: 'journey', label: 'About' },
+                { id: 'about', label: 'About' },
                 { id: 'projects', label: 'Projects' },
                 { id: 'contact', label: 'Contact' }
               ].map((item, index) => (
@@ -118,7 +120,7 @@ export default function Header() {
             <div className="flex flex-col justify-center items-center h-[80%] space-y-8 text-xl font-medium">
               {[
                 { id: 'home', label: 'Home' },
-                { id: 'journey', label: 'About' },
+                { id: 'about', label: 'About' },
                 { id: 'projects', label: 'Projects' },
                 { id: 'contact', label: 'Contact' }
               ].map((item, index) => (

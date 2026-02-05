@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX, ZoomIn } from "lucide-react";
 import type { GraphicProject } from "./GraphicProjectCard";
+import './GraphicProjectInteractions.css';
 
 interface GraphicProjectModalProps {
   project: GraphicProject | null;
@@ -287,17 +288,17 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
           <X className="w-6 h-6" />
         </button>
         
-        {/* Modal content */}
+        {/* Modal content with improved responsive layout */}
         <motion.div 
           ref={modalContentRef}
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="relative w-full max-w-6xl mx-auto bg-white rounded-xl overflow-hidden flex flex-col md:flex-row shadow-xl project-modal-content modal-layer"
+          className="relative w-full max-w-6xl mx-auto bg-white rounded-lg sm:rounded-xl overflow-hidden flex flex-col md:flex-row shadow-xl project-modal-content modal-layer"
           style={{ 
-            maxHeight: 'calc(95vh - 2rem)',
-            maxWidth: 'min(95vw, 1200px)',
+            maxHeight: 'calc(98vh - 1rem)',
+            maxWidth: 'min(98vw, 1200px)',
             margin: 'auto',
             overflowY: 'auto',
             WebkitOverflowScrolling: 'touch'
@@ -305,28 +306,28 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
           onClick={(e) => e.stopPropagation()}
           tabIndex={0} // Make it focusable
         >
-          {/* Media display area */}
-          <div className="flex-1 md:w-3/5 bg-gray-50 relative" style={{ minHeight: '300px', maxHeight: '70vh' }}>
-            {/* Navigation arrows */}
+          {/* Media display area - enhanced for responsive design */}
+          <div className="flex-1 md:w-3/5 bg-gray-50 relative" style={{ minHeight: '250px', maxHeight: '50vh', height: 'auto' }}>
+            {/* Navigation arrows - sized for different screens */}
             {project.assets.length > 1 && (
               <>
                 <button
                   onClick={navigatePrev}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 w-10 h-10 rounded-full flex items-center justify-center text-gray-800 z-10 hover:bg-white transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-gray-800 z-10 hover:bg-white transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={currentIndex === 0}
                   aria-label="Previous image"
                   title="Previous image"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button
                   onClick={navigateNext}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 w-10 h-10 rounded-full flex items-center justify-center text-gray-800 z-10 hover:bg-white transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-gray-800 z-10 hover:bg-white transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={currentIndex === project.assets.length - 1}
                   aria-label="Next image"
                   title="Next image"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </>
             )}
@@ -340,15 +341,15 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
               </div>
             )}
             
-            {/* Media container */}
-            <div className="w-full h-full flex items-center justify-center p-4">
+            {/* Media container - responsive sizing */}
+            <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
               {currentIsVideo ? (
-                <div className="relative w-full h-full flex items-center justify-center" style={{ maxHeight: '65vh' }}>
+                <div className="relative w-full h-full flex items-center justify-center" style={{ maxHeight: '50vh' }}>
                   {isVideoLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-gray-100/30 backdrop-blur-sm z-10">
-                      <div className="bg-white/90 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-[#fb6c85] border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-sm text-gray-700">Loading video...</span>
+                      <div className="bg-white/90 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg shadow-lg flex items-center gap-1.5 sm:gap-2">
+                        <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-[#fb6c85] border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-xs sm:text-sm text-gray-700">Loading video...</span>
                       </div>
                     </div>
                   )}

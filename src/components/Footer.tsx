@@ -67,38 +67,38 @@ export default function Footer() {
           </motion.div>
 
           <h3 className="text-3xl md:text-4xl font-outfit font-semibold mb-6">
-            Let's Create Something{" "}
-            <span className="text-[rgb(251,108,133)]">Amazing</span>
+            Ready to Start Your{" "}
+            <span className="text-[rgb(251,108,133)]">Next Project?</span>
           </h3>
           <p className="text-gray-300 text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
-            Whether you need design that tells a story or code that brings ideas
-            to life, I'm here to help make it happen.
+            Let's transform your ideas into stunning designs and powerful applications. 
+            Get a free consultation and see how I can help grow your business.
           </p>
 
-          {/* Contact Information */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-12">
+          {/* Contact Information - Improved responsive design */}
+          <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 max-w-full">
             <motion.a
-              href="mailto:desireearmojallas@gmail.com"
+              href="mailto:business.desireearmojallas@gmail.com"
               whileHover={{ scale: 1.05, y: -2 }}
-              className="group flex items-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
-                       transition-all duration-300 bg-white/5 px-6 py-3 rounded-full hover:bg-white/10"
+              className="group flex items-center space-x-2 sm:space-x-3 text-[rgb(251,108,133)] hover:text-white 
+                       transition-all duration-300 bg-white/5 px-4 sm:px-6 py-2 sm:py-3 rounded-full hover:bg-white/10 w-full sm:w-auto justify-center"
             >
-              <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium">desireearmojallas@gmail.com</span>
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
+              <span className="font-medium text-sm sm:text-base truncate max-w-[200px] sm:max-w-none">business.desireearmojallas@gmail.com</span>
             </motion.a>
             <motion.a
-              href="https://www.linkedin.com/in/desiree-armojallas/"
+              href="https://www.linkedin.com/in/desireearmojallas"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
-              className="group flex items-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
-                       transition-all duration-300 bg-white/5 px-6 py-3 rounded-full hover:bg-white/10"
+              className="group flex items-center space-x-2 sm:space-x-3 text-[rgb(251,108,133)] hover:text-white 
+                       transition-all duration-300 bg-white/5 px-4 sm:px-6 py-2 sm:py-3 rounded-full hover:bg-white/10 w-full sm:w-auto justify-center"
             >
-              <Linkedin className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium">LinkedIn</span>
+              <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
+              <span className="font-medium text-sm sm:text-base">LinkedIn</span>
             </motion.a>
             <motion.a
-              href="https://github.com/desireearmojallas"
+              href="https://www.github.com/desireearmojallas"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
@@ -109,7 +109,7 @@ export default function Footer() {
               <span className="font-medium">GitHub</span>
             </motion.a>
             <motion.a
-              href="https://behance.net/desireearmojallas"
+              href="https://www.behance.net/desireearmojallas"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
@@ -121,42 +121,55 @@ export default function Footer() {
             </motion.a>
           </div>
 
-          {/* Back to Top */}
+          {/* Back to Top - Responsive */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="group px-8 py-4 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                     text-white rounded-full font-medium text-lg btn-glow mb-12
+            className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                     text-white rounded-full font-medium text-base sm:text-lg btn-glow mb-8 sm:mb-12
                      focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
-                     flex items-center gap-3 mx-auto cursor-pointer"
+                     flex items-center gap-2 sm:gap-3 mx-auto cursor-pointer"
           >
-            <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
+            <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-y-1 transition-transform" />
             Back to Top
           </motion.button>
 
-          {/* Copyright */}
-          <div className="border-t border-gray-700/50 pt-8">
-            <p className="text-gray-400 text-sm flex items-center justify-center gap-2 flex-wrap">
+          {/* Copyright - Responsive */}
+          <div className="border-t border-gray-700/50 pt-6 sm:pt-8">
+            <p className="text-gray-400 text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 flex-wrap px-2">
               © 2025 Desiree Armojallas. Made with
-              <Heart className="w-4 h-4 text-[rgb(251,108,133)] fill-current animate-pulse-soft" />
+              <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-[rgb(251,108,133)] fill-current animate-pulse-soft" />
               and lots of
-              <Coffee className="w-4 h-4 text-amber-400" />
+              <Coffee className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
             </p>
           </div>
         </motion.div>
       </div>
 
-      {/* Floating contact button */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="floating-contact flex items-center justify-center cursor-pointer"
-        onClick={() => setIsContactFormOpen(true)}
-        aria-label="Open contact form"
-      >
-        <Mail className="w-6 h-6 text-white" />
-      </motion.button>
+      {/* Enhanced floating contact button with tooltip */}
+      <div className="fixed bottom-6 right-6 z-50 group">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="floating-contact flex items-center justify-center cursor-pointer relative"
+          onClick={() => setIsContactFormOpen(true)}
+          aria-label="Start your project - Get free consultation"
+        >
+          <Mail className="w-6 h-6 text-white" />
+          
+          {/* Pulse animation */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] animate-ping opacity-20"></div>
+        </motion.button>
+        
+        {/* Tooltip */}
+        <div className="absolute bottom-full right-0 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg whitespace-nowrap shadow-lg">
+            🚀 Start Your Project
+            <div className="absolute top-full right-6 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+          </div>
+        </div>
+      </div>
 
       {/* Contact Form Modal */}
       <AnimatePresence>

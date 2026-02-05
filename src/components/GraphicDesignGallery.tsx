@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
 import {
   Filter,
   Grid,
@@ -16,6 +15,8 @@ import GraphicProjectModal from "./GraphicProjectModal";
 import type { GraphicProject, GraphicProjectType } from "./GraphicProjectCard";
 import CollapsibleSection from "./CollapsibleSection";
 import "./GraphicGalleryStyles.css";
+import "./GraphicProjectInteractions.css";
+import { graphicDesign, videoProduction } from '../config/cloudinaryAssets';
 
 interface GraphicDesignGalleryProps {
   className?: string;
@@ -54,8 +55,9 @@ export default function GraphicDesignGallery({
       setIsModalClosing(false);
     }, 300); // Match this with your animation duration
   };
-  const projects = useMemo<GraphicProject[]>(
-    () => [
+
+  const projects = useMemo<GraphicProject[]>(() => {
+    return [
       // Instagram Videos - Purple Cow
       {
         id: "ig-video-1",
@@ -67,10 +69,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Purple Cow Agency",
         tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-        thumbnail: "/src/assets/ig-videos-purplecow/Delish Deli - 1Nito Tower.mp4",
-        assets: [
-          "/src/assets/ig-videos-purplecow/Delish Deli - 1Nito Tower.mp4",
-        ],
+        thumbnail: videoProduction.delishDeli.thumbnail,
+        assets: videoProduction.delishDeli.videos || [],
         date: "2023",
       },
       {
@@ -83,8 +83,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Purple Cow Agency",
         tools: ["Premiere Pro", "CapCut", "After Effects"],
-        thumbnail: "/src/assets/ig-videos-purplecow/Purple Cow Agency.mp4",
-        assets: ["/src/assets/ig-videos-purplecow/Purple Cow Agency.mp4"],
+        thumbnail: videoProduction.purpleCowAgency.thumbnail,
+        assets: videoProduction.purpleCowAgency.videos || [],
         date: "2023",
       },
       {
@@ -97,8 +97,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Purple Cow Agency",
         tools: ["Premiere Pro", "CapCut", "After Effects"],
-        thumbnail: "/src/assets/ig-videos-purplecow/Purple Cow Philippines.mp4",
-        assets: ["/src/assets/ig-videos-purplecow/Purple Cow Philippines.mp4"],
+        thumbnail: videoProduction.purpleCowPhilippines.thumbnail,
+        assets: videoProduction.purpleCowPhilippines.videos || [],
         date: "2023",
       },
       {
@@ -111,8 +111,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Purple Cow Agency",
         tools: ["Premiere Pro", "Adobe Audition", "CapCut"],
-        thumbnail: "/src/assets/ig-videos-purplecow/Synergy768.mp4",
-        assets: ["/src/assets/ig-videos-purplecow/Synergy768.mp4"],
+        thumbnail: videoProduction.synergy.thumbnail,
+        assets: videoProduction.synergy.videos || [],
         date: "2023",
       },
 
@@ -127,8 +127,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Xeleqt",
         tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-        thumbnail: "/src/assets/xeleqt-videos/agility avp final.mp4",
-        assets: ["/src/assets/xeleqt-videos/agility avp final.mp4"],
+        thumbnail: videoProduction.xeleqtAgility.thumbnail,
+        assets: videoProduction.xeleqtAgility.videos || [],
         date: "2022",
       },
       {
@@ -141,8 +141,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Xeleqt",
         tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-        thumbnail: "/src/assets/xeleqt-videos/aware avp final.mp4",
-        assets: ["/src/assets/xeleqt-videos/aware avp final.mp4"],
+        thumbnail: videoProduction.xeleqtAware.thumbnail,
+        assets: videoProduction.xeleqtAware.videos || [],
         date: "2022",
       },
       {
@@ -155,8 +155,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Xeleqt",
         tools: ["Premiere Pro", "After Effects", "CapCut"],
-        thumbnail: "/src/assets/xeleqt-videos/xeleqt mobility.mp4",
-        assets: ["/src/assets/xeleqt-videos/xeleqt mobility.mp4"],
+        thumbnail: videoProduction.xeleqtMobility.thumbnail,
+        assets: videoProduction.xeleqtMobility.videos || [],
         date: "2022",
       },
 
@@ -170,33 +170,9 @@ export default function GraphicDesignGallery({
         subcategory: "Business Cards",
         type: "card",
         tools: ["Adobe Illustrator", "Photoshop", "InDesign"],
-        thumbnail: "/src/assets/business-cards/bc-mockup-1.png",
-        assets: [
-          "/src/assets/business-cards/bc-mockup-1.png",
-          "/src/assets/business-cards/bc-mockup-2.png",
-          "/src/assets/business-cards/bc-mockup-3.png",
-          "/src/assets/business-cards/bc-mockup-4.png",
-          "/src/assets/business-cards/bc-mockup-5.png",
-        ],
+        thumbnail: graphicDesign.businessCards.thumbnail,
+        assets: graphicDesign.businessCards.images || [],
         date: "2021-2023",
-      },
-      {
-        id: "business-cards-2",
-        title: "Premium Business Card Design",
-        description:
-          "Premium business card designs with mockups showing various angles and presentations.",
-        category: "Print Design",
-        subcategory: "Business Cards",
-        type: "card",
-        tools: ["Adobe Illustrator", "Photoshop"],
-        thumbnail: "/src/assets/business-cards/Business Card.png",
-        assets: [
-          "/src/assets/business-cards/Business Card.png",
-          "/src/assets/business-cards/business card mockup 1.png",
-          "/src/assets/business-cards/business card mockup 2.png",
-          "/src/assets/business-cards/business card mockup 3.png",
-        ],
-        date: "2022",
       },
 
       // Packaging Design
@@ -209,13 +185,8 @@ export default function GraphicDesignGallery({
         type: "packaging",
         client: "AIM",
         tools: ["Adobe Illustrator", "Photoshop", "Mockup Design"],
-        thumbnail: "/src/assets/packaging-design/aim nuance 1.png",
-        assets: [
-          "/src/assets/packaging-design/aim nuance 1.png",
-          "/src/assets/packaging-design/aim nuance 2.png",
-          "/src/assets/packaging-design/aim nuance 3.png",
-          "/src/assets/packaging-design/box new perspective.png",
-        ],
+        thumbnail: graphicDesign.packagingDesign.thumbnail,
+        assets: graphicDesign.packagingDesign.images || [],
         date: "2022",
       },
 
@@ -230,8 +201,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Boligcenter.dk",
         tools: ["Premiere Pro", "After Effects", "Color Grading"],
-        thumbnail: "/src/assets/boligcenter.dk/is_your_garden_screaming_4.mp4",
-        assets: ["/src/assets/boligcenter.dk/is_your_garden_screaming_4.mp4"],
+        thumbnail: videoProduction.boligcenterGarden.thumbnail,
+        assets: videoProduction.boligcenterGarden.videos || [],
         date: "2022",
       },
 
@@ -246,8 +217,8 @@ export default function GraphicDesignGallery({
         type: "packaging",
         client: "Coffeescape",
         tools: ["Adobe Illustrator", "Photoshop", "Mockup Design"],
-        thumbnail: "/src/assets/coffeescape-packaging/mockup.jpg",
-        assets: ["/src/assets/coffeescape-packaging/mockup.jpg"],
+        thumbnail: graphicDesign.coffeescapePackaging.thumbnail,
+        assets: graphicDesign.coffeescapePackaging.images || [],
         date: "2021",
       },
 
@@ -262,49 +233,24 @@ export default function GraphicDesignGallery({
         type: "logo",
         client: "Coffeescape",
         tools: ["Adobe Illustrator", "Brand Strategy"],
-        thumbnail: "/src/assets/coffeescape-logo/logo - transparent.png",
-        assets: [
-          "/src/assets/coffeescape-logo/logo - transparent.png",
-          "/src/assets/coffeescape-logo/logo - black transparent.png",
-          "/src/assets/coffeescape-logo/logo with typeface - transparent.png",
-          "/src/assets/coffeescape-logo/logo with typeface - black transparent.png",
-          "/src/assets/coffeescape-logo/logo and typeface w ph.png",
-          "/src/assets/coffeescape-logo/logo and typeface w ph - black.png",
-          "/src/assets/coffeescape-logo/logo and typeface w ph - white.png",
-        ],
+        thumbnail: graphicDesign.coffeescapeLogo.thumbnail,
+        assets: graphicDesign.coffeescapeLogo.images || [],
         date: "2021",
       },
 
       // Coffeescape Cards
       {
         id: "coffeescape-cards-1",
-        title: "Coffeescape Business Cards",
+        title: "Coffeescape Business Cards & Brochure",
         description:
-          "Business card designs for Coffeescape, featuring their brand identity and logo.",
+          "Business card and brochure designs for Coffeescape, featuring their brand identity and logo.",
         category: "Print Design",
         subcategory: "Business Cards",
         type: "card",
         client: "Coffeescape",
-        tools: ["Adobe Illustrator", "InDesign"],
-        thumbnail: "/src/assets/coffeescape-cards/business card front-01.png",
-        assets: [
-          "/src/assets/coffeescape-cards/business card front-01.png",
-          "/src/assets/coffeescape-cards/to print - business cards-02 (back).png",
-        ],
-        date: "2021",
-      },
-      {
-        id: "coffeescape-brochure-1",
-        title: "Coffeescape Brochure",
-        description:
-          "Brochure design for Coffeescape, showcasing their products and services.",
-        category: "Print Design",
-        subcategory: "Brochure",
-        type: "image",
-        client: "Coffeescape",
         tools: ["Adobe Illustrator", "InDesign", "Photoshop"],
-        thumbnail: "/src/assets/coffeescape-cards/coffeescape - brochure.png",
-        assets: ["/src/assets/coffeescape-cards/coffeescape - brochure.png"],
+        thumbnail: graphicDesign.coffeescapeCards.thumbnail,
+        assets: graphicDesign.coffeescapeCards.images || [],
         date: "2021",
       },
       
@@ -317,14 +263,8 @@ export default function GraphicDesignGallery({
         subcategory: "Logo Design",
         type: "logo",
         tools: ["Adobe Illustrator", "Brand Strategy"],
-        thumbnail: "/src/assets/ferryeasy-logo/ferryeasy-logo-01.png",
-        assets: [
-          "/src/assets/ferryeasy-logo/ferryeasy-logo-01.png",
-          "/src/assets/ferryeasy-logo/ferryeasy-logo-02.png",
-          "/src/assets/ferryeasy-logo/ferryeasy-logo-03.png",
-          "/src/assets/ferryeasy-logo/ferryeasy-logo-04.png",
-          "/src/assets/ferryeasy-logo/ferryeasy-logo-05.png"
-        ],
+        thumbnail: graphicDesign.ferryeasyLogo.thumbnail,
+        assets: graphicDesign.ferryeasyLogo.images || [],
         date: "2022"
       },
 
@@ -338,19 +278,8 @@ export default function GraphicDesignGallery({
         type: "apparel",
         client: "Cebu Doctors' University",
         tools: ["Adobe Illustrator", "Photoshop"],
-        thumbnail: "/src/assets/cebudoc-shirt-design/new man front.png",
-        assets: [
-          "/src/assets/cebudoc-shirt-design/new man front.png",
-          "/src/assets/cebudoc-shirt-design/new man back fac.png",
-          "/src/assets/cebudoc-shirt-design/new man back soc.png",
-          "/src/assets/cebudoc-shirt-design/new man front and back fac.png",
-          "/src/assets/cebudoc-shirt-design/new man front and back soc.png",
-          "/src/assets/cebudoc-shirt-design/new woman front.png",
-          "/src/assets/cebudoc-shirt-design/new woman back fac.png",
-          "/src/assets/cebudoc-shirt-design/new woman back soc.png",
-          "/src/assets/cebudoc-shirt-design/new woman front and back fac.png",
-          "/src/assets/cebudoc-shirt-design/new woman front and back soc.png"
-        ],
+        thumbnail: graphicDesign.cebudocShirts.thumbnail,
+        assets: graphicDesign.cebudocShirts.images || [],
         date: "2022"
       },
 
@@ -364,13 +293,8 @@ export default function GraphicDesignGallery({
         type: "apparel",
         client: "USJR School of Computer Studies",
         tools: ["Adobe Illustrator", "Photoshop"],
-        thumbnail: "/src/assets/scs-practicum-poloshirt-design/design 1 man front.png",
-        assets: [
-          "/src/assets/scs-practicum-poloshirt-design/design 1 man front.png",
-          "/src/assets/scs-practicum-poloshirt-design/design 1 man back.png",
-          "/src/assets/scs-practicum-poloshirt-design/design 1 woman front.png",
-          "/src/assets/scs-practicum-poloshirt-design/design 1 woman back.png"
-        ],
+        thumbnail: graphicDesign.scsPoloshirts.thumbnail,
+        assets: graphicDesign.scsPoloshirts.images || [],
         date: "2023"
       },
 
@@ -384,9 +308,9 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Queen of Poblacion Pageant",
         tools: ["Premiere Pro", "After Effects", "Motion Graphics"],
-        thumbnail: "/src/assets/queen-of-poblacion-intro/queen poblacion into final.mp4",
-        assets: ["/src/assets/queen-of-poblacion-intro/queen poblacion into final.mp4"],
-        date: "2022"
+        thumbnail: videoProduction.queenPoblacion.thumbnail,
+        assets: videoProduction.queenPoblacion.videos || [],
+        date: "2023"
       },
 
       // Return Zero VTR
@@ -399,8 +323,8 @@ export default function GraphicDesignGallery({
         type: "video",
         client: "Return Zero Band",
         tools: ["Premiere Pro", "After Effects", "Audio Editing"],
-        thumbnail: "/src/assets/return-zero-vtr/return zero vtr final.mp4",
-        assets: ["/src/assets/return-zero-vtr/return zero vtr final.mp4"],
+        thumbnail: videoProduction.returnZero.thumbnail,
+        assets: videoProduction.returnZero.videos || [],
         date: "2023"
       },
 
@@ -414,19 +338,12 @@ export default function GraphicDesignGallery({
         type: "packaging",
         client: "TarteTart",
         tools: ["Adobe Illustrator", "Photoshop", "Mockup Design"],
-        thumbnail: "/src/assets/tartetart-box-mockups/tartetart box mockup.png",
-        assets: [
-          "/src/assets/tartetart-box-mockups/tarteart box mockup 1.png",
-          "/src/assets/tartetart-box-mockups/tarteart box mockup 2.png",
-          "/src/assets/tartetart-box-mockups/tarteart box mockup 3.png",
-          "/src/assets/tartetart-box-mockups/tarteart box mockup 4.png",
-          "/src/assets/tartetart-box-mockups/tarteart box mockup 5.png"
-        ],
+        thumbnail: graphicDesign.tartetartBoxes.thumbnail,
+        assets: graphicDesign.tartetartBoxes.images || [],
         date: "2022"
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   // Generate unique categories and types for filtering
   const categories = useMemo(() => {
@@ -486,7 +403,7 @@ export default function GraphicDesignGallery({
 
   return (
     <CollapsibleSection
-      title="Graphic Design Projects"
+      title="Graphic Projects"
       icon={<Palette className="w-6 h-6" />}
       defaultOpen={defaultOpen}
       className={className}
@@ -494,11 +411,11 @@ export default function GraphicDesignGallery({
     >
       <div className={`graphic-design-gallery py-6`}>
         {/* Filter Controls */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+        <div
           className="sticky top-20 z-10 bg-white/95 backdrop-blur-sm px-5 py-6 rounded-xl shadow-sm mb-10 border border-gray-100"
+          style={{
+            animation: "fadeInSimple 0.4s ease-out forwards"
+          }}
         >
           <div className="flex items-center gap-2 mb-5">
             <Filter className="w-5 h-5 text-[rgb(251,108,133)]" />
@@ -512,35 +429,25 @@ export default function GraphicDesignGallery({
               Categories
             </h4>
             <div className="flex flex-wrap gap-2.5 justify-start">
-              <motion.button
-                whileHover={{
-                  y: -2,
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                }}
-                whileTap={{ scale: 0.95 }}
+              <button
                 onClick={() => setActiveCategory(null)}
-                className={`filter-button px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`filter-button px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:-translate-y-1 active:scale-95 ${
                   activeCategory === null ? "active" : ""
                 }`}
               >
                 All Categories
-              </motion.button>
+              </button>
 
               {categories.map((category) => (
-                <motion.button
+                <button
                   key={category}
-                  whileHover={{
-                    y: -2,
-                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                  }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={() => setActiveCategory(category)}
-                  className={`filter-button px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap text-left ${
+                  className={`filter-button px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap text-left hover:-translate-y-1 active:scale-95 ${
                     activeCategory === category ? "active" : ""
                   }`}
                 >
                   {category}
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
@@ -551,30 +458,20 @@ export default function GraphicDesignGallery({
               Project Types
             </h4>
             <div className="flex flex-wrap gap-2.5 justify-start">
-              <motion.button
-                whileHover={{
-                  y: -2,
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                }}
-                whileTap={{ scale: 0.95 }}
+              <button
                 onClick={() => setActiveType(null)}
-                className={`filter-button px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`filter-button px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:-translate-y-1 active:scale-95 ${
                   activeType === null ? "active" : ""
                 }`}
               >
                 All Types
-              </motion.button>
+              </button>
 
               {types.map((type) => (
-                <motion.button
+                <button
                   key={type}
-                  whileHover={{
-                    y: -2,
-                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                  }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={() => setActiveType(type)}
-                  className={`filter-button flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`filter-button flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:-translate-y-1 active:scale-95 ${
                     activeType === type ? "active" : ""
                   }`}
                 >
@@ -588,11 +485,11 @@ export default function GraphicDesignGallery({
                     {getTypeIcon(type)}
                   </div>
                   <span className="capitalize">{type}</span>
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Display filter results */}
         <div className="flex items-center gap-2 mb-8 px-1.5 text-sm text-gray-600">
@@ -619,57 +516,45 @@ export default function GraphicDesignGallery({
 
         {/* Project Gallery */}
         {Object.keys(projectsByCategory).length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
+          <div
             className="text-center py-16 px-6 bg-gray-50 rounded-2xl shadow-inner"
+            style={{
+              animation: "fadeInSimple 0.5s ease-out forwards",
+            }}
           >
-            <motion.div
+            <div
               className="flex justify-center mb-4"
-              animate={{
-                rotate: [0, -5, 5, -5, 0],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatDelay: 2,
-              }}
             >
               <div className="bg-white p-4 rounded-full shadow-md">
                 <Filter className="w-8 h-8 text-gray-300" />
               </div>
-            </motion.div>
+            </div>
             <h3 className="text-xl font-medium text-gray-600 mb-2">
               No matching projects
             </h3>
             <p className="text-gray-500 mb-6 max-w-md mx-auto">
               We couldn't find any projects that match your current filters.
             </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
               onClick={() => {
                 setActiveCategory(null);
                 setActiveType(null);
               }}
-              className="px-6 py-2.5 bg-[rgb(251,108,133)] text-white rounded-full hover:bg-[rgb(231,88,113)] transition-colors duration-300 shadow-md"
+              className="px-6 py-2.5 bg-[rgb(251,108,133)] text-white rounded-full hover:bg-[rgb(231,88,113)] transition-colors duration-300 shadow-md hover:scale-105 active:scale-95"
             >
               Clear all filters
-            </motion.button>
-          </motion.div>
+            </button>
+          </div>
         ) : (
           <div className="space-y-16">
             {Object.entries(projectsByCategory).map(
               ([category, categoryProjects]) => (
-                <motion.div
+                <div
                   key={category}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.5 }}
                   className="category-section"
+                  style={{
+                    animation: "fadeInSimple 0.5s ease-out forwards",
+                  }}
                 >
                   <div className="divider bg-gradient-to-r from-[#fbd1d9]/30 to-transparent p-0.5 rounded-lg mb-6"></div>
 
@@ -712,9 +597,7 @@ export default function GraphicDesignGallery({
                           onClick={(project) => {
                             // Store current scroll position
                             window._lastScrollPosition = window.scrollY;
-                            
                             // Prevent default browser behavior and set modal state
-                            document.body.style.overflow = 'hidden'; // Lock scrolling
                             setSelectedProject(project);
                           }}
                           style={{ "--index": index } as React.CSSProperties}
@@ -722,7 +605,7 @@ export default function GraphicDesignGallery({
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )
             )}
           </div>

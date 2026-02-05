@@ -1,0 +1,47 @@
+/* Reset styles to ensure full width display and no overflow */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fix for section width */
+section {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Removing the unwanted green area */
+.gradient-hero {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Force the entire page content to stay within bounds */
+* {
+  box-sizing: border-box;
+}

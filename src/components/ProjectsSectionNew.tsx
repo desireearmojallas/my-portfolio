@@ -7,8 +7,7 @@ import {
   Mail, 
   FileText
 } from 'lucide-react';
-import { type Project } from './ProjectCardApple';
-import MasonryProjects from './MasonryProjects';
+import ProjectCardNew, { type Project } from './ProjectCardNew';
 import ProjectDetailModal from './ProjectDetailModal';
 import GraphicDesignGallery from './GraphicDesignGallery';
 import UIUXProjectsGallery from './UIUXProjectsGallery';
@@ -18,171 +17,76 @@ interface ProjectsSectionProps {
   role: 'designer' | 'developer';
 }
 
-// Enhanced projects data with client-focused details and visual variety
+// Enhanced projects data with more sophisticated descriptions
 const sampleProjects: Project[] = [
   {
     id: "1",
-    title: "How I Increased Banking App Engagement by 340%",
-    description: "Challenge: SecureBank's mobile app had low user adoption and high support costs. Strategy: Redesigned the complete user experience with focus on financial clarity and trust-building. Results: 340% increase in user engagement, 60% reduction in support tickets, and Apple App Store feature.",
-    tags: ["Full-Stack Solution", "Business Impact", "User Research", "Mobile Development", "Design System", "ROI Proven"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=FinTech+Success",
+    title: "E-commerce Mobile App",
+    description: "A sleek mobile shopping experience with intuitive navigation and seamless checkout flow.",
+    tags: ["Figma", "Prototyping", "User Research", "Mobile Design"],
+    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=UI/UX+Project",
     link: "#",
-    role: "both",
+    role: "designer",
     type: "uiux",
-    category: "Revenue Impact",
-    year: "2024",
-    client: "SecureBank Financial",
-    duration: "4 months",
-    featured: true,
-    achievements: [
-      "340% increase in user engagement within first month",
-      "60% reduction in customer support tickets",
-      "Featured in Apple App Store 'Apps We Love' section",
-      "$2.3M increase in mobile transaction volume"
-    ],
-    testimonial: {
-      quote: "Desiree delivered both exceptional design and flawless technical execution. Having one expert handle everything saved us months and prevented costly miscommunication.",
-      author: "Sarah Chen",
-      role: "Product Director, SecureBank"
-    }
+    category: "UI/UX Design",
   },
   {
     id: "2",
-    title: "85% Brand Recognition Boost for Global Marketplace",
-    description: "Challenge: MarketPlace Global needed cohesive identity across 15 countries and 50M+ users. Strategy: Created comprehensive brand system with cultural adaptability and technical implementation. Results: 85% increase in brand recognition and successful international expansion.",
-    tags: ["Brand Strategy", "Global Scale", "Technical Implementation", "Market Research", "Cross-Cultural Design", "Scalable Systems"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Global+Success",
+    title: "Brand Identity System",
+    description: "Complete brand redesign including logo, color palette, typography, and brand guidelines.",
+    tags: ["Branding", "Illustrator", "Typography", "Style Guide"],
+    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Brand+Identity",
     link: "#",
-    role: "both",
+    role: "designer",
     type: "uiux",
-    category: "Market Entry",
-    year: "2024",
-    client: "MarketPlace Global",
-    duration: "6 months",
-    achievements: [
-      "85% increase in brand recognition across target markets",
-      "Successfully launched in 15 international markets simultaneously",
-      "Won 2024 Design Excellence Award for Brand Identity",
-      "Reduced time-to-market by 40% through integrated approach"
-    ]
+    category: "UI/UX Design",
   },
   {
     id: "3",
-    title: "45% Faster Medical Diagnosis Through Smart Design",
-    description: "Challenge: Healthcare professionals struggled with complex patient data affecting diagnosis speed. Strategy: Designed and built intuitive dashboard prioritizing critical information with seamless data integration. Results: 45% reduction in diagnosis time and improved patient outcomes.",
-    tags: ["Healthcare Innovation", "Data Visualization", "Life-Critical UX", "Complex Systems", "Medical Compliance", "Performance Optimization"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Healthcare+Innovation",
+    title: "SaaS Dashboard",
+    description: "Clean, data-driven dashboard design focusing on usability and information hierarchy.",
+    tags: ["Dashboard", "Data Viz", "UX Research", "Figma"],
+    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=SaaS+Dashboard",
     link: "#",
-    role: "both",
+    role: "designer",
     type: "uiux",
-    category: "Efficiency Impact",
-    year: "2023",
-    client: "MedTech Solutions",
-    duration: "8 months",
-    achievements: [
-      "45% reduction in average diagnosis time",
-      "92% improvement in patient satisfaction scores", 
-      "HIPAA compliant implementation reducing legal risk",
-      "Saved 120+ hours weekly across medical staff"
-    ]
+    category: "UI/UX Design",
   },
   {
     id: "4",
-    title: "1M+ Daily Users: AI Task Platform That Secured $2M Funding",
-    description: "Challenge: ProductivityCorp needed a scalable platform to compete with enterprise task management giants. Strategy: Built full-stack AI-powered solution with intelligent automation and real-time collaboration. Results: Platform processes 1M+ daily tasks, secured Series A funding, and increased team productivity by 40%.",
-    tags: ["AI/ML Integration", "Scalable Architecture", "Full-Stack Development", "Real-time Systems", "Investment Grade", "Enterprise Scale"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=AI+Success",
-    link: "#",
-    github: "#",
-    role: "both",
-    type: "development", 
-    category: "Revenue Impact",
-    year: "2024",
-    client: "ProductivityCorp",
-    duration: "5 months",
-    achievements: [
-      "Processes 1M+ tasks daily with 99.9% uptime",
-      "40% improvement in team productivity metrics",
-      "Secured $2M Series A funding based on platform success",
-      "Reduced infrastructure costs by 60% through optimization"
-    ]
-  },
-  {
-    id: "5",
-    title: "98+ PageSpeed Score: Enterprise Platform That Converts",
-    description: "Challenge: Creative Agency Pro needed premium portfolio platform to attract enterprise clients. Strategy: Designed and built high-performance website with custom CMS and advanced animations that load instantly. Results: 98+ PageSpeed score, 300% increase in enterprise inquiries, and industry recognition.",
-    tags: ["Performance Engineering", "Custom Development", "Enterprise Design", "Advanced Animations", "SEO Optimization", "Conversion Focus"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Performance+Success",
-    link: "#",
-    github: "#",
-    role: "both",
-    type: "development",
-    category: "Market Entry",
-    year: "2024",
-    client: "Creative Agency Pro",
-    duration: "3 months",
-    achievements: [
-      "98+ Google PageSpeed score achieved",
-      "300% increase in enterprise client inquiries",
-      "Featured in Web Design Inspiration galleries",
-      "$500K additional revenue attributed to new platform"
-    ]
-  },
-  {
-    id: "6",
-    title: "Fortune 500 Collaboration Platform: 10K+ Concurrent Users",
-    description: "Challenge: Enterprise Solutions Inc needed to compete with Microsoft Teams and Zoom for Fortune 500 clients. Strategy: Built enterprise-grade collaboration suite with AI-powered insights and seamless video integration. Results: Platform supports 10K+ concurrent users and secured major Fortune 500 contracts.",
-    tags: ["Enterprise Architecture", "Real-time Systems", "AI Integration", "WebRTC", "Scalable Infrastructure", "Fortune 500"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Enterprise+Success",
-    link: "#",
-    github: "#",
-    role: "both",
-    type: "development",
-    category: "Revenue Impact",
-    year: "2023",
-    client: "Enterprise Solutions Inc",
-    duration: "7 months",
-    achievements: [
-      "Supports 10,000+ concurrent users with 99.9% uptime",
-      "85% reduction in meeting preparation time",
-      "Adopted by 15+ Fortune 500 companies",
-      "$12M annual recurring revenue generated"
-    ]
-  },
-  {
-    id: "7",
-    title: "50% Increase in Sustainable Fashion Purchases",
-    description: "Challenge: EcoWear needed to make sustainable fashion choices more appealing and accessible to younger consumers. Strategy: Designed mobile app with AR try-on features and gamified carbon footprint tracking. Results: 50% increase in sustainable purchasing decisions and viral social media adoption.",
-    tags: ["Mobile Innovation", "AR/VR Technology", "Sustainability Impact", "Social Good", "Gamification", "Gen Z Focus"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Sustainability+Impact",
-    link: "#",
-    role: "both",
-    type: "uiux",
-    category: "Social Impact",
-    year: "2024",
-    client: "EcoWear",
-    achievements: [
-      "50% increase in sustainable purchasing decisions",
-      "Featured in UN Sustainability Report"
-    ]
-  },
-  {
-    id: "8",
-    title: "Cryptocurrency Trading Platform",
-    description: "Secure, high-performance trading platform with advanced charting and real-time market data.",
-    tags: ["React", "WebSockets", "Security", "Financial"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Crypto+Platform",
+    title: "React Task Manager",
+    description: "Full-stack task management application with real-time updates and team collaboration.",
+    tags: ["React", "TypeScript", "Node.js", "MongoDB"],
+    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=React+Task+Manager",
     link: "#",
     github: "#",
     role: "developer",
     type: "development",
     category: "Web Development",
-    year: "2023",
-    client: "CryptoTrade Pro",
-    achievements: [
-      "$500M+ in trading volume processed",
-      "Bank-level security implementation"
-    ]
+  },
+  {
+    id: "5",
+    title: "Portfolio Website",
+    description: "Responsive portfolio website built with modern web technologies and smooth animations.",
+    tags: ["React", "Tailwind", "Framer Motion", "Vite"],
+    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Portfolio+Website",
+    link: "#",
+    github: "#",
+    role: "developer",
+    type: "development",
+    category: "Web Development",
+  },
+  {
+    id: "6",
+    title: "AI Chat Application",
+    description: "Real-time chat application with AI integration and beautiful user interface.",
+    tags: ["Next.js", "Socket.io", "AI/ML", "PostgreSQL"],
+    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=AI+Chat+App",
+    link: "#",
+    github: "#",
+    role: "developer",
+    type: "development",
+    category: "Web Development",
   }
 ];
 
@@ -191,22 +95,6 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'featured' | 'all'>('featured');
-
-  // Role-based content
-  const roleContent = {
-    designer: {
-      title: "Crafted with creative intention",
-      subtitle: "A curated collection of design projects that solve real problems through thoughtful visual solutions and user-centered thinking.",
-      badge: "Design Portfolio"
-    },
-    developer: {
-      title: "Built with technical precision", 
-      subtitle: "A showcase of development projects built with modern technologies, clean architecture, and attention to performance and usability.",
-      badge: "Development Portfolio"
-    }
-  };
-
-  const currentContent = roleContent[role];
 
   // Filter projects by role and category
   const filteredProjects = sampleProjects.filter(project => {
@@ -246,7 +134,7 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
   };
 
   return (
-    <section id="projects" className="section-padding bg-gradient-to-br from-white via-pink-50/30 to-purple-50/20 relative overflow-hidden">
+    <section className="section-padding bg-gradient-to-br from-white via-pink-50/30 to-purple-50/20 relative overflow-hidden">
       {/* Subtle background elements matching your theme */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-32 right-32 w-80 h-80 bg-gradient-to-r from-pink-100/30 to-rose-100/30 rounded-full blur-3xl animate-pulse-soft"></div>
@@ -281,20 +169,21 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
             transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
             viewport={{ once: true }}
           >
-            {currentContent.title.split(' ').map((word, index) => {
-              const isHighlighted = (role === 'designer' && word === 'creative') || 
-                                   (role === 'designer' && word === 'intention') ||
-                                   (role === 'developer' && word === 'technical') ||
-                                   (role === 'developer' && word === 'precision');
-              
-              return isHighlighted ? (
-                <span key={index} className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] bg-clip-text text-transparent font-medium">
-                  {word}{' '}
+            {role === 'designer' ? (
+              <>
+                Crafted with{' '}
+                <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] bg-clip-text text-transparent font-medium">
+                  creative intention
                 </span>
-              ) : (
-                <span key={index}>{word}{' '}</span>
-              );
-            })}
+              </>
+            ) : (
+              <>
+                Built with{' '}
+                <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] bg-clip-text text-transparent font-medium">
+                  technical precision
+                </span>
+              </>
+            )}
           </motion.h1>
           
           <motion.div
@@ -305,7 +194,10 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
             className="max-w-4xl mx-auto space-y-6"
           >
             <p className="text-xl md:text-2xl text-gray-600 leading-relaxed">
-              {currentContent.subtitle}
+              {role === 'designer' 
+                ? "A curated collection of design projects that solve real problems through thoughtful visual solutions and user-centered thinking."
+                : "A showcase of development projects built with modern technologies, clean architecture, and attention to performance and usability."
+              }
             </p>
           </motion.div>
 
@@ -405,30 +297,7 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
             viewport={{ once: true }}
             className="space-y-20"
           >
-            {/* Featured designer projects showcase */}
-            <div className="mb-16">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="text-center mb-12"
-              >
-                <h3 className="text-3xl md:text-4xl font-outfit font-light text-gray-800 mb-4">
-                  Featured Design Projects
-                </h3>
-                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                  A selection of recent work showcasing creative problem-solving and strategic design thinking.
-                </p>
-              </motion.div>
-              
-              <MasonryProjects 
-                projects={sampleProjects.filter(p => p.role === 'designer')}
-                onProjectClick={handleProjectClick}
-              />
-            </div>
-            
-            <GraphicDesignGallery className="mb-16" defaultOpen={false} />
+            <GraphicDesignGallery className="mb-16" defaultOpen={true} />
             <UIUXProjectsGallery 
               projects={sampleProjects} 
               defaultOpen={false} 
@@ -445,10 +314,24 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
             viewport={{ once: true }}
             className="mb-20"
           >
-            <MasonryProjects 
-              projects={filteredProjects}
-              onProjectClick={handleProjectClick}
-            />
+            {/* Featured development projects grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredProjects.slice(0, 6).map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <ProjectCardNew 
+                    project={project} 
+                    index={index}
+                    onClick={handleProjectClick}
+                  />
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         )}
 
@@ -470,10 +353,23 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
                 />
               </div>
             ) : (
-              <MasonryProjects 
-                projects={filteredProjects}
-                onProjectClick={handleProjectClick}
-              />
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProjects.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <ProjectCardNew 
+                      project={project} 
+                      index={index}
+                      onClick={handleProjectClick}
+                    />
+                  </motion.div>
+                ))}
+              </div>
             )}
           </motion.div>
         )}
@@ -543,12 +439,12 @@ export default function ProjectsSection({ role }: ProjectsSectionProps) {
                   }
                 }}
                 className="group inline-flex items-center gap-3 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                         text-white px-10 py-5 rounded-full font-outfit font-semibold text-xl 
+                         text-white px-8 py-4 rounded-full font-outfit font-medium text-lg 
                          hover:shadow-2xl hover:shadow-pink-500/25 transition-all duration-300 
                          focus:outline-none focus:ring-4 focus:ring-pink-500/20 btn-glow"
               >
-                <Mail className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                💬 Let's Discuss Your Project
+                <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                Get In Touch
               </motion.button>
 
               {loadingState?.loading ? (

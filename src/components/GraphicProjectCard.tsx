@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
 import { Play, Image as ImageIcon, Package, CreditCard, Coffee, Shirt } from "lucide-react";
+import './GraphicProjectInteractions.css';
 
 // Define the types of graphic projects we'll support
 export type GraphicProjectType = 'video' | 'image' | 'logo' | 'card' | 'packaging' | 'apparel';
@@ -76,8 +76,7 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
     return videoUrl;
   };
 
-  // Calculate a delay based on the index for staggered animations
-  const animationDelay = 0.1 + (index % 8) * 0.05;
+  // Index is used for staggered animations in the inline style
   const [, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -102,49 +101,49 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: animationDelay }}
-      viewport={{ once: true }}
+    <div
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
         onClick(project);
       }}
-      className={`project-card group cursor-pointer relative overflow-hidden rounded-lg bg-white shadow hover:shadow-lg transition-all duration-300 ${project.type === 'video' ? 'mb-6' : ''}`}
-      style={style}
+      className={`project-card group cursor-pointer relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 ${project.type === 'video' ? 'mb-4' : ''}`}
+      style={{
+        ...style,
+        opacity: 0, 
+        animation: `fadeInSimple 0.5s ease-out ${0.1 + (index % 6) * 0.05}s forwards`
+      }}
     >
-      {/* Project thumbnail with hover effect */}
-      <div className="relative aspect-[5/4] overflow-hidden bg-gray-100">
-        {/* Type indicator badge */}
-        <div className="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-sm px-2.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-          <div className="text-gray-800">
+      {/* Project thumbnail with simplified hover effect */}
+      <div className="relative aspect-[5/4] overflow-hidden bg-gray-50">
+        {/* Type indicator badge - made responsive */}
+        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 z-10 bg-white/95 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full flex items-center gap-1 sm:gap-2 shadow-sm">
+          <div className="text-[#fb6c85]">
             {renderTypeIcon()}
           </div>
-          <span className="text-xs font-medium text-gray-700 capitalize">{project.type}</span>
+          <span className="text-[10px] sm:text-xs font-medium text-gray-800 capitalize">{project.type}</span>
         </div>
 
-        {/* Category pill - small and subtle */}
-        <div className="absolute bottom-3 right-3 z-10 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
-          <span className="text-white text-xs font-medium">{project.subcategory || project.category}</span>
+        {/* Category pill - made responsive */}
+        <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 z-10 bg-black/70 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-md">
+          <span className="text-white text-[10px] sm:text-xs font-medium tracking-wide">{project.subcategory || project.category}</span>
         </div>
 
-        {/* Play button for videos - only show for non-video thumbnails */}
+        {/* Play button for videos - simplified */}
         {project.type === 'video' && !isVideo(project.thumbnail) && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+            <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-md">
               <Play className="w-6 h-6 text-[#fb6c85] ml-0.5" />
             </div>
           </div>
         )}
 
-        {/* Main thumbnail - improved rendering */}
+        {/* Main thumbnail with improved rendering and hover effects */}
         {isVideo(project.thumbnail) ? (
           <div className="w-full h-full">
             <video
               src={project.thumbnail}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-105"
               muted
               playsInline
               preload="metadata"
@@ -154,18 +153,21 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
               }}
               onError={() => setImageError(true)}
             />
-            {/* Video play overlay */}
-            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-              <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+            {/* Video play overlay - improved */}
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+              <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
                 <Play className="w-6 h-6 text-[#fb6c85] ml-0.5" />
               </div>
             </div>
+            
+            {/* Enhanced video overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60"></div>
           </div>
         ) : (
           <img
             src={project.thumbnail}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
             loading="lazy"
             onLoad={() => setImageLoaded(true)}
             onError={() => {
@@ -179,63 +181,84 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
           />
         )}
 
-        {/* Fallback for failed images */}
+        {/* Fallback for failed images - enhanced */}
         {imageError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
-            <div className="text-center">
-              <ImageIcon className="w-10 h-10 mx-auto mb-2" />
-              <p className="text-sm">{project.title}</p>
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 text-gray-400">
+            <div className="text-center px-4">
+              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-60" />
+              <p className="text-sm font-medium">{project.title}</p>
+              <p className="text-xs mt-2">Image not available</p>
             </div>
           </div>
         )}
 
-        {/* Subtle hover overlay with gradient - only for images */}
-        {!isVideo(project.thumbnail) && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
+        {/* Enhanced hover overlay with gradient - only for images */}
+        {!isVideo(project.thumbnail) && !imageError && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
         )}
+        
+        {/* Hover info overlay - responsive */}
+        <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+          <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+            <h3 className="text-base sm:text-lg font-bold text-white mb-0.5 sm:mb-1 line-clamp-1 sm:line-clamp-2 text-shadow-sm">
+              {project.title}
+            </h3>
+            {project.description && (
+              <p className="hidden xs:block text-xs sm:text-sm text-white/90 line-clamp-1 sm:line-clamp-2 mb-2 sm:mb-3">
+                {project.description}
+              </p>
+            )}
+            <button 
+              className="bg-white text-gray-800 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium flex items-center space-x-1 hover:bg-[#fb6c85] hover:text-white transition-colors duration-300 shadow-lg"
+            >
+              View Details
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Project info - enhanced layout */}
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-800 group-hover:text-[rgb(251,108,133)] transition-colors duration-300 text-base mb-1.5 line-clamp-1">
+      {/* Project info - responsive layout */}
+      <div className="p-3 sm:p-4 md:p-5">
+        <h3 className="font-semibold text-gray-800 group-hover:text-[#fb6c85] transition-colors duration-300 text-sm sm:text-base mb-1 sm:mb-1.5 line-clamp-1">
           {project.title}
         </h3>
         
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between">
           {project.client ? (
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600 line-clamp-1">
               {project.client}
             </p>
           ) : (
-            <span className="text-sm text-gray-600">&nbsp;</span>
+            <span className="text-xs sm:text-sm text-gray-600">&nbsp;</span>
           )}
           
           {project.date && (
-            <p className="text-xs text-gray-500 font-medium">
+            <p className="text-[10px] xs:text-xs text-gray-500 font-medium mt-1 xs:mt-0">
               {project.date}
             </p>
           )}
         </div>
 
-        {/* Tools tags - smaller and more elegant */}
+        {/* Tools tags - responsive design */}
         {project.tools && project.tools.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
-            {project.tools.slice(0, 1).map((tool) => (
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-2 sm:mt-3">
+            {/* On small screens show only 1 tool, on larger show 2 */}
+            {project.tools.slice(0, window.innerWidth < 400 ? 1 : 2).map((tool) => (
               <span 
                 key={tool} 
-                className="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded"
+                className="bg-gray-100 text-gray-700 text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 rounded-md"
               >
                 {tool}
               </span>
             ))}
-            {project.tools.length > 1 && (
-              <span className="bg-gray-100 text-gray-500 text-[10px] px-1.5 py-0.5 rounded">
-                +{project.tools.length - 1}
+            {project.tools.length > (window.innerWidth < 400 ? 1 : 2) && (
+              <span className="bg-[#fb6c85]/10 text-[#fb6c85] text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 rounded-md font-medium">
+                +{project.tools.length - (window.innerWidth < 400 ? 1 : 2)}
               </span>
             )}
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

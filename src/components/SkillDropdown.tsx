@@ -1,9 +1,10 @@
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, type LucideIcon } from 'lucide-react';
 
 interface Tool {
   name: string;
-  icon?: string; // Optional icon URL or component name
+  icon?: React.ComponentType<{ className?: string }>; // Icon component for the tool
 }
 
 interface SkillDropdownProps {
@@ -65,7 +66,9 @@ export default function SkillDropdown({
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
               <div className="flex flex-wrap gap-2">
                 {tools.map((tool, index) => {
-                  const toolName = typeof tool === 'string' ? tool : tool.name;
+                  const isToolObject = typeof tool !== 'string';
+                  const toolName = isToolObject ? (tool as Tool).name : tool;
+                  const ToolIcon = isToolObject ? (tool as Tool).icon : undefined;
                   
                   return (
                     <motion.div
@@ -75,9 +78,13 @@ export default function SkillDropdown({
                       transition={{ duration: 0.2, delay: index * 0.05 }}
                       className="px-4 py-2 bg-gray-50 hover:bg-[#FBD1D9]/10 
                                text-gray-700 rounded-full text-sm font-medium
-                               border border-gray-200 transition-colors duration-200
-                               hover:border-[#FBD1D9]/50 hover:text-[rgb(251,108,133)]"
+                               border border-gray-200 transition-all duration-200
+                               hover:border-[#FBD1D9]/50 hover:text-[rgb(251,108,133)]
+                               flex items-center gap-2 hover:shadow-sm"
                     >
+                      {ToolIcon && (
+                        <ToolIcon className="w-4 h-4 text-[rgb(251,108,133)]" />
+                      )}
                       {toolName}
                     </motion.div>
                   );

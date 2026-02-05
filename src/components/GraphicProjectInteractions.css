@@ -1,0 +1,154 @@
+/* CSS to ensure proper cursor behavior for all interactive elements */
+
+/* Basic cursor pointers for all interactive elements */
+.filter-button,
+.project-card,
+.navigation-arrow,
+.close-button,
+.zoom-control,
+.play-button,
+.carousel-indicator {
+  cursor: pointer;
+}
+
+/* Specific cursor types for media interactions */
+.zoomable-image {
+  cursor: zoom-in;
+}
+
+.zoomed-image {
+  cursor: zoom-out;
+}
+
+.video-player-area {
+  cursor: pointer;
+}
+
+/* Elegant hover transitions */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Subtle hover glow effect */
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(251, 108, 133, 0.4);
+}
+
+/* Enhanced card animation */
+.project-card {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Image carousel thumbnails */
+.thumbnail-carousel {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.thumbnail:hover {
+  opacity: 0.8;
+}
+
+.thumbnail.active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(251, 108, 133, 0.8);
+}
+
+/* Image zoom transition */
+.zoom-transition {
+  transition: transform 0.3s ease-out, object-position 0.3s ease-out;
+}
+
+/* Custom image shadow on hover */
+.hover-shadow-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow-glow:hover {
+  box-shadow: 0 8px 30px rgba(251, 108, 133, 0.2), 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Add text-shadow to text over images for better readability */
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Video control buttons */
+.video-control {
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.video-control:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Category section transitions */
+.category-section {
+  transition: opacity 0.4s ease;
+}
+
+/* Custom animation for category headings */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-heading {
+  animation: fadeSlideIn 0.5s ease forwards;
+}
+
+/* Animated highlight for new projects */
+.new-project-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(45deg, #fb6c85, #ff9b7d);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+  z-index: 10;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 108, 133, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(251, 108, 133, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 108, 133, 0);
+  }
+}

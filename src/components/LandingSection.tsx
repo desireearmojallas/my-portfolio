@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { Palette, Code, Sparkles, ChevronDown } from 'lucide-react';
+import { Palette, Code, Sparkles, ChevronDown, MousePointer2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface LandingSectionProps {
@@ -13,6 +13,36 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
   // State for font animation
   const [currentFontIndex, setCurrentFontIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
+  // State for guided tutorial
+  const [showRoleTutorial, setShowRoleTutorial] = useState(true);
+  // State for cursor position
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  
+  // Debug component renders and role selection
+  console.log('LandingSection rendered, current role:', selectedRole);
+  
+  // Track mouse movement for cursor following
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+  
+  // Ensure scrolling is always available
+  useEffect(() => {
+    // Reset any overflow settings that might be interfering with scrolling
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    
+    return () => {
+      // Clean up on unmount
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   // Array of font families to cycle through
   const fonts = [
@@ -23,182 +53,233 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
     'font-cursive' // Dancing Script  
   ];
 
-  // Font animation effect
+  // Enhanced font animation effect with better cleanup and timing
   useEffect(() => {
-    let fontInterval: ReturnType<typeof setTimeout>;
-    let pauseTimeout: ReturnType<typeof setTimeout>;
-
-    if (isAnimating) {
-      fontInterval = setInterval(() => {
-        setCurrentFontIndex(prevIndex => (prevIndex + 1) % fonts.length);
-      }, 300); // Change font every 300ms during animation
-
-      // Pause animation after cycling through all fonts
-      pauseTimeout = setTimeout(() => {
-        setIsAnimating(false);
-        setCurrentFontIndex(0); // Return to default font
-        
-        // Resume animation after 5 seconds
-        setTimeout(() => {
-          setIsAnimating(true);
-        }, 5000);
-      }, fonts.length * 300);
-    }
-
+    if (!isAnimating) return;
+    
+    // Use consistent timing for smooth transitions
+    const animationDelay = 400; // slightly slower for better visual effect
+    
+    // Font cycling animation
+    const fontInterval = setInterval(() => {
+      setCurrentFontIndex(prevIndex => (prevIndex + 1) % fonts.length);
+    }, animationDelay);
+    
+    // Pause animation after cycling through all fonts once
+    const pauseTimeout = setTimeout(() => {
+      setIsAnimating(false);
+      clearInterval(fontInterval);
+      
+      // Reset to default font with a small delay for visual smoothness
+      const resetTimeout = setTimeout(() => {
+        setCurrentFontIndex(0);
+      }, animationDelay / 2);
+      
+      // Resume animation after 5 seconds of pause
+      const resumeTimeout = setTimeout(() => {
+        setIsAnimating(true);
+      }, 5000);
+      
+      return () => {
+        clearTimeout(resetTimeout);
+        clearTimeout(resumeTimeout);
+      };
+    }, fonts.length * animationDelay);
+    
     return () => {
       clearInterval(fontInterval);
       clearTimeout(pauseTimeout);
     };
   }, [isAnimating, fonts.length]);
 
+  // Fixed role selection handler with better timing and positioning
   const handleRoleSelect = (role: 'designer' | 'developer') => {
+    console.log(`Role selected: ${role}, Current role: ${selectedRole}`);
+    
+    // Dismiss tutorial on button click
+    setShowRoleTutorial(false);
+    
+    // Always update the state and trigger the callback to ensure consistent behavior
     setSelectedRole(role);
+    
+    // Call the parent callback with the selected role
     onRoleSelect(role);
     
-    // Smooth scroll to next section
-    const nextSection = document.getElementById('journey');
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Give the DOM time to update before scrolling
+    setTimeout(() => {
+      // First, ensure the sections are rendered by forcing a reflow
+      window.dispatchEvent(new Event('resize'));
+      
+      // Then wait a bit more for the sections to fully render
+      setTimeout(() => {
+        const nextSection = document.getElementById('journey');
+        if (nextSection) {
+          console.log('Scrolling to journey section');
+          // Use window.scrollTo instead of scrollIntoView for better browser compatibility
+          const yOffset = -80; // Add some offset for header/navigation
+          const y = nextSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
+          
+          // Ensure scrollbars remain visible by forcing overflow to be visible
+          document.documentElement.style.overflow = 'auto';
+          document.documentElement.style.overflowX = 'hidden';
+          document.body.style.overflow = 'auto';
+          document.body.style.overflowX = 'hidden';
+        } else {
+          console.log('Journey section not found');
+        }
+      }, 150); // Add extra delay for the sections to render
+    }, 100);
   };
 
+  // Improved scroll handler that preserves scrollbars
   const scrollToJourney = () => {
     const journeySection = document.getElementById('journey');
     if (journeySection) {
-      journeySection.scrollIntoView({ behavior: 'smooth' });
+      // Use window.scrollTo instead of scrollIntoView
+      const yOffset = -80; // Add some offset for header/navigation
+      const y = journeySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+      
+      // Ensure scrollbars remain visible
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     }
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center gradient-hero px-6 relative overflow-hidden">
-      {/* Floating decorative elements remain unchanged */}
+    <section className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center gradient-hero px-0 relative w-full landing-section">
+      {/* Simplified decorative elements - just one subtle element */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{ 
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-r from-pink-200 to-pink-300 opacity-30 animate-float"
-        />
-        <motion.div
-          animate={{ 
-            x: [0, -30, 0],
-            y: [0, 50, 0],
-            rotate: [360, 180, 0]
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-32 right-20 w-16 h-16 rounded-full bg-gradient-to-r from-pink-300 to-pink-400 opacity-20 animate-float"
-        />
-        <motion.div
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.1, 0.3, 0.1]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/2 left-10 w-32 h-32 rounded-full bg-gradient-to-r from-pink-200 to-white opacity-20"
-        />
+        <div className="absolute top-20 left-20 w-20 h-20 rounded-full bg-gradient-to-r from-pink-200 to-pink-300 opacity-30" />
       </div>
 
-      <div className="text-center max-w-4xl mx-auto relative z-10">
-        {/* Sparkle icon */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-6"
-        >
-          <Sparkles className="w-12 h-12 mx-auto text-[rgb(251,108,133)] animate-pulse-soft" />
-        </motion.div>
+      <div className="text-center w-full max-w-4xl mx-auto relative z-10 px-4 sm:px-6">
+        {/* Sparkle icon with simplified animation */}
+        <div className="mb-4 sm:mb-6 animate-fadeIn" style={{animationDelay: '0ms', animationFillMode: 'forwards'}}>
+          <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-[rgb(251,108,133)]" />
+        </div>
 
-        {/* Main heading with typewriter effect and font animation */}
-        <motion.h1 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-6xl md:text-8xl font-outfit font-bold text-gray-800 mb-6 animate-fade-in"
-        >
-          Hi, I'm <motion.span 
-            className={`bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] bg-clip-text text-transparent inline-flex ${isAnimating ? 'animate-pulse-soft' : ''} ${fonts[currentFontIndex]}`}
-            animate={{ 
-              scale: isAnimating ? [1, 1.05, 1] : 1
-            }}
-            transition={{ 
-              duration: 0.3, 
-              repeat: isAnimating ? 3 : 0
+        {/* Main heading with enhanced font animation - more responsive */}
+        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-outfit font-bold text-gray-800 mb-4 sm:mb-6 animate-fadeIn" style={{animationDelay: '200ms', animationFillMode: 'forwards'}}>
+          Hi, I'm <span 
+            className={`bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] bg-clip-text text-transparent inline-flex transition-all duration-300 ${isAnimating ? 'animate-pulse-soft' : ''} ${fonts[currentFontIndex]}`}
+            style={{
+              transform: isAnimating ? 'scale(1.05)' : 'scale(1)',
+              transition: 'transform 0.3s ease-in-out'
             }}
           >
             Des<span className="typewriter"></span>
-          </motion.span>
-        </motion.h1>
+          </span>
+        </h1>
         
-        {/* Subtitle with enhanced styling */}
-        <motion.p 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="text-xl md:text-2xl text-gray-600 mb-12 font-light animate-slide-up"
-        >
+        {/* Subtitle with improved responsive styling */}
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 sm:mb-12 font-light animate-fadeIn" style={{animationDelay: '400ms', animationFillMode: 'forwards'}}>
           Designer. Developer. <span className="font-medium text-[rgb(251,108,133)]">Problem Solver</span>.
-        </motion.p>
+        </p>
         
-        {/* Role selection buttons with dynamic styling based on selection */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row gap-6 justify-center"
-        >
-                  <motion.button
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => handleRoleSelect('designer')}
-          className={`group px-8 py-4 rounded-full font-medium text-lg cursor-pointer
-                   focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
-                   flex items-center gap-3 justify-center transition-all duration-300
-                   ${selectedRole === 'designer' 
-                     ? 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white btn-glow' 
-                     : 'btn-outline-glow text-gray-800'}`}
-        >
-          <Palette className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          Designer
-        </motion.button>
+        {/* Guided Tutorial - Cursor Following with Tooltip */}
+        <AnimatePresence>
+          {showRoleTutorial && (
+            <motion.div
+              style={{
+                position: 'fixed',
+                left: cursorPos.x,
+                top: cursorPos.y,
+                pointerEvents: 'none',
+                zIndex: 50
+              }}
+              transition={{ type: 'spring', damping: 3, mass: 0.2 }}
+              className="flex flex-col items-center gap-2"
+            >
+              {/* Animated cursor icon */}
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <MousePointer2 className="w-6 h-6 text-[rgb(251,108,133)] drop-shadow-lg" />
+              </motion.div>
+              
+              {/* Tooltip with text */}
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap shadow-xl"
+              >
+                Choose a role
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         
-        <motion.button
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => handleRoleSelect('developer')}
-          className={`group px-8 py-4 rounded-full font-medium text-lg cursor-pointer
-                   focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
-                   flex items-center gap-3 justify-center transition-all duration-300
-                   ${selectedRole === 'developer' 
-                     ? 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white btn-glow' 
-                     : 'btn-outline-glow text-gray-800'}`}
-        >
-          <Code className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          Developer
-        </motion.button>
-        </motion.div>
+        {/* Enhanced role selection buttons with better responsive design */}
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center animate-fadeIn py-8 px-4 button-shadow-container" style={{animationDelay: '600ms', animationFillMode: 'forwards'}}>
+          <button
+            type="button" 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation(); // Prevent any event bubbling
+              handleRoleSelect('designer');
+            }}
+            className={`group px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium text-base sm:text-lg cursor-pointer
+                     focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
+                     flex items-center gap-2 sm:gap-3 justify-center transition-all duration-300 w-full sm:w-auto
+                     hover:transform hover:scale-105 hover:-translate-y-1
+                     ${selectedRole === 'designer' 
+                       ? 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white shadow-xl shadow-pink-300/60 hover:shadow-2xl hover:shadow-pink-300/70' 
+                       : 'text-gray-800 border border-gray-300 hover:border-pink-300 hover:bg-pink-50/50 hover:shadow-lg hover:shadow-pink-200/40'}`}
+          >
+            <Palette className={`w-4 h-4 sm:w-5 sm:h-5 ${selectedRole === 'designer' ? 'animate-pulse-soft' : ''}`} />
+            Designer
+          </button>
+          
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation(); // Prevent any event bubbling
+              handleRoleSelect('developer');
+            }}
+            className={`group px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium text-base sm:text-lg cursor-pointer
+                     focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
+                     flex items-center gap-2 sm:gap-3 justify-center transition-all duration-300 w-full sm:w-auto
+                     hover:transform hover:scale-105 hover:-translate-y-1
+                     ${selectedRole === 'developer' 
+                       ? 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white shadow-xl shadow-pink-300/60 hover:shadow-2xl hover:shadow-pink-300/70' 
+                       : 'text-gray-800 border border-gray-300 hover:border-pink-300 hover:bg-pink-50/50 hover:shadow-lg hover:shadow-pink-200/40'}`}
+          >
+            <Code className={`w-4 h-4 sm:w-5 sm:h-5 ${selectedRole === 'developer' ? 'animate-pulse-soft' : ''}`} />
+            Developer
+          </button>
+        </div>
       </div>
       
-      {/* Enhanced scroll indicator */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+      {/* Responsive scroll indicator */}
+      <div 
+        className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1 sm:gap-2 cursor-pointer animate-fadeIn hover:translate-y-1 transition-transform duration-300"
+        style={{animationDelay: '800ms', animationFillMode: 'forwards'}}
         onClick={scrollToJourney}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            scrollToJourney();
+          }
+        }}
       >
-        <p className="text-sm text-gray-500 font-light">Scroll to explore</p>
-        <motion.div 
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-8 h-12 border-2 border-gray-300 rounded-full flex justify-center items-start pt-2"
-        >
-          <ChevronDown className="w-4 h-4 text-gray-400 animate-bounce-gentle" />
-        </motion.div>
-      </motion.div>
+        <p className="text-xs sm:text-sm text-gray-500 font-light">Scroll to explore</p>
+        <div className="w-6 h-10 sm:w-8 sm:h-12 border-2 border-gray-300 rounded-full flex justify-center items-start pt-2 transition-colors hover:border-pink-200">
+          <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 animate-bounce" />
+        </div>
+      </div>
     </section>
   );
 }

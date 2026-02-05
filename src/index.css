@@ -2,6 +2,123 @@
 @import "tailwindcss";
 @import "tailwindcss/theme" theme(reference);
 
+/* Responsive Breakpoint Variables */
+:root {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* Responsive Helper Classes */
+.responsive-container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Extra small screens (phones smaller than sm breakpoint) */
+@media (min-width: 480px) {
+  .xs\:flex-row {
+    flex-direction: row;
+  }
+  .xs\:items-center {
+    align-items: center;
+  }
+  .xs\:justify-between {
+    justify-content: space-between;
+  }
+  .xs\:text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  .xs\:mt-0 {
+    margin-top: 0;
+  }
+  .xs\:block {
+    display: block;
+  }
+}
+
+@media (min-width: 640px) {
+  .responsive-container {
+    max-width: 640px;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    max-width: 768px;
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-container {
+    max-width: 1024px;
+    padding-right: 2.5rem;
+    padding-left: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .responsive-container {
+    max-width: 1280px;
+  }
+}
+
+/* Responsive Typography */
+.responsive-heading-xl {
+  font-size: 2.5rem; /* 40px base for mobile */
+  line-height: 1.1;
+}
+
+.responsive-heading-lg {
+  font-size: 2rem; /* 32px base for mobile */
+  line-height: 1.2;
+}
+
+.responsive-heading-md {
+  font-size: 1.5rem; /* 24px base for mobile */
+  line-height: 1.25;
+}
+
+.responsive-body {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.responsive-small {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .responsive-heading-xl {
+    font-size: 3.5rem; /* 56px for tablet+ */
+  }
+  
+  .responsive-heading-lg {
+    font-size: 2.5rem; /* 40px for tablet+ */
+  }
+  
+  .responsive-heading-md {
+    font-size: 1.75rem; /* 28px for tablet+ */
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-heading-xl {
+    font-size: 4rem; /* 64px for desktop */
+  }
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(220, 13%, 18%);
@@ -43,6 +160,14 @@
     @apply font-sans antialiased bg-white text-gray-900;
     font-family: 'Inter', sans-serif;
     scroll-behavior: smooth;
+    overflow-y: auto !important; /* Ensure vertical scrolling is always available */
+    overflow-x: hidden !important; /* Prevent horizontal scrolling */
+    width: 100vw; /* Constrain to viewport */
+    max-width: 100vw; /* Ensure nothing extends beyond the viewport */
+    margin: 0;
+    padding: 0;
+    position: relative;
+    box-sizing: border-box;
   }
   
   .font-outfit {
@@ -52,9 +177,29 @@
   /* Add padding to sections for fixed header */
   section {
     scroll-margin-top: 5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box; /* Include padding in width calculation */
+    overflow-x: hidden;
   }
+  
   html {
     scroll-behavior: smooth;
+    overflow-y: auto !important; /* Ensure vertical scrolling is always available */
+    overflow-x: hidden !important; /* Prevent horizontal scrolling */
+    max-width: 100vw; /* Ensure no horizontal overflow */
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 }
 
@@ -65,6 +210,11 @@
       rgb(255, 245, 248) 0%, 
       rgb(255, 251, 253) 50%, 
       rgb(253, 230, 235) 100%);
+    width: 100%;
+    margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
   }
   
   .gradient-card {
@@ -104,9 +254,79 @@
     color: white;
   }
   
+  /* Button container that allows shadows to show properly */
+  .button-shadow-container {
+    overflow: visible !important;
+    padding: 2rem 1rem;
+    position: relative;
+    z-index: 10;
+    margin: 1rem 0;
+  }
+  
+  /* Only hide horizontal overflow, allow vertical for shadows */
+  .overflow-x-hidden {
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  
+  /* Specific override for landing section to not clip button shadows */
+  .landing-section {
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  
+  .landing-section .button-shadow-container {
+    overflow: visible !important;
+  }
+  
+  /* Enhanced carousel styles for preventing cutoff */
+  .carousel-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-out;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+  }
+
+  /* Prevent text selection during drag */
+  .carousel-track * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+  }
+
+  /* Line clamp utilities for consistent text display */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
   /* Animations */
   .animate-fade-in {
     animation: fadeIn 0.8s ease-out;
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.8s ease-out;
+    opacity: 0;
+    animation-fill-mode: forwards;
   }
   
   .animate-slide-up {
@@ -322,4 +542,154 @@
     width: 50px;
     height: 50px;
   }
+  
+  /* Ensure proper responsive behavior for mobile */
+  html, body {
+    overflow-x: hidden !important;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  #root {
+    overflow-x: hidden !important;
+    max-width: 100vw;
+  }
+  
+  /* Adjust padding for smaller screens */
+  section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Enhanced glassmorphism and editorial styling for About section */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Refined card hover effects */
+.editorial-card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+  transform-origin: center;
+}
+
+.editorial-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(251, 108, 133, 0.1);
+}
+
+/* Subtle gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #fb6c85 0%, #f55977 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Refined button styling */
+.editorial-button {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.editorial-button:hover {
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Interest cards with subtle animation */
+.interest-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interest-card:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(251, 108, 133, 0.3);
+  transform: translateY(-4px);
+}
+
+/* Refined animations */
+@keyframes subtleFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-subtle-fade {
+  animation: subtleFade 0.8s ease-out;
+}
+
+/* Typography enhancements */
+.font-light {
+  font-weight: 300;
+}
+
+.leading-tight {
+  line-height: 1.1;
+}
+
+/* Mobile refinements for editorial design */
+@media (max-width: 768px) {
+  .editorial-spacing {
+    padding: 1.5rem 1rem;
+  }
+  
+  .editorial-text-scale {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+  
+  .editorial-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Refined parallax elements */
+.parallax-element {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
 }

@@ -1,0 +1,52 @@
+/* Fix for white space on the right of hero section */
+.overflow-fix {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure content stays within bounds */
+.content-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: visible;
+  margin: 0;
+  padding: 0;
+}
+
+/* Override any potential causes of horizontal overflow */
+.full-width {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+/* Force sections to be contained */
+@media (max-width: 640px) {
+  body, html, #root {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  section {
+    width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .gradient-hero {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

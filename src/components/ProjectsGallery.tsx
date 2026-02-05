@@ -8,6 +8,7 @@ import UIUXProjectsGallery from "./UIUXProjectsGallery";
 import type { Project } from "./ProjectCard";
 import "./GalleryStyles.css";
 import "./GraphicGalleryStyles.css";
+import { useAssets, getAssetUrl } from '../Assets';
 
 interface ProjectsGalleryProps {
   role: "designer" | "developer";
@@ -166,6 +167,7 @@ const sampleProjects: Project[] = [
 ];
 
 export default function ProjectsGallery({ role }: ProjectsGalleryProps) {
+  const { assets, loadingState } = useAssets();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   
@@ -200,7 +202,7 @@ export default function ProjectsGallery({ role }: ProjectsGalleryProps) {
     window._lastScrollPosition = window.scrollY;
     
     // Prevent any default behavior
-    document.body.style.overflow = 'hidden';
+    // document.body.style.overflow = 'hidden';
     
     // Set the selected project to open the modal
     setSelectedProject(project);
@@ -318,18 +320,18 @@ export default function ProjectsGallery({ role }: ProjectsGalleryProps) {
           </motion.div>
         </motion.div>
 
-        {/* UI/UX Projects Section - only show if there are UI/UX projects */}
-        {role === "designer" && uiuxProjects.length > 0 && (
-          <UIUXProjectsGallery 
-            projects={sampleProjects} 
-            defaultOpen={true} 
-            className="mb-16" 
-          />
-        )}
-
-        {/* Graphic Design Projects Section - only show if there are graphic design projects */}
+        {/* Designer Projects Sections - Graphic Design now comes first */}
         {role === "designer" && (
-          <GraphicDesignGallery className="mb-16" defaultOpen={false} />
+          <>
+            <GraphicDesignGallery className="mb-16" defaultOpen={true} />
+            {uiuxProjects.length > 0 && (
+              <UIUXProjectsGallery 
+                projects={sampleProjects} 
+                defaultOpen={false} 
+                className="mb-16" 
+              />
+            )}
+          </>
         )}
 
         {/* Development Projects Section */}
@@ -352,52 +354,6 @@ export default function ProjectsGallery({ role }: ProjectsGalleryProps) {
           onClose={handleCloseModal} 
         />
 
-        {/* LinkedIn Recommendation */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="mb-20"
-        >
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-gray-100 relative overflow-hidden">
-            {/* Decorative elements */}
-            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[rgb(251,108,133)]/5 to-transparent rounded-full -translate-y-16 -translate-x-16"></div>
-            <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tr from-[rgb(251,108,133)]/5 to-transparent rounded-full translate-y-12 translate-x-12"></div>
-            
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
-              {/* Profile picture */}
-              <div className="flex-shrink-0">
-                <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[rgb(251,108,133)]/20 to-[rgb(251,108,133)]/5 flex items-center justify-center border-2 border-[rgb(251,108,133)]/20 overflow-hidden">
-                  {/* Placeholder avatar */}
-                  <div className="text-[rgb(251,108,133)] text-3xl font-medium">JT</div>
-                </div>
-              </div>
-              
-              <div className="flex-1">
-                {/* LinkedIn logo with quote marks */}
-                <div className="flex items-center gap-2 mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#0077B5]">
-                    <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
-                  </svg>
-                  <span className="text-gray-400 italic text-lg">"</span>
-                </div>
-                
-                {/* Recommendation text */}
-                <p className="text-gray-700 text-lg mb-4 italic">
-                  It gives me the utmost pleasure to recommend Desiree because we have worked together on the social media content for our company. She is able to take my concepts and turn them into creative, functional designs that speak to our intended audience.
-                </p>
-                
-                {/* Name and title */}
-                <div>
-                  <h4 className="font-medium text-gray-900">Jochelle Tumulak</h4>
-                  <p className="text-gray-500">Naval Architect and Marine Engineer</p>
-                  <p className="text-gray-400 text-sm mt-2">LinkedIn Recommendation • August 31, 2022</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
 
         {/* Call to Action */}
         <motion.div
@@ -447,18 +403,25 @@ export default function ProjectsGallery({ role }: ProjectsGalleryProps) {
                 <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 Get In Touch
               </motion.button>
-              <motion.a
-                href="/src/assets/resume/Armojallas, Desiree P. (2025) Resume.docx.pdf"
-                download="Armojallas, Desiree P. (2025) Resume.docx.pdf"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="group px-8 py-4 btn-outline-glow rounded-full font-medium text-lg
-                       focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
-                       flex items-center justify-center gap-3"
-              >
-                <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                Download Resume
-              </motion.a>
+              {loadingState?.loading ? (
+                <div className="px-8 py-4 btn-outline-glow rounded-full font-medium text-lg opacity-70 flex items-center justify-center gap-3">
+                  <div className="w-4 h-4 border-2 border-[#fb6c85] border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Loading resume... {loadingState.progress}%
+                </div>
+              ) : (
+                <motion.a
+                  href={getAssetUrl(assets, 'resume/Armojallas, Desiree P. (2025) Resume.docx.pdf') || '#'}
+                  download="Armojallas, Desiree P. (2025) Resume.docx.pdf"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group px-8 py-4 btn-outline-glow rounded-full font-medium text-lg
+                        focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
+                        flex items-center justify-center gap-3"
+                >
+                  <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  Download Resume
+                </motion.a>
+              )}
             </div>
           </div>
         </motion.div>

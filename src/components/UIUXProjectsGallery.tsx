@@ -70,7 +70,7 @@ export default function UIUXProjectsGallery({
 
   return (
     <CollapsibleSection 
-      title="UI/UX Design Projects" 
+      title="UI/UX Projects" 
       icon={<Palette className="w-6 h-6" />}
       defaultOpen={defaultOpen}
       className={className}

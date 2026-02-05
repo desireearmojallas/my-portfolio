@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Palette, 
@@ -18,10 +18,84 @@ import {
   Share
 } from 'lucide-react';
 import SkillDropdown from './SkillDropdown';
+import { 
+  SiJavascript, SiTypescript, SiHtml5, SiCss3, SiPhp, SiC, 
+  SiCplusplus, SiDart, SiReact, SiAngular, SiNextdotjs,
+  SiTailwindcss, SiBootstrap, SiVite, SiFramer,
+  SiMysql, SiFirebase, SiNodedotjs,
+  SiGit, SiNetlify, SiVercel, SiGithub,
+  SiAdobephotoshop, SiAdobeillustrator, SiAdobexd, SiAdobeaftereffects,
+  SiAdobepremierepro, SiAdobeindesign, SiFigma, SiCanva, SiWix,
+  SiFlutter, SiAndroidstudio, SiArduino, SiMaterialdesign
+} from 'react-icons/si';
+import { DiJava, DiVisualstudio, DiNetbeans } from 'react-icons/di';
+import { FaCreditCard } from 'react-icons/fa';
 
 interface JourneySectionProps {
   role: 'designer' | 'developer';
 }
+
+// Function to map tool names to their corresponding icons
+const getToolIcon = (toolName: string) => {
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    // Programming languages
+    'JavaScript': SiJavascript,
+    'TypeScript': SiTypescript,
+    'HTML': SiHtml5,
+    'CSS': SiCss3,
+    'PHP': SiPhp,
+    'C': SiC,
+    'C++': SiCplusplus,
+    'Java': DiJava,
+    'Dart': SiDart,
+    
+    // Frameworks & Libraries
+    'React': SiReact,
+    'Angular': SiAngular,
+    'Next.js': SiNextdotjs,
+    'Tailwind CSS': SiTailwindcss,
+    'Bootstrap': SiBootstrap,
+    'Vite': SiVite,
+    'Framer Motion': SiFramer,
+    'Material UI': SiMaterialdesign,
+    
+    // Backend & Database
+    'MySQL': SiMysql,
+    'Firebase': SiFirebase,
+    'Node.js': SiNodedotjs,
+    
+    // Tools & IDEs
+    'Visual Studio': DiVisualstudio,
+    'VS Code': DiVisualstudio,
+    'Git': SiGit,
+    'Netlify': SiNetlify,
+    'Vercel': SiVercel,
+    'GitHub Pages': SiGithub,
+    'Xendit': FaCreditCard,
+    'NetBeans': DiNetbeans,
+    
+    // Design Tools
+    'Adobe Photoshop': SiAdobephotoshop,
+    'Photoshop': SiAdobephotoshop,
+    'Adobe Illustrator': SiAdobeillustrator,
+    'Illustrator': SiAdobeillustrator,
+    'Adobe XD': SiAdobexd,
+    'After Effects': SiAdobeaftereffects,
+    'Premiere Pro': SiAdobepremierepro,
+    'InDesign': SiAdobeindesign,
+    'Figma': SiFigma,
+    'Canva': SiCanva,
+    'Wix': SiWix,
+    
+    // Mobile Development
+    'Flutter': SiFlutter,
+    'React Native': SiReact,
+    'Android Studio': SiAndroidstudio,
+    'Arduino IDE': SiArduino,
+  };
+  
+  return iconMap[toolName] || null;
+};
 
 export default function JourneySection({ role }: JourneySectionProps) {
   // State to track which skill dropdown is open
@@ -44,19 +118,28 @@ export default function JourneySection({ role }: JourneySectionProps) {
         id: 'uiux',
         name: "UI/UX Design", 
         icon: Figma,
-        tools: ['Figma', 'Adobe XD', 'Adobe Illustrator', 'Adobe Photoshop', 'Canva', 'Wix']
+        tools: ['Figma', 'Adobe XD', 'Adobe Illustrator', 'Adobe Photoshop', 'Canva', 'Wix'].map(name => ({
+          name,
+          icon: getToolIcon(name)
+        })).filter(tool => tool.icon) // Only include tools with valid icons
       },
       { 
         id: 'graphic',
         name: "Graphic Design", 
         icon: Paintbrush,
-        tools: ['Adobe Photoshop', 'Illustrator', 'Canva', 'InDesign', 'Figma']
+        tools: ['Adobe Photoshop', 'Illustrator', 'Canva', 'InDesign', 'Figma'].map(name => ({
+          name,
+          icon: getToolIcon(name)
+        })).filter(tool => tool.icon)
       },
       { 
         id: 'motion',
         name: "Motion Graphics", 
         icon: Film,
-        tools: ['After Effects', 'Premiere Pro', 'Canva', 'CapCut']
+        tools: ['After Effects', 'Premiere Pro', 'Canva', 'CapCut'].map(name => ({
+          name,
+          icon: getToolIcon(name)
+        })).filter(tool => tool.icon)
       },
       { 
         id: 'branding',
@@ -68,7 +151,10 @@ export default function JourneySection({ role }: JourneySectionProps) {
         id: 'tools',
         name: "Design Tools", 
         icon: Share,
-        tools: ['Figma', 'Adobe Illustrator', 'Adobe Photoshop', 'Canva', 'MS Office', 'Google Docs']
+        tools: ['Figma', 'Adobe Illustrator', 'Adobe Photoshop', 'Canva', 'MS Office', 'Google Docs'].map(name => ({
+          name,
+          icon: getToolIcon(name)
+        })).filter(tool => tool.icon)
       }
     ],
     philosophy: "Design is not just what it looks like — design is how it works. I believe in creating experiences that are both visually stunning and functionally exceptional.",
@@ -83,43 +169,64 @@ const developerContent = {
       id: 'languages',
       name: "Programming Languages", 
       icon: Code,
-      tools: ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'PHP', 'C', 'C++', 'Java', 'Dart']
+      tools: ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'PHP', 'C', 'C++', 'Java', 'Dart'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     },
     { 
       id: 'frontend',
       name: "Frontend Technologies", 
       icon: Layers,
-      tools: ['Tailwind CSS', 'Bootstrap', 'Vite', 'Framer Motion', 'Material UI']
+      tools: ['Tailwind CSS', 'Bootstrap', 'Vite', 'Framer Motion', 'Material UI'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     },
     { 
       id: 'database',
       name: "Database & Backend", 
       icon: Database,
-      tools: ['MySQL', 'Firebase', 'SQL', 'NoSQL', 'PHP', 'REST API', 'Node.js']
+      tools: ['MySQL', 'Firebase', 'SQL', 'NoSQL', 'PHP', 'REST API', 'Node.js'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     },
     { 
       id: 'web',
       name: "Web Development", 
       icon: Globe,
-      tools: ['React', 'Angular', 'Next.js', 'PHP', 'HTML', 'CSS', 'JavaScript', 'TypeScript']
+      tools: ['React', 'Angular', 'Next.js', 'PHP', 'HTML', 'CSS', 'JavaScript', 'TypeScript'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     },
     { 
       id: 'mobile',
       name: "Mobile Development",
       icon: Cpu,
-      tools: ['React Native', 'Flutter', 'Android Studio']
+      tools: ['React Native', 'Flutter', 'Android Studio'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     },
     { 
       id: 'tools',
       name: "Developer Tools", 
       icon: Share,
-      tools: ['Visual Studio', 'VS Code', 'Git', 'Git Kraken', 'NetBeans', 'Arduino IDE']
+      tools: ['Visual Studio', 'VS Code', 'Git', 'Git Kraken', 'NetBeans', 'Arduino IDE'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     },
     { 
       id: 'deployment',
       name: "Deployment & Services", 
       icon: Share,
-      tools: ['Netlify', 'Vercel', 'Replit', 'Firebase', 'Xendit', 'Wix', 'GitHub Pages']
+      tools: ['Netlify', 'Vercel', 'Replit', 'Firebase', 'Xendit', 'Wix', 'GitHub Pages'].map(name => ({
+        name,
+        icon: getToolIcon(name)
+      })).filter(tool => tool.icon)
     }
   ],
   philosophy: "Code is poetry in motion. I craft applications that not only work flawlessly but are maintainable, scalable, and bring ideas to life through technology.",
@@ -161,79 +268,77 @@ const developerContent = {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Philosophy Section */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                            rounded-full flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-2xl font-outfit font-semibold text-gray-800">
-                My Philosophy
-              </h3>
+        {/* Philosophy Section - Centered */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto mb-16"
+        >
+          <div className="flex items-center gap-4 mb-6 justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                         rounded-full flex items-center justify-center">
+              <Lightbulb className="w-6 h-6 text-white" />
             </div>
+            <h3 className="text-2xl font-outfit font-semibold text-gray-800">
+              My Philosophy
+            </h3>
+          </div>
+          
+          <div className="gradient-card p-8 rounded-3xl shadow-lg">
+            <p className="text-gray-700 leading-relaxed text-lg mb-6 text-center">
+              {content.philosophy}
+            </p>
             
-            <div className="gradient-card p-8 rounded-3xl shadow-lg">
-              <p className="text-gray-700 leading-relaxed text-lg mb-6">
-                {content.philosophy}
-              </p>
-              
-              {/* Decorative stars */}
-              <div className="flex items-center gap-2">
-                {[...Array(5)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: 0.1 * i }}
-                    viewport={{ once: true }}
-                  >
-                    <Star className="w-5 h-5 text-[rgb(251,108,133)] fill-current" />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Skills Section */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                            rounded-full flex items-center justify-center">
-                <Target className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-2xl font-outfit font-semibold text-gray-800">
-                Core Skills
-              </h3>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-4">
-              {content.skills.map((skill) => (
-                <SkillDropdown
-                  key={skill.id}
-                  title={skill.name}
-                  icon={skill.icon}
-                  tools={skill.tools}
-                  isOpen={openSkillId === skill.id}
-                  onToggle={() => toggleSkill(skill.id)}
-                />
+            {/* Decorative stars */}
+            <div className="flex items-center justify-center gap-2">
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.1 * i }}
+                  viewport={{ once: true }}
+                >
+                  <Star className="w-5 h-5 text-[rgb(251,108,133)] fill-current" />
+                </motion.div>
               ))}
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
+
+        {/* Skills Section - Full Width */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="space-y-6"
+        >
+          <div className="flex items-center gap-4 mb-8 justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                         rounded-full flex items-center justify-center">
+              <Target className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-2xl font-outfit font-semibold text-gray-800">
+              Core Skills
+            </h3>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {content.skills.map((skill) => (
+              <SkillDropdown
+                key={skill.id}
+                title={skill.name}
+                icon={skill.icon}
+                tools={skill.tools}
+                isOpen={openSkillId === skill.id}
+                onToggle={() => toggleSkill(skill.id)}
+              />
+            ))}
+          </div>
+        </motion.div>
 
         {/* Call to action */}
         <motion.div
@@ -241,7 +346,7 @@ const developerContent = {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mt-20"
+          className="text-center mt-24"
         >
           <p className="text-lg text-gray-600 mb-8">
             Ready to see my {role === 'designer' ? 'design' : 'development'} work in action?
