@@ -6,6 +6,7 @@ import AboutSection from './components/AboutSection';
 import ProjectsCarousel from './components/ProjectsCarousel';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import ScrollToTop from './components/ScrollToTop';
 import './components/ScrollFix.css';
 import './components/OverflowFix.css';
 import './components/FullWidthFix.css';
@@ -64,11 +65,15 @@ function App() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white via-gray-50/30 to-pink-50/20 force-scrollable w-full overflow-hidden" id="root">
+    <div className="bg-gradient-to-br from-white via-gray-50/30 to-pink-50/20 force-scrollable w-full overflow-x-hidden" id="root">
       <Header onNavigate={handleNavigation} />
-      <main className="pt-16 overflow-hidden force-scrollable w-full">
+      <main className="pt-16 overflow-x-hidden force-scrollable w-full">
         <section id="home">
           <LandingSection onRoleSelect={handleRoleSelect} />
+        </section>
+        
+        <section id="projects" className="transition-all duration-500 opacity-100">
+          <ProjectsCarousel role={selectedRole || 'designer'} />
         </section>
         
         {/* Render sections - show them when a role is selected or when directly navigated to */}
@@ -82,21 +87,12 @@ function App() {
         >
           <AboutSection role={selectedRole || 'designer'} />
         </section>
-        <section 
-          id="projects" 
-          className={`transition-all duration-500 ${
-            selectedRole 
-              ? 'opacity-100 block' 
-              : 'opacity-0 hidden'
-          }`}
-        >
-          <ProjectsCarousel role={selectedRole || 'designer'} />
-        </section>
         
         <section id="contact" className={selectedRole ? '' : 'mt-0'}>
           <Footer />
         </section>
       </main>
+      <ScrollToTop />
     </div>
   );
 }

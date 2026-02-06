@@ -8,17 +8,34 @@ interface HeaderProps {
 
 export default function Header({ onNavigate }: HeaderProps) {
   const [scrollY, setScrollY] = useState(0);
+  const [prevScrollY, setPrevScrollY] = useState(0);
+  const [visible, setVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Update scroll position
+  // Update scroll position and handle navbar visibility
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      const currentScrollY = window.scrollY;
+      
+      // Always show navbar when at the top
+      if (currentScrollY < 100) {
+        setVisible(true);
+      } else {
+        // Show navbar when scrolling up, hide when scrolling down
+        if (currentScrollY < prevScrollY) {
+          setVisible(true);
+        } else if (currentScrollY > prevScrollY) {
+          setVisible(false);
+        }
+      }
+      
+      setPrevScrollY(currentScrollY);
+      setScrollY(currentScrollY);
     };
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [prevScrollY]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -47,9 +64,10 @@ export default function Header({ onNavigate }: HeaderProps) {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-          scrollY > 50 ? 'glass-nav shadow-lg py-2' : 'py-4 bg-transparent'
-        }`}
+        className="fixed top-0 w-full z-40 transition-all duration-300 glass-nav shadow-lg py-2"
+        style={{
+          transform: visible ? 'translateY(0)' : 'translateY(-100%)'
+        }}
       >
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-center">
@@ -65,8 +83,8 @@ export default function Header({ onNavigate }: HeaderProps) {
             <div className="hidden md:flex space-x-8">
               {[
                 { id: 'home', label: 'Home' },
-                { id: 'about', label: 'About' },
                 { id: 'projects', label: 'Projects' },
+                { id: 'about', label: 'About' },
                 { id: 'contact', label: 'Contact' }
               ].map((item, index) => (
                 <motion.button 
@@ -120,8 +138,8 @@ export default function Header({ onNavigate }: HeaderProps) {
             <div className="flex flex-col justify-center items-center h-[80%] space-y-8 text-xl font-medium">
               {[
                 { id: 'home', label: 'Home' },
-                { id: 'about', label: 'About' },
                 { id: 'projects', label: 'Projects' },
+                { id: 'about', label: 'About' },
                 { id: 'contact', label: 'Contact' }
               ].map((item, index) => (
                 <motion.button 

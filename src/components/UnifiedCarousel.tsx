@@ -29,7 +29,9 @@ const UnifiedCarousel: React.FC<UnifiedCarouselProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCards, setVisibleCards] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Breakpoint configuration for responsive card visibility
   // Calculate visible cards based on screen size
@@ -38,7 +40,7 @@ const UnifiedCarousel: React.FC<UnifiedCarouselProps> = ({
     
     const breakpointConfig: BreakpointConfig = {
       base: 1,
-      sm: 1.5,
+      sm: 1,
       md: 2,
       lg: 3,
       xl: 4,
@@ -64,6 +66,24 @@ const UnifiedCarousel: React.FC<UnifiedCarouselProps> = ({
     window.addEventListener('resize', updateVisibleCards);
     return () => window.removeEventListener('resize', updateVisibleCards);
   }, [updateVisibleCards]);
+
+  // Measure container width for accurate card sizing
+  useEffect(() => {
+    const measureContainer = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    measureContainer();
+
+    const resizeObserver = new ResizeObserver(measureContainer);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   // Calculate pagination
   const totalPages = Math.ceil(projects.length / Math.floor(visibleCards));
@@ -103,21 +123,18 @@ const UnifiedCarousel: React.FC<UnifiedCarouselProps> = ({
   const getCardWidth = () => {
     if (typeof window === 'undefined') return 320;
     
-    // Use container ref for accurate measurements when available
-    const containerRef = carouselRef.current?.parentElement;
-    let containerWidth;
+    // Use measured container width for accurate calculations
+    let measuredWidth = containerWidth;
     
-    if (containerRef) {
-      containerWidth = containerRef.offsetWidth;
-    } else {
+    if (!measuredWidth) {
       // Fallback calculation
       const maxContainerWidth = 1280;
-      containerWidth = Math.min(window.innerWidth - 48, maxContainerWidth); // 48px for padding
+      measuredWidth = Math.min(window.innerWidth - 48, maxContainerWidth); // 48px for padding
     }
     
     const effectiveVisibleCards = Math.floor(visibleCards);
     const totalGap = (effectiveVisibleCards - 1) * 24;
-    const availableWidth = containerWidth - totalGap;
+    const availableWidth = measuredWidth - totalGap;
     
     return Math.max(280, Math.floor(availableWidth / effectiveVisibleCards)); // Min width of 280px
   };
@@ -135,24 +152,27 @@ const UnifiedCarousel: React.FC<UnifiedCarouselProps> = ({
       </div>
 
       {/* Carousel Container */}
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="relative w-full overflow-hidden">
-          <motion.div
-            ref={carouselRef}
-            className={`flex ${getGapClass()}`}
-            animate={{
-              x: getTransform()
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-              duration: 0.8
-            }}
-            style={{
-              width: `${projects.length * (getCardWidth() + 24)}px`
-            }}
-          >
+      <div ref={containerRef} className="max-w-7xl mx-auto px-6">
+        {/* Overflow wrapper - clips carousel track during transitions */}
+        <div className="relative w-full overflow-hidden rounded-2xl">
+          {/* Padding wrapper - provides buffer zone for hover effects */}
+          <div className="py-6 px-1">
+            <motion.div
+              ref={carouselRef}
+              className={`flex ${getGapClass()}`}
+              animate={{
+                x: getTransform()
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                duration: 0.8
+              }}
+              style={{
+                width: `${projects.length * (getCardWidth() + 24)}px`
+              }}
+            >
             {projects.map((project, index) => (
               <motion.div
                 key={`${title}-${project.id}`}
@@ -165,30 +185,34 @@ const UnifiedCarousel: React.FC<UnifiedCarouselProps> = ({
                   delay: index * 0.1,
                   ease: "easeOut"
                 }}
-                whileHover={{ 
-                  scale: 1.03, 
-                  y: -8,
-                  transition: { 
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 25,
-                    duration: 0.3 
-                  }
-                }}
               >
-                <div className="rounded-2xl bg-white border border-gray-200/50 h-full overflow-hidden
-                              shadow-lg hover:shadow-2xl hover:shadow-pink-500/10 
-                              transition-all duration-500 ease-out
-                              hover:border-pink-200/50">
+                {/* Card wrapper with hover effects - buffer zone prevents clipping */}
+                <motion.div
+                  className="rounded-2xl bg-white border border-gray-200/50 h-full overflow-hidden
+                            shadow-lg hover:shadow-2xl hover:shadow-pink-500/10 
+                            transition-all duration-500 ease-out
+                            hover:border-pink-200/50"
+                  whileHover={{ 
+                    scale: 1.03, 
+                    y: -8,
+                    transition: { 
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 25,
+                      duration: 0.3 
+                    }
+                  }}
+                >
                   <ProjectCardNew
                     project={project}
                     index={index}
                     onClick={onProjectClick}
                   />
-                </div>
+                </motion.div>
               </motion.div>
           ))}
-        </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
 

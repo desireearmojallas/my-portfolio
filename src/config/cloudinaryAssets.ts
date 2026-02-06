@@ -245,31 +245,31 @@ export const cloudinaryAssets: CloudinaryAssets = {
       ],
     },
     queenPoblacion: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_0/v1770304867/queen_poblacion_into_final_frfwh0.jpg',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_8/v1770304867/queen_poblacion_into_final_frfwh0.jpg?v=2',
       videos: [
         'https://res.cloudinary.com/du4nug3uk/video/upload/v1770304867/queen_poblacion_into_final_frfwh0.mp4',
       ],
     },
     xeleqtAgility: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_0/v1769919666/agility_avp_final_woeg4w.jpg',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_12/v1769919666/agility_avp_final_woeg4w.jpg?v=2',
       videos: [
         'https://res.cloudinary.com/du4nug3uk/video/upload/v1769919666/agility_avp_final_woeg4w.mp4',
       ],
     },
     xeleqtAware: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_0/v1769919672/aware_avp_final_gzihxt.jpg',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_12/v1769919672/aware_avp_final_gzihxt.jpg?v=2',
       videos: [
         'https://res.cloudinary.com/du4nug3uk/video/upload/v1769919672/aware_avp_final_gzihxt.mp4',
       ],
     },
     xeleqtMobility: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_0/v1769919693/xeleqt_mobility_uuek1r.jpg',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_2/v1769919693/xeleqt_mobility_uuek1r.jpg?v=2',
       videos: [
         'https://res.cloudinary.com/du4nug3uk/video/upload/v1769919693/xeleqt_mobility_uuek1r.mp4',
       ],
     },
     returnZero: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_0/v1770305288/return_zero_vtr_final_wes0vb.jpg',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_20/v1770305288/return_zero_vtr_final_wes0vb.jpg?v=2',
       videos: [
         'https://res.cloudinary.com/du4nug3uk/video/upload/v1770305288/return_zero_vtr_final_wes0vb.mp4',
       ],

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Play, Image as ImageIcon, Package, CreditCard, Coffee, Shirt } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Play, Image as ImageIcon, Package, CreditCard, Coffee, Shirt, Volume2, VolumeX } from "lucide-react";
 import './GraphicProjectInteractions.css';
 
 // Define the types of graphic projects we'll support
@@ -17,6 +17,7 @@ export interface GraphicProject {
   thumbnail: string;
   assets: string[]; // Can be images or videos
   date?: string;
+  featured?: boolean; // For larger cards in masonry layout
 }
 
 interface GraphicProjectCardProps {
@@ -24,9 +25,16 @@ interface GraphicProjectCardProps {
   index: number;
   onClick: (project: GraphicProject) => void;
   style?: React.CSSProperties;
+  variant?: 'default' | 'masonry';
 }
 
-export default function GraphicProjectCard({ project, index, onClick, style }: GraphicProjectCardProps) {
+export default function GraphicProjectCard({
+  project,
+  index,
+  onClick,
+  style,
+  variant = 'default'
+}: GraphicProjectCardProps) {
   // Function to check if an asset is a video
   const isVideo = (url: string) => {
     return url.toLowerCase().endsWith('.mp4') || 
@@ -47,7 +55,7 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
       const video = document.createElement('video');
       video.preload = 'metadata';
       video.src = videoUrl;
-      video.currentTime = 0.1; // Get frame at 0.1 seconds
+      video.currentTime = 2.0; // Get frame at 2 seconds to avoid black intros
       
       // After loaded, extract frame to canvas and cache it
       video.addEventListener('loadeddata', () => {
@@ -79,6 +87,57 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
   // Index is used for staggered animations in the inline style
   const [, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [canAutoPlay, setCanAutoPlay] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Handle video hover - autoplay on hover, pause on leave
+  const handleVideoHover = (hover: boolean) => {
+    setIsHovered(hover);
+    if (videoRef.current) {
+      // Use different start time for Return Zero video
+      const startTime = project.id === 'return-zero-1' ? 20.0 : 3.0;
+      
+      if (hover) {
+        // Start from a better frame (not 0) to avoid black intro
+        videoRef.current.currentTime = startTime;
+        videoRef.current.load();
+        if (canAutoPlay) {
+          const playPromise = videoRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.log('Autoplay prevented:', err);
+            });
+          }
+        }
+      } else {
+        videoRef.current.pause();
+        videoRef.current.currentTime = startTime; // Reset to a good frame
+      }
+    }
+  };
+
+  // Autoplay when hover state changes and video becomes playable
+  useEffect(() => {
+    if (!isHovered || !videoRef.current || !canAutoPlay) return;
+    // Use different start time for Return Zero video
+    const startTime = project.id === 'return-zero-1' ? 20.0 : 3.0;
+    videoRef.current.currentTime = startTime; // Start from a good frame
+    const playPromise = videoRef.current.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.log('Autoplay prevented:', err);
+      });
+    }
+  }, [isHovered, canAutoPlay, project.id]);
+
+  // Toggle mute/unmute
+  const handleMuteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMuted(!isMuted);
+  };
 
   // Function to render the appropriate icon based on project type
   const renderTypeIcon = () => {
@@ -99,6 +158,139 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
         return <ImageIcon className="w-4 h-4" />;
     }
   };
+
+  const isVideoProject = project.type === 'video' && project.assets?.length > 0 && isVideo(project.assets[0]);
+
+  if (variant === 'masonry') {
+    return (
+      <div
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onClick(project);
+        }}
+        onMouseEnter={() => isVideoProject && handleVideoHover(true)}
+        onMouseLeave={() => isVideoProject && handleVideoHover(false)}
+        onPointerEnter={() => isVideoProject && handleVideoHover(true)}
+        onPointerLeave={() => isVideoProject && handleVideoHover(false)}
+        className="group cursor-pointer relative overflow-hidden bg-white flex flex-col
+                   transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 
+                   hover:z-10 hover:-translate-y-1 rounded-lg"
+        style={{
+          ...style,
+          opacity: 0,
+          animation: `fadeInSimple 0.5s ease-out ${0.1 + (index % 6) * 0.05}s forwards`,
+          height: project.featured ? '400px' : '280px', // Use height instead of minHeight
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)'
+        }}
+        aria-label={`View ${project.title}`}
+      >
+        <div className="relative w-full h-full overflow-hidden rounded-lg flex-1">
+          {isVideoProject ? (
+            <div className="w-full h-full flex items-stretch">
+              <video
+                ref={videoRef}
+                src={project.assets[0]}
+                poster={project.thumbnail}
+                className={`w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500
+                           transition-opacity ${isVideoPlaying ? 'opacity-100' : 'opacity-85'}`}
+                style={{ display: 'block' }}
+                muted={isMuted}
+                loop
+                playsInline
+                preload="auto"
+                onCanPlay={(e) => {
+                  const video = e.currentTarget;
+                  setCanAutoPlay(true);
+                  if (!isHovered) {
+                    // Use different thumbnail frame for Return Zero video
+                    const thumbnailTime = project.id === 'return-zero-1' ? 20.0 : 3.0;
+                    video.currentTime = thumbnailTime; // Set to a good frame when not playing
+                  }
+                }}
+                onLoadedMetadata={() => setCanAutoPlay(true)}
+                onPlay={() => setIsVideoPlaying(true)}
+                onPause={() => setIsVideoPlaying(false)}
+                onLoadedData={() => setCanAutoPlay(true)}
+                onLoadStart={() => {
+                  getThumbnailFromVideo(project.assets[0]);
+                }}
+                onError={() => setImageError(true)}
+              />
+              
+              {/* Mute/Unmute Button - appears on hover */}
+              {isHovered && (
+                <button
+                  onClick={handleMuteToggle}
+                  className="absolute top-4 right-4 w-10 h-10 bg-black/70 hover:bg-black/90 rounded-full 
+                           flex items-center justify-center transition-all duration-300 z-20
+                           transform opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2"
+                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                >
+                  {isMuted ? (
+                    <VolumeX className="w-5 h-5 text-white" />
+                  ) : (
+                    <Volume2 className="w-5 h-5 text-white" />
+                  )}
+                </button>
+              )}
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent 
+                            opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-center justify-center pointer-events-none">
+                <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-xl mb-4 
+                              transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <Play className="w-7 h-7 text-[#fb6c85] ml-0.5" />
+                </div>
+                <p className="text-white font-outfit font-semibold text-lg px-4 text-center 
+                            transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                  {project.title}
+                </p>
+              </div>
+              <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-black/70 text-white text-xs font-semibold 
+                            rounded-full tracking-wide pointer-events-none">
+                Video
+              </div>
+            </div>
+          ) : (
+            <>
+              <img
+                src={project.thumbnail}
+                alt={project.title}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                loading="lazy"
+                onLoad={() => setImageLoaded(true)}
+                onError={() => {
+                  setImageError(true);
+                  console.error(`Failed to load image: ${project.thumbnail}`);
+                }}
+                style={{
+                  visibility: imageError ? 'hidden' : 'visible',
+                  display: 'block'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent 
+                            opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-6">
+                <p className="text-white font-outfit font-semibold text-lg px-4 text-center 
+                            transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  {project.title}
+                </p>
+              </div>
+            </>
+          )}
+
+          {imageError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-50 text-gray-400">
+              <div className="text-center px-4">
+                <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-60" />
+                <p className="text-sm font-medium">{project.title}</p>
+                <p className="text-xs mt-2">Image not available</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -147,6 +339,10 @@ export default function GraphicProjectCard({ project, index, onClick, style }: G
               muted
               playsInline
               preload="metadata"
+              onLoadedMetadata={(e) => {
+                const video = e.currentTarget;
+                video.currentTime = 2.0; // Set to 2 seconds to avoid black intro
+              }}
               onLoadStart={() => {
                 // For video thumbnails, try to get a frame
                 getThumbnailFromVideo(project.thumbnail);

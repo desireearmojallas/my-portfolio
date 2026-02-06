@@ -1,0 +1,273 @@
+/* ============================================================================
+   MASONRY LAYOUT SYSTEM
+   A responsive masonry grid layout system supporting CSS Grid with dense packing
+   ============================================================================ */
+
+/* Base Wrapper Container */
+.projects {
+  display: grid;
+  width: 100%;
+  gap: 16px;
+  grid-auto-flow: dense;
+  grid-auto-rows: auto;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* Base Project Item */
+.project {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.project:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+/* MOBILE: <640px (1 column) */
+@media (max-width: 639px) {
+  .projects {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  .project {
+    grid-column: span 1;
+    min-height: 280px;
+  }
+
+  /* Prevent spanning on mobile */
+  .project.landscape {
+    grid-column: span 1;
+  }
+
+  .project img,
+  .project video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* TABLET: 640px–960px (2 columns) */
+@media (min-width: 640px) and (max-width: 959px) {
+  .projects {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 0 14px;
+  }
+
+  .project {
+    grid-column: span 1;
+    min-height: 240px;
+  }
+
+  /* Landscape videos/images span 2 columns */
+  .project.landscape {
+    grid-column: span 2;
+    min-height: 280px;
+  }
+
+  .project.landscape-half {
+    grid-column: span 1;
+  }
+
+  .project img,
+  .project video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* DESKTOP: 960px–1280px (3 columns) */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .projects {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  .project {
+    grid-column: span 1;
+    min-height: 220px;
+  }
+
+  /* Landscape items span 2 columns */
+  .project.landscape {
+    grid-column: span 2;
+    min-height: 240px;
+  }
+
+  /* Featured items can span full width or 2 columns */
+  .project.featured {
+    grid-column: span 2;
+    min-height: 260px;
+  }
+
+  .project img,
+  .project video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* WIDE: >1280px (4+ columns) */
+@media (min-width: 1280px) {
+  .projects {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    padding: 0 18px;
+  }
+
+  .project {
+    grid-column: span 1;
+    min-height: 200px;
+  }
+
+  /* Landscape items span 2 columns */
+  .project.landscape {
+    grid-column: span 2;
+    min-height: 220px;
+  }
+
+  /* Featured items span 2 columns */
+  .project.featured {
+    grid-column: span 2;
+    min-height: 240px;
+  }
+
+  .project img,
+  .project video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ============================================================================
+   SIZING & SPACING ENHANCEMENTS
+   ============================================================================ */
+
+/* Responsive image/video scaling */
+.project img,
+.project video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project:hover img,
+.project:hover video {
+  transform: scale(1.03);
+}
+
+/* Gap/spacing consistency */
+.projects > .project {
+  box-sizing: border-box;
+}
+
+/* ============================================================================
+   ANIMATION & TRANSITIONS
+   ============================================================================ */
+
+/* Smooth fade-in animation for items */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.project:nth-child(1) { animation-delay: 0s; }
+.project:nth-child(2) { animation-delay: 0.08s; }
+.project:nth-child(3) { animation-delay: 0.16s; }
+.project:nth-child(4) { animation-delay: 0.24s; }
+.project:nth-child(5) { animation-delay: 0.32s; }
+.project:nth-child(6) { animation-delay: 0.4s; }
+.project:nth-child(n+7) { animation-delay: 0.4s; }
+
+/* Smooth resize transitions */
+.projects {
+  transition: all 0.3s ease;
+}
+
+/* ============================================================================
+   ACCESSIBILITY & EXTRA UTILITIES
+   ============================================================================ */
+
+/* Focus states for keyboard navigation */
+.project:focus-within {
+  outline: 2px solid #e879f9;
+  outline-offset: 2px;
+}
+
+/* Aspect ratio helpers */
+.project.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.project.aspect-landscape {
+  aspect-ratio: 16 / 9;
+}
+
+.project.aspect-portrait {
+  aspect-ratio: 9 / 16;
+}
+
+.project.aspect-card {
+  aspect-ratio: 3.5 / 2;
+}
+
+/* ============================================================================
+   UTILITY CLASSES FOR SPECIAL LAYOUTS
+   ============================================================================ */
+
+/* Full width on mobile, normal on larger screens */
+@media (max-width: 639px) {
+  .project.sm\:full {
+    grid-column: span 1;
+  }
+}
+
+/* Preserve aspect ratio container */
+.project-aspect-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Loading state */
+.project.loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}

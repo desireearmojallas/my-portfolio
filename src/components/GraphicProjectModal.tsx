@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX, ZoomIn } from "lucide-react";
+import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform, animate } from "framer-motion";
+import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX, ZoomIn, Info } from "lucide-react";
 import type { GraphicProject } from "./GraphicProjectCard";
+import { useResponsive } from '../hooks/useResponsive';
 import './GraphicProjectInteractions.css';
 
 interface GraphicProjectModalProps {
@@ -13,25 +14,50 @@ interface GraphicProjectModalProps {
 export default function GraphicProjectModal({ project, onClose, isClosing = false }: GraphicProjectModalProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
   const [isVideoLoading, setIsVideoLoading] = useState(true);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const [showDetails, setShowDetails] = useState(false); // For mobile detail toggle
   const videoRef = useRef<HTMLVideoElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const dragX = useMotionValue(0);
+  const { isMobile, isSmAndDown, isMdAndDown } = useResponsive();
   
   const navigateNext = useCallback(() => {
     if (project && currentIndex < project.assets.length - 1) {
       setCurrentIndex(prev => prev + 1);
+      setIsZoomed(false); // Reset zoom when changing assets
     }
   }, [project, currentIndex]);
   
   const navigatePrev = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1);
+      setIsZoomed(false); // Reset zoom when changing assets
     }
   }, [currentIndex]);
+  
+  // Handle swipe gestures for touch devices
+  const handleDragEnd = useCallback((event: any, info: PanInfo) => {
+    const threshold = 50; // Minimum swipe distance
+    const velocity = info.velocity.x;
+    const offset = info.offset.x;
+    
+    if (Math.abs(offset) > threshold || Math.abs(velocity) > 500) {
+      if (offset > 0 && velocity >= 0) {
+        // Swiped right - go to previous
+        navigatePrev();
+      } else if (offset < 0 && velocity <= 0) {
+        // Swiped left - go to next
+        navigateNext();
+      }
+    }
+    
+    // Reset drag position
+    animate(dragX, 0, { type: "spring", stiffness: 300, damping: 30 });
+  }, [navigateNext, navigatePrev, dragX]);
   
   const togglePlayPause = useCallback(() => {
     setIsPlaying(prev => !prev);
@@ -122,6 +148,16 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
     window.addEventListener('keydown', handleSpaceKey);
     return () => window.removeEventListener('keydown', handleSpaceKey);
   }, [toggleZoom, currentIsVideo]);
+
+  // Autoplay videos when modal opens
+  useEffect(() => {
+    if (project && currentIsVideo) {
+      setIsPlaying(true);
+      setIsMuted(true); // Start muted for autoplay compliance
+    } else {
+      setIsPlaying(false);
+    }
+  }, [project, currentIsVideo, currentIndex]);
   
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -272,95 +308,156 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
         key="graphic-modal"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.3, ease: "easeInOut" } }}
-        transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-[999] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm project-modal-overlay"
-        style={{ overflow: 'hidden' }}
+        exit={{ opacity: 0, transition: { duration: 0.2, ease: "easeOut" } }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm project-modal-overlay"
+        style={{ 
+          overflow: 'hidden',
+          padding: isMdAndDown ? '0' : '1rem'
+        }}
         onClick={handleClickOutside}
         data-state={isClosing ? 'closing' : 'open'}
       >
-        {/* Close button - repositioned outside the modal content */}
+        {/* Close button - responsive positioning */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 z-50 bg-white/90 backdrop-blur-sm w-12 h-12 flex items-center justify-center rounded-full text-gray-800 hover:bg-white transition-colors shadow-xl"
+          className="absolute z-50 bg-white/95 backdrop-blur-sm flex items-center justify-center text-gray-800 hover:bg-white active:scale-95 transition-all shadow-xl"
+          style={{
+            top: isMdAndDown ? '0.75rem' : '1.5rem',
+            right: isMdAndDown ? '0.75rem' : '1.5rem',
+            width: isMdAndDown ? '44px' : '48px',
+            height: isMdAndDown ? '44px' : '48px',
+            borderRadius: '50%',
+            touchAction: 'manipulation' // Improve touch responsiveness
+          }}
           aria-label="Close modal"
         >
-          <X className="w-6 h-6" />
+          <X className={isMdAndDown ? "w-5 h-5" : "w-6 h-6"} />
         </button>
         
         {/* Modal content with improved responsive layout */}
         <motion.div 
           ref={modalContentRef}
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } }}
-          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="relative w-full max-w-6xl mx-auto bg-white rounded-lg sm:rounded-xl overflow-hidden flex flex-col md:flex-row shadow-xl project-modal-content modal-layer"
+          initial={isMdAndDown ? { y: '100%' } : { scale: 0.96, opacity: 0 }}
+          animate={isMdAndDown ? { y: 0 } : { scale: 1, opacity: 1 }}
+          exit={isMdAndDown ? 
+            { y: '100%', transition: { duration: 0.25, ease: [0.4, 0, 1, 1] } } : 
+            { scale: 0.96, opacity: 0, transition: { duration: 0.2, ease: "easeOut" } }
+          }
+          transition={isMdAndDown ? 
+            { type: 'spring', damping: 35, stiffness: 300 } : 
+            { type: 'spring', damping: 30, stiffness: 300 }
+          }
+          className="relative w-full mx-auto bg-white overflow-hidden flex shadow-2xl project-modal-content modal-layer"
           style={{ 
-            maxHeight: 'calc(98vh - 1rem)',
-            maxWidth: 'min(98vw, 1200px)',
-            margin: 'auto',
+            maxHeight: isMdAndDown ? '100vh' : 'calc(96vh - 2rem)',
+            maxWidth: isMdAndDown ? '100vw' : 'min(95vw, 1280px)',
+            height: isMdAndDown ? '100vh' : 'auto',
+            borderRadius: isMdAndDown ? '0' : '16px',
+            flexDirection: isMdAndDown ? 'column' : 'row',
             overflowY: 'auto',
             WebkitOverflowScrolling: 'touch'
           }}
           onClick={(e) => e.stopPropagation()}
-          tabIndex={0} // Make it focusable
+          tabIndex={0}
         >
           {/* Media display area - enhanced for responsive design */}
-          <div className="flex-1 md:w-3/5 bg-gray-50 relative" style={{ minHeight: '250px', maxHeight: '50vh', height: 'auto' }}>
-            {/* Navigation arrows - sized for different screens */}
-            {project.assets.length > 1 && (
+          <motion.div 
+            className="flex-1 bg-white relative overflow-hidden"
+            style={{ 
+              minHeight: isMdAndDown ? '60vh' : '400px',
+              maxHeight: isMdAndDown ? '70vh' : 'none',
+              height: isMdAndDown ? 'auto' : '100%',
+              width: isMdAndDown ? '100%' : '65%',
+              touchAction: currentIsVideo ? 'auto' : 'none' // Allow swipe on images, not on video
+            }}
+            drag={!currentIsVideo && project.assets.length > 1 && isMdAndDown ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
+            style={{ x: dragX }}
+          >
+            {/* Navigation arrows - touch-optimized */}
+            {project.assets.length > 1 && !isMdAndDown && (
               <>
                 <button
                   onClick={navigatePrev}
-                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-gray-800 z-10 hover:bg-white transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 z-20 hover:bg-white active:scale-95 transition-all shadow-lg disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    touchAction: 'manipulation'
+                  }}
                   disabled={currentIndex === 0}
                   aria-label="Previous image"
-                  title="Previous image"
                 >
-                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button
                   onClick={navigateNext}
-                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-gray-800 z-10 hover:bg-white transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 z-20 hover:bg-white active:scale-95 transition-all shadow-lg disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    touchAction: 'manipulation'
+                  }}
                   disabled={currentIndex === project.assets.length - 1}
                   aria-label="Next image"
-                  title="Next image"
                 >
-                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ChevronRight className="w-6 h-6" />
                 </button>
               </>
             )}
             
-            {/* Asset counter badge */}
+            {/* Asset counter badge - repositioned for mobile */}
             {project.assets.length > 1 && (
-              <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full z-10 project-asset-counter">
-                <span className="text-white text-xs font-medium">
+              <div 
+                className="absolute bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full z-20 project-asset-counter"
+                style={{
+                  bottom: isMdAndDown ? '1rem' : '1.5rem',
+                  left: isMdAndDown ? '1rem' : '1.5rem'
+                }}
+              >
+                <span className="text-white text-sm font-medium">
                   {currentIndex + 1} / {project.assets.length}
                 </span>
               </div>
             )}
             
             {/* Media container - responsive sizing */}
-            <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
+            <div 
+              className="w-full h-full flex items-center justify-center"
+              style={{
+                padding: isMdAndDown ? '0.5rem' : '1rem'
+              }}
+            >
               {currentIsVideo ? (
-                <div className="relative w-full h-full flex items-center justify-center" style={{ maxHeight: '50vh' }}>
+                <div 
+                  className="relative w-full h-full flex items-center justify-center"
+                  style={{ 
+                    maxHeight: isMdAndDown ? '65vh' : '80vh'
+                  }}
+                >
                   {isVideoLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100/30 backdrop-blur-sm z-10">
-                      <div className="bg-white/90 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg shadow-lg flex items-center gap-1.5 sm:gap-2">
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-[#fb6c85] border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-xs sm:text-sm text-gray-700">Loading video...</span>
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm z-10">
+                      <div className="bg-white/95 px-4 py-2 rounded-xl shadow-lg flex items-center gap-2">
+                        <div className="w-4 h-4 border-3 border-[#fb6c85] border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-sm text-gray-700 font-medium">Loading video...</span>
                       </div>
                     </div>
                   )}
                   <video
                     ref={videoRef}
                     src={currentAsset}
-                    className="max-w-full max-h-full object-contain bg-black rounded-md"
+                    className="max-w-full max-h-full object-contain bg-black"
+                    style={{
+                      borderRadius: isMdAndDown ? '0' : '8px'
+                    }}
                     controls={false}
                     loop
                     preload="metadata"
                     playsInline
+                    webkit-playsinline="true"
                     onLoadedMetadata={() => {
                       console.log("Video metadata loaded");
                       // Set current time to ensure poster frame shows
@@ -380,111 +477,137 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
                     poster={project.thumbnail}
                   />
                   
-                  {/* Video controls */}
-                  <div className="absolute bottom-4 right-4 flex items-center gap-2 z-10">
+                  {/* Video controls - touch-optimized */}
+                  <div 
+                    className="absolute flex items-center gap-2 z-20"
+                    style={{
+                      bottom: isMdAndDown ? '1rem' : '1.5rem',
+                      right: isMdAndDown ? '1rem' : '1.5rem'
+                    }}
+                  >
                     <button
                       onClick={toggleMute}
-                      className="bg-white/80 w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
+                      className="bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white active:scale-95 transition-all"
+                      style={{
+                        width: isMdAndDown ? '44px' : '44px',
+                        height: isMdAndDown ? '44px' : '44px',
+                        touchAction: 'manipulation'
+                      }}
                       aria-label={isMuted ? "Unmute video" : "Mute video"}
-                      title={isMuted ? "Unmute video" : "Mute video"}
                     >
                       {isMuted ? (
-                        <VolumeX className="w-4 h-4 text-gray-800" />
+                        <VolumeX className="w-5 h-5 text-gray-800" />
                       ) : (
-                        <Volume2 className="w-4 h-4 text-gray-800" />
+                        <Volume2 className="w-5 h-5 text-gray-800" />
                       )}
                     </button>
                     <button
                       onClick={togglePlayPause}
-                      className="bg-white/80 w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
+                      className="bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white active:scale-95 transition-all"
+                      style={{
+                        width: isMdAndDown ? '48px' : '52px',
+                        height: isMdAndDown ? '48px' : '52px',
+                        touchAction: 'manipulation'
+                      }}
                       aria-label={isPlaying ? "Pause video" : "Play video"}
-                      title={isPlaying ? "Pause video" : "Play video"}
                     >
                       {isPlaying ? (
-                        <Pause className="w-5 h-5 text-gray-800" />
+                        <Pause className="w-6 h-6 text-gray-800" />
                       ) : (
-                        <Play className="w-5 h-5 text-gray-800 ml-0.5" />
+                        <Play className="w-6 h-6 text-gray-800 ml-0.5" />
                       )}
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (videoRef.current) {
-                          // Toggle browser controls
-                          videoRef.current.controls = !videoRef.current.controls;
-                        }
-                      }}
-                      className="bg-white/80 w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors"
-                      aria-label="Toggle browser controls"
-                      title="Toggle browser controls"
-                    >
-                      <span className="text-xs font-bold text-gray-800">HD</span>
                     </button>
                   </div>
                 </div>
               ) : (
                 // Image display with zoom
                 <div 
-                  className="flex items-center justify-center max-h-[65vh] overflow-hidden relative"
+                  className="flex items-center justify-center overflow-hidden relative"
                   style={{
                     cursor: isZoomed ? 'zoom-out' : 'zoom-in',
+                    maxHeight: isMdAndDown ? '65vh' : '80vh'
                   }}
                 >
                   <motion.img 
                     ref={imageRef}
                     src={currentAsset}
                     alt={project.title}
-                    onClick={(e: React.MouseEvent) => toggleZoom(e)}
-                    className="max-w-full max-h-full object-contain rounded-md shadow-sm transition-all duration-300"
+                    onClick={(e: React.MouseEvent) => !isMdAndDown && toggleZoom(e)}
+                    className="max-w-full max-h-full object-contain shadow-sm transition-all duration-300"
                     style={{
                       transform: isZoomed ? `scale(2)` : 'scale(1)',
                       transformOrigin: isZoomed ? `${zoomPosition.x}% ${zoomPosition.y}%` : 'center',
-                      transition: 'transform 0.3s ease-out'
+                      transition: 'transform 0.3s ease-out',
+                      borderRadius: isMdAndDown ? '0' : '8px',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none'
                     }}
-                    loading="eager" // Load immediately to prevent visual jumps
+                    loading="eager"
+                    draggable={false}
                   />
-                  {!isZoomed && (
-                    <div className="zoom-indicator">
-                      <ZoomIn size={20} />
+                  {!isZoomed && !isMdAndDown && (
+                    <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg flex items-center gap-2 z-20">
+                      <ZoomIn size={16} className="text-gray-700" />
+                      <span className="text-xs text-gray-700 font-medium">Click to zoom</span>
                     </div>
                   )}
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
           
-          {/* Project details sidebar - with smooth scrolling */}
+          {/* Project details sidebar - responsive with mobile toggle */}
           <div 
-            className="w-full md:w-2/5 lg:w-80 bg-white p-6 overflow-y-auto md:max-h-[90vh] flex-shrink-0 overscroll-contain modal-content-scroll"
+            className="bg-white overflow-y-auto flex-shrink-0 overscroll-contain modal-content-scroll"
             style={{ 
+              width: isMdAndDown ? '100%' : '35%',
+              minWidth: isMdAndDown ? 'auto' : '320px',
+              maxWidth: isMdAndDown ? '100%' : '420px',
+              padding: isMdAndDown ? '1.5rem' : '2rem',
               overflowY: 'auto', 
               WebkitOverflowScrolling: 'touch',
-              maxHeight: 'calc(95vh - 2rem)'
+              maxHeight: isMdAndDown ? '40vh' : 'none',
+              borderTop: isMdAndDown ? '1px solid #e5e7eb' : 'none'
             }}
           >
-            <h2 className="text-2xl font-medium text-gray-900 mb-2">{project.title}</h2>
+            {/* Mobile swipe indicator */}
+            {isMdAndDown && (
+              <div className="flex justify-center mb-3">
+                <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+              </div>
+            )}
+            <h2 
+              className="font-semibold text-gray-900 mb-3"
+              style={{
+                fontSize: isMdAndDown ? '1.25rem' : '1.5rem',
+                lineHeight: '1.3'
+              }}
+            >
+              {project.title}
+            </h2>
             
             {project.client && (
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Client</h3>
-                <p className="text-gray-900">{project.client}</p>
+              <div className="mb-3">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Client</h3>
+                <p className="text-gray-900 text-sm">{project.client}</p>
               </div>
             )}
             
             {project.description && (
               <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">About</h3>
-                <p className="text-gray-700">{project.description}</p>
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">About</h3>
+                <p className="text-gray-700 text-sm leading-relaxed">{project.description}</p>
               </div>
             )}
             
-            <div className="mb-4">
-              <h3 className="text-sm font-medium text-gray-500">Category</h3>
-              <div className="flex gap-2 mt-1">
-                <span className="bg-[#FBD1D9]/20 text-[rgb(251,108,133)] text-sm px-3 py-1 rounded-full">
+            <div className="mb-3">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Category</h3>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-[#FBD1D9]/30 text-[rgb(251,108,133)] text-xs font-medium px-3 py-1.5 rounded-full">
                   {project.category}
                 </span>
                 {project.subcategory && (
-                  <span className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">
+                  <span className="bg-gray-100 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-full">
                     {project.subcategory}
                   </span>
                 )}
@@ -492,13 +615,13 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
             </div>
             
             {project.tools && project.tools.length > 0 && (
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Tools Used</h3>
-                <div className="flex flex-wrap gap-2 mt-1">
+              <div className="mb-3">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Tools Used</h3>
+                <div className="flex flex-wrap gap-1.5">
                   {project.tools.map(tool => (
                     <span 
                       key={tool}
-                      className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full"
+                      className="bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-md"
                     >
                       {tool}
                     </span>
@@ -509,40 +632,56 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
             
             {project.date && (
               <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Date</h3>
-                <p className="text-gray-700">{project.date}</p>
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Date</h3>
+                <p className="text-gray-700 text-sm">{project.date}</p>
               </div>
             )}
             
             {/* Image/asset navigation thumbnails */}
             {project.assets.length > 1 && (
-              <div className="mt-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">
-                  {project.type === 'video' ? 'Videos' : 'Images'} ({project.assets.length})
+              <div className="mt-5 pt-4 border-t border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                  {project.type === 'video' ? 'Videos' : 'Gallery'} ({project.assets.length})
                 </h3>
-                <div className="grid grid-cols-4 gap-2">
+                <div 
+                  className="grid gap-2"
+                  style={{
+                    gridTemplateColumns: isMdAndDown ? 'repeat(auto-fill, minmax(70px, 1fr))' : 'repeat(4, 1fr)'
+                  }}
+                >
                   {project.assets.map((asset, idx) => (
-                    <div 
+                    <button
                       key={idx}
                       onClick={() => setCurrentIndex(idx)}
-                      className={`cursor-pointer rounded-md overflow-hidden aspect-square relative transition-all duration-200 ${
+                      className={`rounded-lg overflow-hidden aspect-square relative transition-all duration-200 ${
                         idx === currentIndex 
-                          ? 'ring-2 ring-[rgb(251,108,133)] shadow-md scale-105 z-10' 
-                          : 'hover:ring-2 hover:ring-gray-200'
+                          ? 'ring-3 ring-[rgb(251,108,133)] shadow-lg scale-105' 
+                          : 'ring-1 ring-pink-100 hover:ring-2 hover:ring-[rgb(251,108,133)]/40 active:scale-95'
                       }`}
+                      style={{
+                        touchAction: 'manipulation',
+                        outline: 'none'
+                      }}
+                      aria-label={`View ${project.type === 'video' ? 'video' : 'image'} ${idx + 1}`}
                     >
                       <img 
                         src={isVideoAsset(asset) ? project.thumbnail : asset}
                         alt={`Thumbnail ${idx + 1}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
+                        draggable={false}
                       />
                       {isVideoAsset(asset) && (
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                          <Play className="w-4 h-4 text-white" />
+                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-1.5">
+                            <Play className="w-3 h-3 text-gray-800" fill="currentColor" />
+                          </div>
                         </div>
                       )}
-                    </div>
+                      {idx === currentIndex && (
+                        <div className="absolute inset-0 border-2 border-white rounded-lg pointer-events-none"></div>
+                      )}
+                    </button>
                   ))}
                 </div>
               </div>

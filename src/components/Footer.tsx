@@ -75,64 +75,65 @@ export default function Footer() {
             Get a free consultation and see how I can help grow your business.
           </p>
 
-          {/* Contact Information - Improved responsive design */}
-          <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 max-w-full">
+          {/* Social Links - Grid Layout */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12 max-w-3xl mx-auto">
             <motion.a
               href="mailto:business.desireearmojallas@gmail.com"
               whileHover={{ scale: 1.05, y: -2 }}
-              className="group flex items-center space-x-2 sm:space-x-3 text-[rgb(251,108,133)] hover:text-white 
-                       transition-all duration-300 bg-white/5 px-4 sm:px-6 py-2 sm:py-3 rounded-full hover:bg-white/10 w-full sm:w-auto justify-center"
+              className="group flex items-center justify-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
+                       transition-all duration-300 bg-white/5 px-6 py-3 rounded-full hover:bg-white/10"
             >
-              <Mail className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium text-sm sm:text-base truncate max-w-[200px] sm:max-w-none">business.desireearmojallas@gmail.com</span>
+              <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span className="font-medium hidden sm:inline">Email</span>
             </motion.a>
             <motion.a
               href="https://www.linkedin.com/in/desireearmojallas"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
-              className="group flex items-center space-x-2 sm:space-x-3 text-[rgb(251,108,133)] hover:text-white 
-                       transition-all duration-300 bg-white/5 px-4 sm:px-6 py-2 sm:py-3 rounded-full hover:bg-white/10 w-full sm:w-auto justify-center"
+              className="group flex items-center justify-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
+                       transition-all duration-300 bg-white/5 px-6 py-3 rounded-full hover:bg-white/10"
             >
-              <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium text-sm sm:text-base">LinkedIn</span>
+              <Linkedin className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <span className="font-medium hidden sm:inline">LinkedIn</span>
             </motion.a>
             <motion.a
               href="https://www.github.com/desireearmojallas"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
-              className="group flex items-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
+              className="group flex items-center justify-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
                        transition-all duration-300 bg-white/5 px-6 py-3 rounded-full hover:bg-white/10"
             >
               <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium">GitHub</span>
+              <span className="font-medium hidden sm:inline">GitHub</span>
             </motion.a>
             <motion.a
               href="https://www.behance.net/desireearmojallas"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05, y: -2 }}
-              className="group flex items-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
+              className="group flex items-center justify-center space-x-3 text-[rgb(251,108,133)] hover:text-white 
                        transition-all duration-300 bg-white/5 px-6 py-3 rounded-full hover:bg-white/10"
             >
               <BehanceIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              <span className="font-medium">Behance</span>
+              <span className="font-medium hidden sm:inline">Behance</span>
             </motion.a>
           </div>
 
-          {/* Back to Top - Responsive */}
+          {/* CTA Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                     text-white rounded-full font-medium text-base sm:text-lg btn-glow mb-8 sm:mb-12
+            onClick={() => setIsContactFormOpen(true)}
+            className="px-8 py-4 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                     text-white rounded-full font-medium text-lg btn-glow mb-12
                      focus:outline-none focus:ring-4 focus:ring-[rgb(251,108,133)]/30
-                     flex items-center gap-2 sm:gap-3 mx-auto cursor-pointer"
+                     flex items-center gap-3 mx-auto cursor-pointer shadow-xl"
+            type="button"
           >
-            <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-y-1 transition-transform" />
-            Back to Top
+            <Mail className="w-5 h-5" />
+            Start Your Project
           </motion.button>
 
           {/* Copyright - Responsive */}
@@ -145,30 +146,6 @@ export default function Footer() {
             </p>
           </div>
         </motion.div>
-      </div>
-
-      {/* Enhanced floating contact button with tooltip */}
-      <div className="fixed bottom-6 right-6 z-50 group">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="floating-contact flex items-center justify-center cursor-pointer relative"
-          onClick={() => setIsContactFormOpen(true)}
-          aria-label="Start your project - Get free consultation"
-        >
-          <Mail className="w-6 h-6 text-white" />
-          
-          {/* Pulse animation */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] animate-ping opacity-20"></div>
-        </motion.button>
-        
-        {/* Tooltip */}
-        <div className="absolute bottom-full right-0 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg whitespace-nowrap shadow-lg">
-            🚀 Start Your Project
-            <div className="absolute top-full right-6 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-          </div>
-        </div>
       </div>
 
       {/* Contact Form Modal */}

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Palette, Code, Sparkles, ChevronDown, MousePointer2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface LandingSectionProps {
   onRoleSelect: (role: 'designer' | 'developer') => void;
@@ -15,16 +15,19 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
   const [isAnimating, setIsAnimating] = useState(true);
   // State for guided tutorial
   const [showRoleTutorial, setShowRoleTutorial] = useState(true);
-  // State for cursor position
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  // Ref for cursor element (no state to avoid re-renders)
+  const cursorRef = useRef<HTMLDivElement>(null);
   
   // Debug component renders and role selection
   console.log('LandingSection rendered, current role:', selectedRole);
   
-  // Track mouse movement for cursor following
+  // Track mouse movement for cursor following (DOM only, no re-renders)
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
+      if (cursorRef.current) {
+        cursorRef.current.style.left = `${e.clientX}px`;
+        cursorRef.current.style.top = `${e.clientY}px`;
+      }
     };
     
     window.addEventListener('mousemove', handleMouseMove);
@@ -190,10 +193,9 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
         <AnimatePresence>
           {showRoleTutorial && (
             <motion.div
+              ref={cursorRef}
               style={{
                 position: 'fixed',
-                left: cursorPos.x,
-                top: cursorPos.y,
                 pointerEvents: 'none',
                 zIndex: 50
               }}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Grid, 
@@ -9,9 +9,10 @@ import {
 } from 'lucide-react';
 import { type Project } from './ProjectCardNew';
 import ProjectDetailModal from './ProjectDetailModal';
-import GraphicDesignGallery from './GraphicDesignGallery';
+import GraphicMasonryGallery from './GraphicMasonryGallery';
 import UIUXProjectsGallery from './UIUXProjectsGallery';
-import UnifiedCarousel from './UnifiedCarousel';
+import DeveloperProjectCard from './DeveloperProjectCard';
+import TechStackSection from './TechStackSection';
 import { useAssets, getAssetUrl } from '../Assets';
 
 interface ProjectsCarouselProps {
@@ -21,49 +22,17 @@ interface ProjectsCarouselProps {
 // Enhanced projects data with more sophisticated descriptions
 const sampleProjects: Project[] = [
   {
-    id: "1",
-    title: "E-commerce Mobile App",
-    description: "A sleek mobile shopping experience with intuitive navigation and seamless checkout flow.",
-    tags: ["Figma", "Prototyping", "User Research", "Mobile Design"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=UI/UX+Project",
-    link: "#",
-    role: "designer",
-    type: "uiux",
-    category: "UI/UX Design",
-  },
-  {
-    id: "2",
-    title: "Brand Identity System",
-    description: "Complete brand redesign including logo, color palette, typography, and brand guidelines.",
-    tags: ["Branding", "Illustrator", "Typography", "Style Guide"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Brand+Identity",
-    link: "#",
-    role: "designer",
-    type: "uiux",
-    category: "UI/UX Design",
-  },
-  {
-    id: "3",
-    title: "SaaS Dashboard",
-    description: "Clean, data-driven dashboard design focusing on usability and information hierarchy.",
-    tags: ["Dashboard", "Data Viz", "UX Research", "Figma"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=SaaS+Dashboard",
-    link: "#",
-    role: "designer",
-    type: "uiux",
-    category: "UI/UX Design",
-  },
-  {
     id: "4",
     title: "React Task Manager",
     description: "Full-stack task management application with real-time updates and team collaboration.",
     tags: ["React", "TypeScript", "Node.js", "MongoDB"],
     image: "https://placehold.co/600x800/f8f9fa/6c757d?text=React+Task+Manager",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/task-manager",
     role: "developer",
     type: "development",
     category: "Web Development",
+    techStack: ["React", "TypeScript", "Node.js", "MongoDB", "Express"],
   },
   {
     id: "5",
@@ -72,10 +41,11 @@ const sampleProjects: Project[] = [
     tags: ["React", "Tailwind", "Framer Motion", "Vite"],
     image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Portfolio+Website",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/portfolio",
     role: "developer",
     type: "development",
     category: "Web Development",
+    techStack: ["React", "TypeScript", "Tailwind", "Framer Motion", "Vite"],
   },
   {
     id: "6",
@@ -84,10 +54,11 @@ const sampleProjects: Project[] = [
     tags: ["Next.js", "Socket.io", "AI/ML", "PostgreSQL"],
     image: "https://placehold.co/600x800/f8f9fa/6c757d?text=AI+Chat+App",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/ai-chat",
     role: "developer",
     type: "development",
     category: "Web Development",
+    techStack: ["Next.js", "Socket.io", "PostgreSQL", "Node.js", "OpenAI"],
   },
   {
     id: "7",
@@ -96,21 +67,11 @@ const sampleProjects: Project[] = [
     tags: ["React Native", "Firebase", "Node.js", "Socket.io"],
     image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Social+Platform",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/social-platform",
     role: "developer",
     type: "development",
     category: "Mobile Development",
-  },
-  {
-    id: "8",
-    title: "Design System Library",
-    description: "Comprehensive design system with reusable components and design tokens.",
-    tags: ["Figma", "Design Tokens", "Components", "Documentation"],
-    image: "https://placehold.co/600x800/f8f9fa/6c757d?text=Design+System",
-    link: "#",
-    role: "designer",
-    type: "uiux",
-    category: "UI/UX Design",
+    techStack: ["React Native", "Firebase", "Node.js", "Socket.io", "Redux"],
   },
   {
     id: "9",
@@ -130,32 +91,11 @@ const sampleProjects: Project[] = [
     tags: ["React", "Stripe", "Node.js", "PostgreSQL"],
     image: "https://placehold.co/600x800/20B2AA/FFFFFF?text=E-commerce",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/ecommerce-platform",
     role: "developer",
     type: "development",
     category: "Web Development",
-  },
-  {
-    id: "11",
-    title: "Mobile Fitness App UI",
-    description: "Intuitive fitness tracking app with social features and progress visualization.",
-    tags: ["Figma", "Mobile UI", "Prototyping", "User Testing"],
-    image: "https://placehold.co/600x800/FF6347/FFFFFF?text=Fitness+App",
-    link: "#",
-    role: "designer",
-    type: "uiux",
-    category: "Mobile Design",
-  },
-  {
-    id: "12",
-    title: "Restaurant Menu Design",
-    description: "Modern menu design with elegant typography and appetizing food photography layout.",
-    tags: ["Print Design", "Typography", "InDesign", "Photography"],
-    image: "https://placehold.co/600x800/DAA520/FFFFFF?text=Menu+Design",
-    link: "#",
-    role: "designer",
-    type: "graphic",
-    category: "Print Design",
+    techStack: ["React", "Node.js", "PostgreSQL", "Stripe", "Redis"],
   },
   {
     id: "13",
@@ -164,10 +104,11 @@ const sampleProjects: Project[] = [
     tags: ["React", "TypeScript", "Node.js", "PostgreSQL", "Redis", "AWS"],
     image: "https://placehold.co/600x800/4F46E5/FFFFFF?text=Learning+Platform",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/learning-platform",
     role: "developer",
     type: "development",
     category: "Full Stack",
+    techStack: ["React", "TypeScript", "Node.js", "PostgreSQL", "Redis", "AWS"],
   },
   {
     id: "14",
@@ -176,10 +117,11 @@ const sampleProjects: Project[] = [
     tags: ["React", "GraphQL", "Node.js", "MongoDB", "Socket.io", "D3.js"],
     image: "https://placehold.co/600x800/06B6D4/FFFFFF?text=Analytics+Dashboard",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/analytics-dashboard",
     role: "developer",
     type: "development",
     category: "Full Stack",
+    techStack: ["React", "GraphQL", "Node.js", "MongoDB", "Socket.io"],
   },
   {
     id: "15",
@@ -188,10 +130,11 @@ const sampleProjects: Project[] = [
     tags: ["React Native", "Firebase", "Node.js", "Express", "Redux"],
     image: "https://placehold.co/600x800/EC4899/FFFFFF?text=Collaboration+App",
     link: "#",
-    github: "#",
+    github: "https://github.com/desireearmojallas/collab-app",
     role: "developer",
     type: "development",
     category: "Full Stack",
+    techStack: ["React Native", "Firebase", "Node.js", "Express", "Redux"],
   }
 ];
 
@@ -199,7 +142,14 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
   const { assets, loadingState } = useAssets();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<'featured' | 'all'>('featured');
+  const [activeView, setActiveView] = useState<'featured' | 'all'>(
+    role === 'designer' ? 'all' : 'featured'
+  );
+  const uiuxProjects = sampleProjects.filter(project => project.type === 'uiux');
+
+  useEffect(() => {
+    setActiveView(role === 'designer' ? 'all' : 'featured');
+  }, [role]);
 
   // Filter projects by role and category, and ensure valid project data
   const filteredProjects = sampleProjects.filter(project => {
@@ -312,38 +262,40 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
           </motion.div>
 
           {/* View Toggle - Apple-inspired segmented control */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            viewport={{ once: true }}
-            className="mt-12 inline-flex bg-gray-100/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50"
-          >
-            <button
-              onClick={() => setActiveView('featured')}
-              className={`px-6 py-3 rounded-xl font-outfit font-medium text-sm transition-all duration-300 ${
-                activeView === 'featured'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+          {role === 'developer' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              viewport={{ once: true }}
+              className="mt-12 inline-flex bg-gray-100/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50"
             >
-              Featured Work
-            </button>
-            <button
-              onClick={() => setActiveView('all')}
-              className={`px-6 py-3 rounded-xl font-outfit font-medium text-sm transition-all duration-300 ${
-                activeView === 'all'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              All Projects
-            </button>
-          </motion.div>
+              <button
+                onClick={() => setActiveView('featured')}
+                className={`px-6 py-3 rounded-xl font-outfit font-medium text-sm transition-all duration-300 ${
+                  activeView === 'featured'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Featured Work
+              </button>
+              <button
+                onClick={() => setActiveView('all')}
+                className={`px-6 py-3 rounded-xl font-outfit font-medium text-sm transition-all duration-300 ${
+                  activeView === 'all'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                All Projects
+              </button>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Category Filters - Refined Apple style */}
-        {activeView === 'all' && categories.length > 0 && (
+        {role === 'developer' && activeView === 'all' && categories.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -398,23 +350,42 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
           </motion.div>
         )}
 
-        {/* Unified Carousel Section */}
-        {(activeView === 'all' || activeView === 'featured') && filteredProjects.length > 0 && (
+        {/* Projects Display Section - Role-Based Layout */}
+        {role === 'developer' && (activeView === 'all' || activeView === 'featured') && filteredProjects.length > 0 && (
           <motion.div
             key={activeView}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <UnifiedCarousel
-              projects={filteredProjects}
-              title={activeView === 'featured' ? 'Featured Projects' : 'All Projects'}
-              subtitle={role === 'designer' 
-                ? "A curated collection of design projects that solve real problems through thoughtful visual solutions and user-centered thinking."
-                : "A showcase of development projects built with modern technologies, clean architecture, and attention to performance and usability."
-              }
-              onProjectClick={handleProjectClick}
-            />
+            <div className="space-y-8">
+              {/* Section Header */}
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-outfit font-semibold text-gray-800 mb-4">
+                  {activeView === 'featured' ? 'Featured Projects' : 'All Projects'}
+                </h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  A showcase of development projects built with modern technologies, clean architecture, and attention to performance and usability.
+                </p>
+              </div>
+
+              {/* Developer Cards Grid */}
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
+              >
+                {filteredProjects.map((project, index) => (
+                  <DeveloperProjectCard 
+                    key={project.id}
+                    project={project}
+                    index={index}
+                    onClick={handleProjectClick}
+                  />
+                ))}
+              </motion.div>
+            </div>
           </motion.div>
         )}
 
@@ -425,24 +396,62 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="mb-20 space-y-20"
+            className="mb-20"
           >
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-outfit font-semibold text-gray-800 mb-4">
+            {/* Section Header with improved styling */}
+            <div className="text-center mb-16 px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="inline-block mb-6"
+              >
+                <div className="w-16 h-16 mx-auto bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                              rounded-2xl flex items-center justify-center shadow-lg">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </motion.div>
+              <motion.h3 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-5xl font-outfit font-bold text-gray-800 mb-4"
+              >
                 Graphic Design Portfolio
-              </h3>
-              <p className="text-gray-600">
+              </motion.h3>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="text-lg text-gray-600 max-w-2xl mx-auto"
+              >
                 Explore my complete graphic design and visual identity work
-              </p>
+              </motion.p>
             </div>
-            <GraphicDesignGallery className="mb-16" defaultOpen={true} />
-            <UIUXProjectsGallery 
-              projects={sampleProjects} 
-              defaultOpen={true} 
-              className="mb-16" 
-            />
+            
+            {/* Masonry Gallery with wrapper styling */}
+            <div className="relative">
+              {/* Decorative background elements */}
+              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-pink-50/40 to-transparent pointer-events-none"></div>
+              <GraphicMasonryGallery className="" />
+              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white via-pink-50/20 to-transparent pointer-events-none"></div>
+            </div>
+            {uiuxProjects.length > 0 && (
+              <UIUXProjectsGallery 
+                projects={sampleProjects} 
+                defaultOpen={true} 
+                className="mb-16" 
+              />
+            )}
           </motion.div>
         )}
+
+        <TechStackSection role={role} />
 
         {/* Enhanced Call to Action Footer */}
         <motion.div
