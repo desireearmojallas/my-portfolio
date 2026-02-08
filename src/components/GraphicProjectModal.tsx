@@ -74,7 +74,7 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 overflow-y-auto bg-black/60 backdrop-blur-sm project-modal-overlay modal-layer"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm project-modal-overlay modal-layer"
         style={{ overflow: 'hidden' }}
         onClick={handleClickOutside}
         onMouseDown={(e) => e.preventDefault()}
