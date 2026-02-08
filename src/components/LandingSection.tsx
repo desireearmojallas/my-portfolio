@@ -50,10 +50,15 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
   // Hide tutorial when user scrolls beyond hero section
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 200) {
+      if (window.scrollY > 150) {
         setShowRoleTutorial(false);
       }
     };
+
+    // Check initial scroll position
+    if (window.scrollY > 150) {
+      setShowRoleTutorial(false);
+    }
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
