@@ -417,51 +417,53 @@ export default function GraphicMasonryGallery({
   });
 
   return (
-    <div className={`relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-8 px-2 ${className}`}>
-      <div
-        ref={containerRef}
-        className={`flex w-full ${
-          columns === 1 ? 'flex-col' : 'flex-row'
-        }`}
-        style={{
-          gap: '8px' // Small aesthetic gap between columns
-        }}
-      >
-        {distributedProjects.map((column, columnIndex) => (
-          <div 
-            key={columnIndex} 
-            className="flex flex-col"
-            style={{
-              flex: '1 1 0',
-              minWidth: 0,
-              gap: '8px' // Small aesthetic gap between items in column
-            }}
-          >
-            {column.map((project, projectIndex) => (
-              <motion.div
-                key={project.id}
-                className="w-full"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: projectIndex * 0.08 }}
-                viewport={{ once: true }}
-              >
-                <GraphicProjectCard
-                  project={project}
-                  index={columnIndex * 10 + projectIndex}
-                  onClick={(project) => {
-                    window._lastScrollPosition = window.scrollY;
-                    setSelectedProject(project);
-                  }}
-                  variant="masonry"
-                />
-              </motion.div>
-            ))}
-          </div>
-        ))}
+    <>
+      <div className={`relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-8 px-2 ${className}`}>
+        <div
+          ref={containerRef}
+          className={`flex w-full ${
+            columns === 1 ? 'flex-col' : 'flex-row'
+          }`}
+          style={{
+            gap: '8px' // Small aesthetic gap between columns
+          }}
+        >
+          {distributedProjects.map((column, columnIndex) => (
+            <div 
+              key={columnIndex} 
+              className="flex flex-col"
+              style={{
+                flex: '1 1 0',
+                minWidth: 0,
+                gap: '8px' // Small aesthetic gap between items in column
+              }}
+            >
+              {column.map((project, projectIndex) => (
+                <motion.div
+                  key={project.id}
+                  className="w-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: projectIndex * 0.08 }}
+                  viewport={{ once: true }}
+                >
+                  <GraphicProjectCard
+                    project={project}
+                    index={columnIndex * 10 + projectIndex}
+                    onClick={(project) => {
+                      window._lastScrollPosition = window.scrollY;
+                      setSelectedProject(project);
+                    }}
+                    variant="masonry"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal - Rendered outside gallery container to ensure proper viewport centering */}
       {selectedProject && (
         <GraphicProjectModal
           project={selectedProject}
@@ -469,6 +471,6 @@ export default function GraphicMasonryGallery({
           isClosing={isModalClosing}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -301,16 +301,19 @@
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
+  overflow-y: auto;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: contain;
 }
 
 .project-modal-content {
   max-width: 90vw;
   max-height: 90vh;
   border-radius: 16px;
-  overflow: hidden;
+  overflow-y: auto;
   will-change: transform, opacity; /* Performance optimization */
-  contain: content; /* Performance optimization */
   overscroll-behavior: contain; /* Improve mobile scroll experience */
+  -webkit-overflow-scrolling: touch;
 }
 
 .project-asset-counter {

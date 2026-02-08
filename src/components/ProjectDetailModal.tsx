@@ -89,8 +89,7 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 overflow-y-auto bg-black/60 backdrop-blur-sm project-modal-overlay modal-layer"
-        style={{ overflow: 'hidden' }}
+        className="fixed inset-0 z-50 flex items-start justify-center p-4 md:p-6 overflow-hidden bg-black/60 backdrop-blur-sm project-modal-overlay modal-layer"
         onClick={handleClickOutside}
         onMouseDown={(e) => e.preventDefault()} // Prevent mousedown events
       >
@@ -100,7 +99,7 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="bg-white rounded-3xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative project-modal-content modal-layer modal-content-scroll"
+          className="bg-white rounded-3xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative my-auto project-modal-content modal-layer modal-content-scroll"
           style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
           onClick={(e) => {
             e.stopPropagation();

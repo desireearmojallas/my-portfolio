@@ -610,16 +610,16 @@ export default function GraphicDesignGallery({
             )}
           </div>
         )}
-
-        {/* Project Detail Modal */}
-        {selectedProject && (
-          <GraphicProjectModal
-            project={selectedProject}
-            onClose={handleCloseModal}
-            isClosing={isModalClosing}
-          />
-        )}
       </div>
+
+      {/* Project Detail Modal - Rendered outside to ensure proper viewport centering */}
+      {selectedProject && (
+        <GraphicProjectModal
+          project={selectedProject}
+          onClose={handleCloseModal}
+          isClosing={isModalClosing}
+        />
+      )}
     </CollapsibleSection>
   );
 }

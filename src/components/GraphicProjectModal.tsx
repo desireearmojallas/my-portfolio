@@ -74,8 +74,7 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm project-modal-overlay modal-layer"
-        style={{ overflow: 'hidden' }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm project-modal-overlay"
         onClick={handleClickOutside}
         onMouseDown={(e) => e.preventDefault()}
       >
@@ -85,7 +84,7 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="bg-white rounded-3xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative project-modal-content modal-layer modal-content-scroll"
+          className="bg-white rounded-3xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative project-modal-content modal-content-scroll"
           style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
           onClick={(e) => {
             e.stopPropagation();
@@ -201,7 +200,9 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="w-full bg-white"
+                    className={`w-full bg-white ${
+                      project.type === 'logo' ? 'p-8 md:p-12 lg:p-16' : ''
+                    }`}
                   >
                     {isVideoAsset(asset) ? (
                       <video
@@ -216,7 +217,9 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
                       <img 
                         src={asset} 
                         alt={`${project.title} - Image ${index + 1}`}
-                        className="w-full h-auto object-contain block"
+                        className={`w-full h-auto object-contain block ${
+                          project.type === 'logo' ? 'max-w-2xl mx-auto' : ''
+                        }`}
                       />
                     )}
                   </motion.div>
