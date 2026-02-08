@@ -47,6 +47,18 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
     };
   }, []);
 
+  // Hide tutorial when user scrolls beyond hero section
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowRoleTutorial(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Array of font families to cycle through
   const fonts = [
     'font-outfit', // Default font
