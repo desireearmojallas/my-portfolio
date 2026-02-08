@@ -65,7 +65,7 @@ function App() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white via-gray-50/30 to-pink-50/20 force-scrollable w-full overflow-x-hidden" id="root">
+    <div className="force-scrollable w-full overflow-x-hidden" id="root">
       <Header onNavigate={handleNavigation} />
       <main className="pt-16 overflow-x-hidden force-scrollable w-full">
         <section id="home">

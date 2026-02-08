@@ -5,6 +5,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  overview?: string; // Detailed project overview for modal
   tags: string[];
   image: string;
   images?: string[]; // For graphic design projects with multiple images

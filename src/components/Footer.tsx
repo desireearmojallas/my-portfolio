@@ -34,9 +34,9 @@ export default function Footer() {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   return (
-    <footer className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white py-20 px-6 relative overflow-hidden">
+    <footer className="bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white py-20 px-6 relative overflow-x-hidden">
       {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-x-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-20 h-20 bg-[rgb(251,108,133)]/10 rounded-full animate-float"></div>
         <div className="absolute bottom-20 right-20 w-16 h-16 bg-[rgb(251,108,133)]/10 rounded-full animate-pulse-soft"></div>
         <div className="absolute top-1/2 right-10 w-12 h-12 bg-[rgb(251,108,133)]/10 rounded-full animate-bounce-gentle"></div>

@@ -14,11 +14,9 @@ import UIUXProjectsGallery from './UIUXProjectsGallery';
 import DeveloperProjectCard from './DeveloperProjectCard';
 import TechStackSection from './TechStackSection';
 import { useAssets, getAssetUrl } from '../Assets';
-
 interface ProjectsCarouselProps {
   role: 'designer' | 'developer';
 }
-
 // Enhanced projects data with more sophisticated descriptions
 const sampleProjects: Project[] = [
   {
@@ -127,9 +125,60 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Full Stack",
+  },
+  // UI/UX Design Projects
+  {
+    id: "uiux-1",
+    title: "FerryEasy - Mobile Ticketing App Design",
+    description: "A comprehensive ferry ticketing mobile app with seamless booking experience, real-time schedules, and user-friendly interface for maritime transportation.",
+    overview: "FerryEasy is a mobile ticketing app designed to streamline ferry travel for passengers in Cebu and Lapu-Lapu. The project focuses on creating a smooth and intuitive booking experience by enabling users to view ferry schedules in real time, purchase tickets digitally, and manage their trips directly from their smartphones.\n\nThe goal of this project was to eliminate common pain points such as long queues, physical tickets, and confusing schedules. Through a clean interface, user-centered UX decisions, and a visual identity inspired by maritime travel, FerryEasy delivers a simple, accessible, and reliable solution for everyday ferry commuters.",
+    tags: ["Figma", "UI Design", "Mobile App", "UX Research"],
+    image: "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567653/FerryEasy_UI_UX_Portfolio_2.0_page-0001_lcrj4x.jpg",
+    images: [
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567653/FerryEasy_UI_UX_Portfolio_2.0_page-0001_lcrj4x.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567659/FerryEasy_UI_UX_Portfolio_2.0_page-0002_cyq5ej.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567680/FerryEasy_UI_UX_Portfolio_2.0_page-0003_oajmf1.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567680/FerryEasy_UI_UX_Portfolio_2.0_page-0004_ykxtge.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567679/FerryEasy_UI_UX_Portfolio_2.0_page-0005_udfjsf.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567681/FerryEasy_UI_UX_Portfolio_2.0_page-0006_nkzrzk.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567684/FerryEasy_UI_UX_Portfolio_2.0_page-0007_qs3q2o.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567683/FerryEasy_UI_UX_Portfolio_2.0_page-0008_fdut3d.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567685/FerryEasy_UI_UX_Portfolio_2.0_page-0009_q9kh6j.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567682/FerryEasy_UI_UX_Portfolio_2.0_page-0010_xpfvrg.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567686/FerryEasy_UI_UX_Portfolio_2.0_page-0011_immgsz.jpg",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770567684/FerryEasy_UI_UX_Portfolio_2.0_page-0012_oo9sas.jpg",
+    ],
+    link: "#",
+    role: "designer",
+    type: "uiux",
+    category: "UI/UX Design",
+  },
+  {
+    id: "uiux-2",
+    title: "Co-Vaccine - Mobile Vaccine Management App",
+    description: "A comprehensive vaccine management mobile app designed to streamline vaccination tracking, appointments, and health records.",
+    tags: ["Figma", "UI Design", "Mobile App", "Healthcare"],
+    image: "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569996/1-co-vaccine-uiux-1920_v4doyx.png",
+    images: [
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569996/1-co-vaccine-uiux-1920_v4doyx.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569999/9-co-vaccine-uiux-1920_vjufd8.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569996/17-co-vaccine-uiux-1920_r3fama.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569996/25-co-vaccine-uiux-1920_i7o4om.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569998/33-co-vaccine-uiux-1920_l798z2.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569998/41-co-vaccine-uiux-1920_bon2ha.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569997/49-co-vaccine-uiux-1920_cuubmf.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569996/57-co-vaccine-uiux-1920_lgsw1m.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569998/65-co-vaccine-uiux-1920_hxlrid.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569996/73-co-vaccine-uiux-1920_g05d89.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569999/81-co-vaccine-uiux-1920_gta32c.png",
+      "https://res.cloudinary.com/du4nug3uk/image/upload/v1770569998/89-co-vaccine-uiux-1920_wnkwju.png",
+    ],
+    link: "#",
+    role: "designer",
+    type: "uiux",
+    category: "UI/UX Design",
   }
 ];
-
 export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
   const { assets, loadingState } = useAssets();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -138,17 +187,14 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
     role === 'designer' ? 'all' : 'featured'
   );
   const uiuxProjects = sampleProjects.filter(project => project.type === 'uiux');
-
   useEffect(() => {
     setActiveView(role === 'designer' ? 'all' : 'featured');
   }, [role]);
-
   // Filter projects by role and category, and ensure valid project data
   const filteredProjects = sampleProjects.filter(project => {
     // First check if project has required fields
     const hasValidData = project.title && project.image && project.description && project.tags && project.tags.length > 0;
     if (!hasValidData) return false;
-    
     // Then check role match
     const roleMatch = project.role === role || project.role === "both";
     if (activeCategory && roleMatch) {
@@ -156,7 +202,6 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
     }
     return roleMatch;
   });
-
   // Get unique categories for the current role
   const categories = [...new Set(
     sampleProjects
@@ -164,12 +209,10 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
       .map(p => p.category)
       .filter(Boolean)
   )] as string[];
-
   const handleProjectClick = (project: Project) => {
     window._lastScrollPosition = window.scrollY;
     setSelectedProject(project);
   };
-
   const handleCloseModal = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -177,22 +220,19 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
     }
     setSelectedProject(null);
     document.body.style.overflow = 'auto';
-    
     if (window._lastScrollPosition !== undefined) {
       setTimeout(() => {
         window.scrollTo(0, window._lastScrollPosition || 0);
       }, 10);
     }
   };
-
   return (
     <section className="section-padding bg-gradient-to-br from-white via-pink-50/30 to-purple-50/20 relative overflow-visible">
       {/* Subtle background elements matching your theme */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-x-hidden pointer-events-none">
         <div className="absolute top-32 right-32 w-80 h-80 bg-gradient-to-r from-pink-100/30 to-rose-100/30 rounded-full blur-3xl animate-pulse-soft"></div>
         <div className="absolute bottom-32 left-32 w-96 h-96 bg-gradient-to-r from-purple-100/20 to-pink-100/20 rounded-full blur-3xl animate-float"></div>
       </div>
-
       <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
         {/* Hero Section - Apple-inspired */}
         <motion.div
@@ -427,18 +467,63 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
             </div>
             
             {/* Masonry Gallery with wrapper styling */}
-            <div className="relative">
-              {/* Decorative background elements */}
-              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-pink-50/40 to-transparent pointer-events-none"></div>
+            <div className="relative mb-20">
               <GraphicMasonryGallery className="" />
-              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white via-pink-50/20 to-transparent pointer-events-none"></div>
             </div>
+
+            {/* UI/UX Design Section */}
             {uiuxProjects.length > 0 && (
-              <UIUXProjectsGallery 
-                projects={sampleProjects} 
-                defaultOpen={true} 
-                className="mb-16" 
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="relative w-screen -mx-6 left-[calc(-50vw+50%)] px-6 md:px-8 lg:px-12"
+              >
+                {/* Section Header */}
+                <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                    className="inline-block mb-6"
+                  >
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                                  rounded-2xl flex items-center justify-center shadow-lg">
+                      <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  </motion.div>
+                  <motion.h3 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    viewport={{ once: true }}
+                    className="text-4xl md:text-5xl font-outfit font-bold text-gray-800 mb-4"
+                  >
+                    UI/UX Design Projects
+                  </motion.h3>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    viewport={{ once: true }}
+                    className="text-lg text-gray-600 max-w-2xl mx-auto"
+                  >
+                    User-centered digital experiences crafted with attention to detail and intuitive design
+                  </motion.p>
+                </div>
+
+                {/* UI/UX Gallery */}
+                <div className="max-w-[1600px] mx-auto">
+                  <UIUXProjectsGallery 
+                    projects={sampleProjects} 
+                    className="" 
+                  />
+                </div>
+              </motion.div>
             )}
           </motion.div>
         )}
@@ -453,12 +538,6 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
           viewport={{ once: true }}
           className="text-center relative"
         >
-          {/* Background Pattern */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-32 -left-32 w-64 h-64 bg-gradient-to-r from-pink-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-gradient-to-r from-rose-200/20 to-pink-200/20 rounded-full blur-3xl"></div>
-          </div>
-
           <div className="relative z-10 gradient-card border border-pink-100/50 rounded-3xl p-12 md:p-16 max-w-5xl mx-auto 
                         bg-gradient-to-br from-white/95 via-pink-50/30 to-purple-50/30 shadow-2xl backdrop-blur-sm">
             

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Github, ExternalLink, Figma } from 'lucide-react';
+import { X } from 'lucide-react';
 import type { Project } from './ProjectCard';
 
 interface ProjectDetailModalProps {
@@ -69,12 +69,18 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
 
   if (!project) return null;
 
-  // Mock images for the project (replace with real images from your project data)
-  const projectImages = [
-    { id: 1, src: project.image || '/placeholder.jpg', alt: `${project.title} preview 1` },
-    { id: 2, src: '/placeholder-2.jpg', alt: `${project.title} preview 2` },
-    { id: 3, src: '/placeholder-3.jpg', alt: `${project.title} preview 3` },
-  ];
+  // Use project images if available, otherwise use the main image or placeholders
+  const projectImages = project.images && project.images.length > 0
+    ? project.images.map((src, index) => ({
+        id: index + 1,
+        src,
+        alt: `${project.title} preview ${index + 1}`
+      }))
+    : [
+        { id: 1, src: project.image || '/placeholder.jpg', alt: `${project.title} preview 1` },
+        { id: 2, src: '/placeholder-2.jpg', alt: `${project.title} preview 2` },
+        { id: 3, src: '/placeholder-3.jpg', alt: `${project.title} preview 3` },
+      ];
 
   return (
     <AnimatePresence>
@@ -127,27 +133,11 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
               </p>
             </motion.div>
 
-            {/* Cover Image */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-10"
-            >
-              <div className="rounded-2xl overflow-hidden shadow-lg aspect-video bg-gray-100">
-                <img 
-                  src={project.image || '/placeholder.jpg'} 
-                  alt={`${project.title} cover`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-
             {/* Tools/Tags */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.2 }}
               className="mb-8"
             >
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
@@ -169,92 +159,53 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.3 }}
               className="mb-10"
             >
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
                 Project Overview
               </h3>
               <div className="prose prose-lg max-w-none text-gray-600">
-                <p>{project.description}</p>
-                <p className="mt-4">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. 
-                  Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus 
-                  rhoncus ut eleifend nibh porttitor. Ut in nulla enim.
-                </p>
+                {project.overview ? (
+                  project.overview.split('\n\n').map((paragraph, index) => (
+                    <p key={index} className={index > 0 ? 'mt-4' : ''}>
+                      {paragraph}
+                    </p>
+                  ))
+                ) : (
+                  <p>{project.description}</p>
+                )}
               </div>
             </motion.div>
 
-            {/* Project Images Gallery */}
+            {/* Project Images Gallery - Behance-style seamless vertical layout */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mb-10"
+              transition={{ delay: 0.4 }}
+              className="mb-10 -mx-6 md:-mx-8 lg:-mx-10"
             >
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6 px-6 md:px-8 lg:px-10">
                 Project Gallery
               </h3>
-              <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-                {projectImages.map((image) => (
+              <div className="flex flex-col">
+                {projectImages.map((image, index) => (
                   <motion.div
                     key={image.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="rounded-xl overflow-hidden shadow-md aspect-video bg-gray-100"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="w-full bg-white"
                   >
                     <img 
                       src={image.src} 
                       alt={image.alt}
-                      className="w-full h-full object-cover"
+                      className="w-full h-auto object-contain block"
                     />
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
-
-            {/* External Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-4 mb-6"
-            >
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors text-gray-800 font-medium"
-                >
-                  <Github className="w-5 h-5" />
-                  View Code
-                </a>
-              )}
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white rounded-full font-medium transition-transform hover:scale-105"
-                >
-                  <ExternalLink className="w-5 h-5" />
-                  Live Demo
-                </a>
-              )}
-              {project.role === 'designer' && (
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-3 bg-black text-white rounded-full font-medium transition-transform hover:scale-105"
-                >
-                  <Figma className="w-5 h-5" />
-                  Figma Design
-                </a>
-              )}
             </motion.div>
           </div>
         </motion.div>
