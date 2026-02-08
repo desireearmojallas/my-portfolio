@@ -8,6 +8,7 @@ export interface Project {
   tags: string[];
   image: string;
   images?: string[]; // For graphic design projects with multiple images
+  overview?: string; // Detailed project description for modal
   link?: string;
   github?: string;
   role: 'designer' | 'developer' | 'both';

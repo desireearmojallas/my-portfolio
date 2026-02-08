@@ -167,7 +167,7 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
               </h3>
               <div className="prose prose-lg max-w-none text-gray-600">
                 {project.overview ? (
-                  project.overview.split('\n\n').map((paragraph, index) => (
+                  project.overview.split('\n\n').map((paragraph: string, index: number) => (
                     <p key={index} className={index > 0 ? 'mt-4' : ''}>
                       {paragraph}
                     </p>
