@@ -32,7 +32,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Web Development",
-    techStack: ["React", "TypeScript", "Node.js", "MongoDB", "Express"],
   },
   {
     id: "5",
@@ -45,7 +44,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Web Development",
-    techStack: ["React", "TypeScript", "Tailwind", "Framer Motion", "Vite"],
   },
   {
     id: "6",
@@ -58,7 +56,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Web Development",
-    techStack: ["Next.js", "Socket.io", "PostgreSQL", "Node.js", "OpenAI"],
   },
   {
     id: "7",
@@ -71,7 +68,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Mobile Development",
-    techStack: ["React Native", "Firebase", "Node.js", "Socket.io", "Redux"],
   },
   {
     id: "9",
@@ -95,7 +91,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Web Development",
-    techStack: ["React", "Node.js", "PostgreSQL", "Stripe", "Redis"],
   },
   {
     id: "13",
@@ -108,7 +103,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Full Stack",
-    techStack: ["React", "TypeScript", "Node.js", "PostgreSQL", "Redis", "AWS"],
   },
   {
     id: "14",
@@ -121,7 +115,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Full Stack",
-    techStack: ["React", "GraphQL", "Node.js", "MongoDB", "Socket.io"],
   },
   {
     id: "15",
@@ -134,7 +127,6 @@ const sampleProjects: Project[] = [
     role: "developer",
     type: "development",
     category: "Full Stack",
-    techStack: ["React Native", "Firebase", "Node.js", "Express", "Redux"],
   }
 ];
 

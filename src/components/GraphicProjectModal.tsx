@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform, animate } from "framer-motion";
+import type { PanInfo } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX, ZoomIn, Info } from "lucide-react";
 import type { GraphicProject } from "./GraphicProjectCard";
 import { useResponsive } from '../hooks/useResponsive';
@@ -40,7 +41,7 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
   }, [currentIndex]);
   
   // Handle swipe gestures for touch devices
-  const handleDragEnd = useCallback((event: any, info: PanInfo) => {
+  const handleDragEnd = useCallback((_: any, info: PanInfo) => {
     const threshold = 50; // Minimum swipe distance
     const velocity = info.velocity.x;
     const offset = info.offset.x;
@@ -364,18 +365,18 @@ export default function GraphicProjectModal({ project, onClose, isClosing = fals
           {/* Media display area - enhanced for responsive design */}
           <motion.div 
             className="flex-1 bg-white relative overflow-hidden"
+            drag={!currentIsVideo && project.assets.length > 1 && isMdAndDown ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
             style={{ 
               minHeight: isMdAndDown ? '60vh' : '400px',
               maxHeight: isMdAndDown ? '70vh' : 'none',
               height: isMdAndDown ? 'auto' : '100%',
               width: isMdAndDown ? '100%' : '65%',
-              touchAction: currentIsVideo ? 'auto' : 'none' // Allow swipe on images, not on video
+              touchAction: currentIsVideo ? 'auto' : 'none',
+              x: dragX
             }}
-            drag={!currentIsVideo && project.assets.length > 1 && isMdAndDown ? "x" : false}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            onDragEnd={handleDragEnd}
-            style={{ x: dragX }}
           >
             {/* Navigation arrows - touch-optimized */}
             {project.assets.length > 1 && !isMdAndDown && (
