@@ -53,9 +53,9 @@ export default function UIUXProjectsGallery({
   };
 
   return (
-    <div className={`${className}`}>
+    <div className={className}>
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {uiuxProjects.map((project, index) => {
           const deviceType = getDeviceType(project);
           const isHovered = hoveredProject === project.id;
@@ -76,7 +76,7 @@ export default function UIUXProjectsGallery({
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-50/50 via-purple-50/30 to-blue-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 {/* Content */}
-                <div className="relative h-full p-6 flex flex-col">
+                <div className="relative h-full p-4 md:p-6 flex flex-col">
                   {/* Device Icon Badge */}
                   <div className="absolute top-4 right-4 z-10">
                     <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-md">
@@ -99,6 +99,9 @@ export default function UIUXProjectsGallery({
                         src={project.image} 
                         alt={project.title}
                         className="w-full h-full object-cover rounded-xl"
+                        loading="eager"
+                        decoding="async"
+                        fetchPriority="high"
                       />
                     </motion.div>
 
@@ -116,10 +119,10 @@ export default function UIUXProjectsGallery({
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 20, opacity: 0 }}
                             onClick={() => handleOpenProject(project)}
-                            className="bg-white text-gray-900 px-6 py-3 rounded-full font-semibold text-sm flex items-center gap-2 hover:bg-[rgb(251,108,133)] hover:text-white transition-colors duration-300 shadow-xl"
+                            className="bg-white text-gray-900 px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold text-xs md:text-sm flex items-center gap-2 hover:bg-[rgb(251,108,133)] hover:text-white transition-colors duration-300 shadow-xl"
                           >
                             View Case Study
-                            <ArrowRight className="w-4 h-4" />
+                            <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                           </motion.button>
                         </motion.div>
                       )}
@@ -127,11 +130,11 @@ export default function UIUXProjectsGallery({
                   </div>
 
                   {/* Project Info */}
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-[rgb(251,108,133)] transition-colors duration-300">
+                  <div className="space-y-3 w-full">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-[rgb(251,108,133)] transition-colors duration-300">
                       {project.title}
                     </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">
+                    <p className="text-xs md:text-sm text-gray-600 line-clamp-2">
                       {project.description}
                     </p>
 
@@ -155,10 +158,10 @@ export default function UIUXProjectsGallery({
                     {/* Action Button */}
                     <button
                       onClick={() => handleOpenProject(project)}
-                      className="w-full mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white px-4 py-3 rounded-xl font-semibold text-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group/btn"
+                      className="w-full mt-4 flex items-center justify-center gap-2 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white px-4 py-3 rounded-xl font-semibold text-xs md:text-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group/btn"
                     >
                       <span>Explore Project</span>
-                      <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                      <ExternalLink className="w-3 h-3 md:w-4 md:h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                     </button>
                   </div>
                 </div>

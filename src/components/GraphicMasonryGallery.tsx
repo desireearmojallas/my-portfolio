@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import GraphicProjectCard, { type GraphicProject, type GraphicProjectType } from './GraphicProjectCard';
 import GraphicProjectModal from './GraphicProjectModal';
 import { graphicDesign, videoProduction } from '../config/cloudinaryAssets';
@@ -17,7 +18,10 @@ export default function GraphicMasonryGallery({
   const [columns, setColumns] = useState(3);
   const [selectedProject, setSelectedProject] = useState<GraphicProject | null>(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const PROJECTS_PER_PAGE = 6; // Show 6 items per page on mobile
 
   // Create projects array with all work
   const projects = useMemo<GraphicProject[]>(() => {
@@ -336,6 +340,22 @@ export default function GraphicMasonryGallery({
         });
       }
 
+      if (graphicDesign?.pilgrimRise?.thumbnail) {
+        projectsList.push({
+          id: "pilgrim-rise-1",
+          title: "Pilgrim Rise OBB",
+          description: "Promotional video for Pilgrim Rise, showcasing their brand and services.",
+          category: "Video Production",
+          subcategory: "Promotional",
+          type: "video",
+          client: "Pilgrim Rise",
+          tools: ["Premiere Pro", "After Effects"],
+          thumbnail: graphicDesign.pilgrimRise.thumbnail,
+          assets: graphicDesign.pilgrimRise.videos || [],
+          date: "2024",
+        });
+      }
+
       console.log('GraphicMasonryGallery - Total projects created:', projectsList.length);
       console.log('GraphicMasonryGallery - Projects:', projectsList);
       return projectsList;
@@ -349,6 +369,8 @@ export default function GraphicMasonryGallery({
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
+      const mobile = width < 768;
+      setIsMobile(mobile);
       if (width < 640) setColumns(1);
       else if (width < 1024) setColumns(2);
       else if (width < 1536) setColumns(3);
@@ -362,13 +384,41 @@ export default function GraphicMasonryGallery({
 
   const filteredProjects = useMemo(() => projects, [projects]);
 
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
+  const endIndex = startIndex + PROJECTS_PER_PAGE;
+
+  // Limit projects on mobile based on current page
+  const displayedProjects = useMemo(() => {
+    if (isMobile) {
+      return filteredProjects.slice(startIndex, endIndex);
+    }
+    return filteredProjects;
+  }, [filteredProjects, isMobile, currentPage, startIndex, endIndex]);
+
+  // Pagination handlers
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+      containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+      containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   // Smart distribution: Place featured items strategically across columns
   const distributeProjects = () => {
     const columnArrays: GraphicProject[][] = Array.from({ length: columns }, () => []);
     
     // Separate featured and regular items
-    const featuredItems = filteredProjects.filter(p => p.featured);
-    const regularItems = filteredProjects.filter(p => !p.featured);
+    const featuredItems = displayedProjects.filter(p => p.featured);
+    const regularItems = displayedProjects.filter(p => !p.featured);
     
     // First, distribute featured items evenly across columns
     featuredItems.forEach((project, index) => {
@@ -441,7 +491,7 @@ export default function GraphicMasonryGallery({
               {column.map((project, projectIndex) => (
                 <motion.div
                   key={project.id}
-                  className="w-full"
+                  className={`w-full ${isMobile ? 'mb-6 rounded-lg overflow-hidden shadow-md' : ''}`}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: projectIndex * 0.08 }}
@@ -456,11 +506,88 @@ export default function GraphicMasonryGallery({
                     }}
                     variant="masonry"
                   />
+                  
+                  {/* Mobile: Show project info under card */}
+                  {isMobile && (
+                    <div className="bg-white px-4 py-3 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 bg-[#FBD1D9]/20 text-[#E27396] rounded-full text-xs font-medium">
+                          {project.subcategory || project.category}
+                        </span>
+                        {project.date && (
+                          <span className="text-xs text-gray-500">{project.date}</span>
+                        )}
+                      </div>
+                      <h4 className="text-base font-semibold text-gray-800 leading-tight">
+                        {project.title}
+                      </h4>
+                      {project.client && (
+                        <p className="text-xs text-gray-500">
+                          {project.client}
+                        </p>
+                      )}
+                      {project.description && (
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {project.description}
+                        </p>
+                      )}
+                      {project.tools && project.tools.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {project.tools.slice(0, 3).map((tool, toolIdx) => (
+                            <span
+                              key={toolIdx}
+                              className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"
+                            >
+                              {tool}
+                            </span>
+                          ))}
+                          {project.tools.length > 3 && (
+                            <span className="px-2 py-1 bg-[#fb6c85]/10 text-[#fb6c85] rounded-full text-xs font-medium">
+                              +{project.tools.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
           ))}
         </div>
+        
+        {/* Pagination Controls - Mobile Only */}
+        {isMobile && totalPages > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center justify-center gap-4 mt-8 px-4"
+          >
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="flex items-center justify-center w-12 h-12 bg-white border-2 border-gray-300 rounded-full font-medium hover:bg-gray-50 transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-700" />
+            </button>
+            
+            <div className="flex items-center gap-2">
+              <span className="text-base font-semibold text-gray-800">
+                Page {currentPage} of {totalPages}
+              </span>
+            </div>
+            
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="flex items-center justify-center w-12 h-12 bg-[#fb6c85] rounded-full font-medium hover:bg-[#e95b74] transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
+              aria-label="Next page"
+            >
+              <ChevronRight className="w-6 h-6 text-white" />
+            </button>
+          </motion.div>
+        )}
       </div>
 
       {/* Modal - Rendered outside gallery container to ensure proper viewport centering */}

@@ -91,10 +91,25 @@ export default function GraphicProjectCard({
   const [isHovered, setIsHovered] = useState(false);
   const [canAutoPlay, setCanAutoPlay] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Handle video hover - autoplay on hover, pause on leave
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // mobile if less than 768px (tablet breakpoint)
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Handle video hover - autoplay on hover, pause on leave (disabled on mobile)
   const handleVideoHover = (hover: boolean) => {
+    // Disable hover-to-play on mobile
+    if (isMobile) return;
+    
     setIsHovered(hover);
     if (videoRef.current) {
       // Use different start time for Return Zero video
@@ -119,9 +134,9 @@ export default function GraphicProjectCard({
     }
   };
 
-  // Autoplay when hover state changes and video becomes playable
+  // Autoplay when hover state changes and video becomes playable (disabled on mobile)
   useEffect(() => {
-    if (!isHovered || !videoRef.current || !canAutoPlay) return;
+    if (isMobile || !isHovered || !videoRef.current || !canAutoPlay) return;
     // Use different start time for Return Zero video
     const startTime = project.id === 'return-zero-1' ? 20.0 : 3.0;
     videoRef.current.currentTime = startTime; // Start from a good frame
@@ -131,7 +146,7 @@ export default function GraphicProjectCard({
         console.log('Autoplay prevented:', err);
       });
     }
-  }, [isHovered, canAutoPlay, project.id]);
+  }, [isHovered, canAutoPlay, project.id, isMobile]);
 
   // Toggle mute/unmute
   const handleMuteToggle = (e: React.MouseEvent) => {
@@ -192,7 +207,8 @@ export default function GraphicProjectCard({
                 ref={videoRef}
                 src={project.assets[0]}
                 poster={project.thumbnail}
-                className={`w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500
+                className={`w-full h-full object-cover transition-all duration-500
+                           ${isMobile ? '' : 'grayscale group-hover:grayscale-0'}
                            transition-opacity ${isVideoPlaying ? 'opacity-100' : 'opacity-85'}`}
                 style={{ display: 'block' }}
                 muted={isMuted}
@@ -201,17 +217,20 @@ export default function GraphicProjectCard({
                 preload="auto"
                 onCanPlay={(e) => {
                   const video = e.currentTarget;
-                  setCanAutoPlay(true);
+                  // Only enable autoplay on non-mobile devices
+                  if (!isMobile) {
+                    setCanAutoPlay(true);
+                  }
                   if (!isHovered) {
                     // Use different thumbnail frame for Return Zero video
                     const thumbnailTime = project.id === 'return-zero-1' ? 20.0 : 3.0;
                     video.currentTime = thumbnailTime; // Set to a good frame when not playing
                   }
                 }}
-                onLoadedMetadata={() => setCanAutoPlay(true)}
+                onLoadedMetadata={() => !isMobile && setCanAutoPlay(true)}
                 onPlay={() => setIsVideoPlaying(true)}
                 onPause={() => setIsVideoPlaying(false)}
-                onLoadedData={() => setCanAutoPlay(true)}
+                onLoadedData={() => !isMobile && setCanAutoPlay(true)}
                 onLoadStart={() => {
                   getThumbnailFromVideo(project.assets[0]);
                 }}
@@ -246,9 +265,9 @@ export default function GraphicProjectCard({
                   {project.title}
                 </p>
               </div>
-              <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-black/70 text-white text-xs font-semibold 
-                            rounded-full tracking-wide pointer-events-none">
-                Video
+              <div className="absolute bottom-4 left-4 p-2 bg-black/70 text-white 
+                            rounded-full pointer-events-none flex items-center justify-center">
+                <Play className="w-4 h-4" />
               </div>
             </div>
           ) : (
@@ -256,8 +275,12 @@ export default function GraphicProjectCard({
               <img
                 src={project.thumbnail}
                 alt={project.title}
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
-                loading="lazy"
+                className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+                  isMobile ? '' : 'grayscale group-hover:grayscale-0'
+                }`}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
                 onLoad={() => setImageLoaded(true)}
                 onError={() => {
                   setImageError(true);
@@ -308,12 +331,11 @@ export default function GraphicProjectCard({
     >
       {/* Project thumbnail with simplified hover effect */}
       <div className="relative aspect-[5/4] overflow-hidden bg-gray-50">
-        {/* Type indicator badge - made responsive */}
-        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 z-10 bg-white/95 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full flex items-center gap-1 sm:gap-2 shadow-sm">
+        {/* Type indicator badge - icon only */}
+        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 z-10 bg-white/95 p-2 sm:p-2.5 rounded-full flex items-center shadow-sm">
           <div className="text-[#fb6c85]">
             {renderTypeIcon()}
           </div>
-          <span className="text-[10px] sm:text-xs font-medium text-gray-800 capitalize">{project.type}</span>
         </div>
 
         {/* Category pill - made responsive */}

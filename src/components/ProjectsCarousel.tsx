@@ -478,7 +478,7 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 viewport={{ once: true }}
-                className="relative w-screen -mx-6 left-[calc(-50vw+50%)] px-6 md:px-8 lg:px-12"
+                className="relative"
               >
                 {/* Section Header */}
                 <div className="text-center mb-16 px-4 max-w-7xl mx-auto">
@@ -501,7 +501,7 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
                     viewport={{ once: true }}
-                    className="text-4xl md:text-5xl font-outfit font-bold text-gray-800 mb-4"
+                    className="text-3xl md:text-4xl lg:text-5xl font-outfit font-bold text-gray-800 mb-4 text-center"
                   >
                     UI/UX Design Projects
                   </motion.h3>
@@ -510,18 +510,20 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                     viewport={{ once: true }}
-                    className="text-lg text-gray-600 max-w-2xl mx-auto"
+                    className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto text-center px-4"
                   >
                     User-centered digital experiences crafted with attention to detail and intuitive design
                   </motion.p>
                 </div>
 
-                {/* UI/UX Gallery */}
-                <div className="max-w-[1600px] mx-auto">
-                  <UIUXProjectsGallery 
-                    projects={sampleProjects} 
-                    className="" 
-                  />
+                {/* UI/UX Gallery - Centered container */}
+                <div className="flex justify-center">
+                  <div className="w-full max-w-sm md:max-w-7xl px-4 md:px-0">
+                    <UIUXProjectsGallery 
+                      projects={sampleProjects} 
+                      className="" 
+                    />
+                  </div>
                 </div>
               </motion.div>
             )}

@@ -342,6 +342,21 @@ export default function GraphicDesignGallery({
         assets: graphicDesign.tartetartBoxes.images || [],
         date: "2022"
       },
+
+      // Pilgrim Rise OBB
+      {
+        id: "pilgrim-rise-1",
+        title: "Pilgrim Rise OBB",
+        description: "Promotional video for Pilgrim Rise, showcasing their brand and services.",
+        category: "Video Production",
+        subcategory: "Promotional",
+        type: "video",
+        client: "Pilgrim Rise",
+        tools: ["Premiere Pro", "After Effects"],
+        thumbnail: graphicDesign.pilgrimRise.thumbnail,
+        assets: graphicDesign.pilgrimRise.videos || [],
+        date: "2024"
+      },
     ];
   }, []);
 

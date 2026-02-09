@@ -201,6 +201,8 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
                       src={image.src} 
                       alt={image.alt}
                       className="w-full h-auto object-contain block"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </motion.div>
                 ))}

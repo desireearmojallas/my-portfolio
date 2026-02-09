@@ -235,6 +235,12 @@ export const cloudinaryAssets: CloudinaryAssets = {
         'https://res.cloudinary.com/du4nug3uk/image/upload/v1769919142/design_1_woman_back_bevhy2.png',
       ],
     },
+    pilgrimRise: {
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/video/upload/so_0/v1770633287/Pilgrim_Rise_OBB_ey6kdz.jpg',
+      videos: [
+        'https://res.cloudinary.com/du4nug3uk/video/upload/v1770633287/Pilgrim_Rise_OBB_ey6kdz.mp4',
+      ],
+    },
   },
 
   videoProduction: {
