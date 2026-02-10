@@ -27,6 +27,11 @@ export interface CloudinaryAssets {
     avatar?: string;
   };
 
+  // Client Feedback Photos
+  clientFeedback: {
+    [key: string]: string;
+  };
+
   // UI/UX Design Projects
   uiux: {
     [key: string]: ProjectAsset;
@@ -85,6 +90,10 @@ export const cloudinaryAssets: CloudinaryAssets = {
     formal: 'https://res.cloudinary.com/du4nug3uk/image/upload/v1770309344/des-formal-pic_yybba8.jpg',
     casual: 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/profile/des-casual.jpg',
     avatar: 'https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/profile/avatar.jpg',
+  },
+
+  clientFeedback: {
+    jochelleTumulak: 'https://res.cloudinary.com/du4nug3uk/image/upload/v1770720051/jochelle-tumulak_kiaf2q.jpg',
   },
 
   uiux: {
@@ -401,6 +410,7 @@ export function getCategoryAssets(
 // Export individual categories for easier access
 export const {
   profile,
+  clientFeedback,
   uiux,
   graphicDesign,
   videoProduction,

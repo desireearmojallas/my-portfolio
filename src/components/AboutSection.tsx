@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { profile } from '../config/cloudinaryAssets';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { profile, clientFeedback } from '../config/cloudinaryAssets';
 import { 
   ArrowRight,
   Eye,
   Palette,
   Code,
   Sparkles,
-  Heart
+  Heart,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
+import useResponsive from '../hooks/useResponsive';
 
 interface AboutSectionProps {
   role: 'designer' | 'developer';
@@ -16,6 +19,16 @@ interface AboutSectionProps {
 
 export default function AboutSection({ role }: AboutSectionProps) {
   const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [showMoreServices, setShowMoreServices] = useState(false);
+  const [expandedService, setExpandedService] = useState<number | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { isMobile, isMdAndDown } = useResponsive();
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+
+  // Toggle to show/hide Beyond Design section (set to true to re-enable)
+  const SHOW_BEYOND_DESIGN = false;
 
   // Dynamic content based on selected role
   const roleContent = {
@@ -256,54 +269,56 @@ export default function AboutSection({ role }: AboutSectionProps) {
           </div>
         </motion.div>
 
-        {/* Beyond Design Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-outfit font-light text-gray-800 mb-6">
-              Beyond Design
-            </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Outside of work, I'm constantly exploring creativity in motion — from coding small UI experiments 
-              to composing music and capturing moments through photography. These projects keep my perspective 
-              fresh, grounded, and always learning.
-            </p>
-          </div>
+        {/* Beyond Design Section - Temporarily hidden (toggle SHOW_BEYOND_DESIGN to re-enable) */}
+        {SHOW_BEYOND_DESIGN && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-outfit font-light text-gray-800 mb-6">
+                Beyond Design
+              </h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                Outside of work, I'm constantly exploring creativity in motion — from coding small UI experiments 
+                to composing music and capturing moments through photography. These projects keep my perspective 
+                fresh, grounded, and always learning.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {interests.map((interest, index) => (
-              <motion.div
-                key={interest.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true }}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="group"
-              >
-                <div className="gradient-card border border-pink-100/50 rounded-xl p-6 h-full 
-                              hover:shadow-xl hover:shadow-pink-500/5 transition-all duration-300 
-                              bg-gradient-to-br from-white to-pink-50/30">
-                  <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {interest.emoji}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {interests.map((interest, index) => (
+                <motion.div
+                  key={interest.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  className="group"
+                >
+                  <div className="gradient-card border border-pink-100/50 rounded-xl p-6 h-full 
+                                hover:shadow-xl hover:shadow-pink-500/5 transition-all duration-300 
+                                bg-gradient-to-br from-white to-pink-50/30">
+                    <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                      {interest.emoji}
+                    </div>
+                    
+                    <h3 className="text-lg font-outfit font-semibold text-gray-800 mb-2">
+                      {interest.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {interest.description}
+                    </p>
                   </div>
-                  
-                  <h3 className="text-lg font-outfit font-semibold text-gray-800 mb-2">
-                    {interest.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {interest.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Client Testimonials - Premium Social Proof */}
         <motion.div
@@ -362,10 +377,11 @@ export default function AboutSection({ role }: AboutSectionProps) {
 
               {/* Author Info */}
               <div className="flex items-center gap-4 pt-6 border-t border-gray-200/50">
-                <div className="w-12 h-12 bg-gradient-to-r from-pink-100 to-rose-100 rounded-full 
-                              flex items-center justify-center">
-                  <span className="text-[rgb(251,108,133)] font-semibold text-lg">JT</span>
-                </div>
+                <img 
+                  src={clientFeedback.jochelleTumulak} 
+                  alt="Jochelle Tumulak"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
                 <div>
                   <p className="font-outfit font-semibold text-gray-800">Jochelle Tumulak</p>
                   <p className="text-gray-600 text-sm">Naval Architect and Marine Engineer</p>
@@ -394,168 +410,356 @@ export default function AboutSection({ role }: AboutSectionProps) {
               What I Deliver
             </motion.h2>
             <motion.p 
-              className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed"
+              className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               viewport={{ once: true }}
             >
               {role === 'designer' 
-                ? "Design and development services that bring your visual ideas to life"
-                : "Development and design services that turn your technical visions into reality"
+                ? "End-to-end solutions that transform your brand vision into tangible results"
+                : "High-performance digital experiences built to scale your business"
               }
             </motion.p>
-            
-            {/* Role-specific callout */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-              viewport={{ once: true }}
-              className="max-w-3xl mx-auto mt-6"
-            >
-              <div className="bg-gradient-to-r from-gray-50 to-pink-50/30 rounded-2xl p-6 border border-gray-200/50">
-                <p className="text-gray-700 text-center">
-                  {currentContent.callout}
-                </p>
-              </div>
-            </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(() => {
-              // Define base services
-              const baseServices = [
-                {
-                  title: "Graphic Design",
-                  icon: "🎨",
-                  description: "Visual designs that communicate your message effectively across all platforms.",
-                  deliverables: [
-                    "Social media graphics & posts",
-                    "Digital ads & banners", 
-                    "Print materials (flyers, brochures)",
-                    "Brand identity & logos",
-                    "Marketing materials"
-                  ],
-                  perfect_for: "Businesses needing visual content"
-                },
-                {
-                  title: "Social Media Management",
-                  icon: "📱",
-                  description: "Complete social media presence that engages your audience and grows your brand.",
-                  deliverables: [
-                    "Content strategy & planning",
-                    "Post creation & scheduling",
-                    "Graphics & visual content",
-                    "Community engagement",
-                    "Performance analytics"
-                  ],
-                  perfect_for: "Brands wanting active social presence"
-                },
-                {
-                  title: "Web Development",
-                  icon: "💻",
-                  description: "Custom websites and web applications built with modern technology.",
-                  deliverables: [
-                    "Responsive websites",
-                    "E-commerce platforms",
-                    "Web applications",
-                    "Performance optimization",
-                    "Mobile-friendly design"
-                  ],
-                  perfect_for: "Businesses needing online presence"
-                },
-                {
-                  title: "Mobile Apps",
-                  icon: "📲",
-                  description: "Native and cross-platform mobile applications for iOS and Android.",
-                  deliverables: [
-                    "iOS & Android apps",
-                    "Cross-platform solutions",
-                    "App Store deployment",
-                    "User interface design",
-                    "Backend integration"
-                  ],
-                  perfect_for: "Companies wanting mobile solutions"
-                },
-                {
-                  title: "Design + Code Combo",
-                  icon: "⚡",
-                  description: "Complete digital solutions where I handle both design and development seamlessly.",
-                  deliverables: [
-                    "Full website design & build",
-                    "App design & development",
-                    "Brand identity + website",
-                    "Social media + landing pages",
-                    "Print + digital campaigns"
-                  ],
-                  perfect_for: "Projects needing unified approach"
-                }
-              ];
+          {/* Core Services - Interactive Cards */}
+          {(() => {
+            // Define core premium services
+            const coreServices = [
+              {
+                title: "Graphic Design",
+                icon: "🎨",
+                tagline: "Elevate your brand with designs that convert and captivate.",
+                categories: "Branding • Social Media • Print • Marketing",
+                perfect_for: "Brands seeking cohesive visual identity that drives recognition and trust",
+                highlight: role === 'designer'
+              },
+              {
+                title: "Design + Code Combo",
+                icon: "⚡",
+                tagline: "Seamless execution from concept to launch, no handoff friction.",
+                categories: "Websites • Apps • Landing Pages • Full-Stack",
+                perfect_for: "Businesses wanting pixel-perfect implementation and faster time-to-market",
+                highlight: true
+              },
+              {
+                title: "Web Development",
+                icon: "💻",
+                tagline: "Scalable, high-performance websites built for growth.",
+                categories: "Custom Sites • E-commerce • Web Apps • CMS",
+                perfect_for: "Companies needing robust digital platforms that handle real-world scale",
+                highlight: role === 'developer'
+              }
+            ];
 
-              // Order services based on role and set highlights
-              const orderedServices = currentContent.serviceOrder.map(title => {
-                const service = baseServices.find(s => s.title === title);
-                if (!service) return null;
-                return {
-                  ...service,
-                  highlight: currentContent.highlightedServices.includes(title)
-                };
-              }).filter((service): service is NonNullable<typeof service> => service !== null);
+            // Touch handlers for mobile swipe
+            const handleTouchStart = (e: React.TouchEvent) => {
+              touchStartX.current = e.touches[0].clientX;
+            };
 
-              return orderedServices.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true }}
-                className={`relative rounded-2xl p-8 border transition-all duration-300 h-full ${
-                  service.highlight 
-                    ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl' 
-                    : 'bg-white/60 backdrop-blur-sm border-gray-200/50 hover:shadow-lg'
-                }`}
-              >
-                {service.highlight && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                                   text-white px-4 py-1 rounded-full text-xs font-medium">
-                      Popular Choice
-                    </span>
-                  </div>
-                )}
-                
-                <div className="mb-6">
-                  <div className="text-4xl mb-4">{service.icon}</div>
-                  <h3 className="text-xl font-outfit font-semibold text-gray-800 mb-3">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed text-sm">
-                    {service.description}
-                  </p>
+            const handleTouchMove = (e: React.TouchEvent) => {
+              touchEndX.current = e.touches[0].clientX;
+            };
+
+            const handleTouchEnd = () => {
+              if (touchStartX.current - touchEndX.current > 75) {
+                // Swipe left
+                setCurrentSlide(prev => Math.min(prev + 1, coreServices.length - 1));
+              }
+              if (touchStartX.current - touchEndX.current < -75) {
+                // Swipe right
+                setCurrentSlide(prev => Math.max(prev - 1, 0));
+              }
+            };
+
+            const toggleExpanded = (index: number) => {
+              setExpandedService(expandedService === index ? null : index);
+            };
+
+            // Desktop/Tablet Grid View
+            if (!isMdAndDown) {
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                  {coreServices.map((service, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      viewport={{ once: true }}
+                      onClick={() => toggleExpanded(index)}
+                      whileHover={{ y: -8, scale: 1.02 }}
+                      className={`relative rounded-2xl p-8 border transition-all duration-300 flex flex-col cursor-pointer ${
+                        service.highlight 
+                          ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl' 
+                          : 'bg-white/60 backdrop-blur-sm border-gray-200/50 hover:shadow-2xl'
+                      } ${expandedService === index ? 'shadow-2xl ring-2 ring-[rgb(251,108,133)]/20' : ''}`}
+                    >
+                      {service.highlight && (
+                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                          <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                                         text-white px-4 py-1 rounded-full text-xs font-medium shadow-md">
+                            Popular Choice
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className="text-5xl mb-4">{service.icon}</div>
+                      <h3 className="text-2xl font-outfit font-semibold text-gray-800 mb-3">
+                        {service.title}
+                      </h3>
+                      
+                      <p className="text-gray-700 leading-relaxed mb-4 font-medium">
+                        {service.tagline}
+                      </p>
+
+                      <AnimatePresence>
+                        {expandedService === index && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="mb-4 pb-4 border-b border-gray-200/50">
+                              <p className="text-sm text-gray-600 leading-relaxed">
+                                {service.categories}
+                              </p>
+                            </div>
+
+                            <div>
+                              <p className="text-sm text-gray-600 leading-relaxed">
+                                <span className="font-semibold text-gray-700">Perfect for:</span> {service.perfect_for}
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {expandedService !== index && (
+                        <div className="mt-auto pt-4">
+                          <p className="text-sm text-[rgb(251,108,133)] font-medium">
+                            Click to learn more →
+                          </p>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
                 </div>
+              );
+            }
 
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3">What you get:</h4>
-                  <ul className="space-y-2">
-                    {service.deliverables.map((item, dIndex) => (
-                      <li key={dIndex} className="flex items-start gap-3">
-                        <div className="w-1.5 h-1.5 bg-[rgb(251,108,133)] rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-600 text-sm">{item}</span>
-                      </li>
+            // Mobile Carousel/Accordion View
+            return (
+              <div className="max-w-6xl mx-auto">
+                {/* Mobile Carousel - Allow overflow for expanded content */}
+                <div className="relative">
+                  <div
+                    ref={carouselRef}
+                    className="flex transition-transform duration-500 ease-out overflow-visible"
+                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                  >
+                    {coreServices.map((service, index) => (
+                      <div
+                        key={index}
+                        className="w-full flex-shrink-0 px-3 sm:px-4 py-2"
+                      >
+                        <motion.div
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6 }}
+                          viewport={{ once: true }}
+                          onClick={() => toggleExpanded(index)}
+                          className={`relative rounded-2xl p-5 sm:p-6 border transition-all duration-300 flex flex-col overflow-visible ${
+                            service.highlight 
+                              ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl' 
+                              : 'bg-white/60 backdrop-blur-sm border-gray-200/50'
+                          } ${expandedService === index ? 'shadow-2xl ring-2 ring-[rgb(251,108,133)]/20' : ''}`}
+                        >
+                          {service.highlight && (
+                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
+                              <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                                             text-white px-4 py-1 rounded-full text-xs font-medium shadow-md">
+                                Popular Choice
+                              </span>
+                            </div>
+                          )}
+                          
+                          <div className="text-5xl mb-4">{service.icon}</div>
+                          <h3 className="text-xl sm:text-2xl font-outfit font-semibold text-gray-800 mb-3">
+                            {service.title}
+                          </h3>
+                          
+                          <p className="text-gray-700 leading-relaxed mb-4 font-medium text-sm sm:text-base">
+                            {service.tagline}
+                          </p>
+
+                          <AnimatePresence>
+                            {expandedService === index && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="overflow-visible"
+                              >
+                                <div className="mb-4 pb-4 border-b border-gray-200/50">
+                                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                    {service.categories}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                    <span className="font-semibold text-gray-700">Perfect for:</span> {service.perfect_for}
+                                  </p>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+
+                          <div className="mt-4 pt-4 border-t border-gray-200/50">
+                            <p className="text-xs sm:text-sm text-[rgb(251,108,133)] font-medium text-center">
+                              {expandedService === index ? 'Tap to collapse ▲' : 'Tap to expand ▼'}
+                            </p>
+                          </div>
+                        </motion.div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
+
+                  {/* Navigation Arrows */}
+                  {currentSlide > 0 && (
+                    <button
+                      onClick={() => setCurrentSlide(prev => prev - 1)}
+                      className="absolute left-1 sm:left-2 top-1/3 -translate-y-1/2 bg-white/90 backdrop-blur-sm 
+                               rounded-full p-2 sm:p-3 shadow-lg border border-gray-200 hover:bg-white 
+                               transition-all duration-300 z-10"
+                      aria-label="Previous service"
+                    >
+                      <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+                    </button>
+                  )}
+
+                  {currentSlide < coreServices.length - 1 && (
+                    <button
+                      onClick={() => setCurrentSlide(prev => prev + 1)}
+                      className="absolute right-1 sm:right-2 top-1/3 -translate-y-1/2 bg-white/90 backdrop-blur-sm 
+                               rounded-full p-2 sm:p-3 shadow-lg border border-gray-200 hover:bg-white 
+                               transition-all duration-300 z-10"
+                      aria-label="Next service"
+                    >
+                      <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+                    </button>
+                  )}
                 </div>
 
-                <div className="border-t border-gray-200/50 pt-4 mt-auto">
-                  <p className="text-xs text-gray-500">
-                    <strong>Perfect for:</strong> {service.perfect_for}
-                  </p>
+                {/* Carousel Indicators */}
+                <div className="flex justify-center gap-2 mt-6">
+                  {coreServices.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        currentSlide === index 
+                          ? 'w-8 bg-[rgb(251,108,133)]' 
+                          : 'w-2 bg-gray-300 hover:bg-gray-400'
+                      }`}
+                      aria-label={`Go to service ${index + 1}`}
+                    />
+                  ))}
                 </div>
+              </div>
+            );
+          })()}
+
+          {/* More Services - Collapsible Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="mt-12 max-w-6xl mx-auto"
+          >
+            <button
+              onClick={() => setShowMoreServices(!showMoreServices)}
+              className="w-full flex items-center justify-center gap-3 py-4 px-6 
+                       border border-gray-300 rounded-xl hover:bg-gray-50 
+                       transition-all duration-300 group"
+            >
+              <span className="text-gray-700 font-medium">
+                {showMoreServices ? 'Show Less Services' : 'View All Services'}
+              </span>
+              <motion.span
+                animate={{ rotate: showMoreServices ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                ▼
+              </motion.span>
+            </button>
+
+            {showMoreServices && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.4 }}
+                className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6"
+              >
+                {[
+                  {
+                    title: "Social Media Management",
+                    icon: "📱",
+                    tagline: "Build engaged communities that convert followers into customers.",
+                    categories: "Strategy • Content • Analytics • Community",
+                    perfect_for: "Brands ready to establish authority and drive engagement on social platforms"
+                  },
+                  {
+                    title: "Mobile Apps",
+                    icon: "📲",
+                    tagline: "Native experiences that users love and businesses rely on.",
+                    categories: "iOS • Android • Cross-Platform • Backend",
+                    perfect_for: "Companies expanding into mobile-first experiences with professional execution"
+                  }
+                ].map((service, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="rounded-2xl p-8 border border-gray-200/50 bg-white/60 backdrop-blur-sm 
+                             hover:shadow-lg transition-all duration-300 flex flex-col"
+                  >
+                    <div className="text-5xl mb-4">{service.icon}</div>
+                    <h3 className="text-2xl font-outfit font-semibold text-gray-800 mb-3">
+                      {service.title}
+                    </h3>
+                    
+                    <p className="text-gray-700 leading-relaxed mb-6 font-medium">
+                      {service.tagline}
+                    </p>
+
+                    <div className="mb-6 pb-6 border-b border-gray-200/50">
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        {service.categories}
+                      </p>
+                    </div>
+
+                    <div className="mt-auto">
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        <span className="font-semibold text-gray-700">Perfect for:</span> {service.perfect_for}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ));
-            })()}
-          </div>
+            )}
+          </motion.div>
         </motion.div>
 
         {/* Closing Section - Apple-inspired CTA */}
