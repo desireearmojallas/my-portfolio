@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import type { GraphicProject } from './GraphicProjectCard';
+import UnifiedMediaGallery from './UnifiedMediaGallery';
+import './UnifiedMediaGallery.css';
 
 interface GraphicProjectModalProps {
   project: GraphicProject | null;
@@ -73,11 +75,20 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
 
   if (!project) return null;
 
-  // Determine if an asset is a video
   const isVideoAsset = (url: string) => {
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
     return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
   };
+
+  // Convert project assets to media items for the unified gallery
+  const mediaItems = project.assets.map((asset) => {
+    const type: 'video' | 'image' = isVideoAsset(asset) ? 'video' : 'image';
+    return {
+      src: asset,
+      type,
+      alt: `${project.title} - Media`
+    };
+  });
 
   return (
     <AnimatePresence>
@@ -114,60 +125,18 @@ export default function GraphicProjectModal({ project, onClose }: GraphicProject
 
           {/* Project content */}
           <div className="p-3 md:p-8 lg:p-10">
-            {/* Project Gallery - Behance-style seamless vertical layout - SHOWN FIRST */}
+            {/* Project Gallery - Using Unified Media Gallery */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="mb-6 md:mb-10 -mx-3 md:-mx-8 lg:-mx-10"
             >
-              <div className="flex flex-col">
-                {project.assets.map((asset, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="w-full bg-white"
-                  >
-                    {/* Media Container */}
-                    <div className={`w-full flex items-center justify-center ${
-                      project.type === 'logo' ? 'p-8 md:p-12 lg:p-16' : 'py-2 md:py-4'
-                    }`}>
-                      {isVideoAsset(asset) ? (
-                        <video
-                          src={asset}
-                          className="w-auto h-auto max-w-full object-contain block mx-auto"
-                          style={{ 
-                            maxHeight: isMobile ? '50vh' : 'calc(90vh - 300px)',
-                            maxWidth: '100%'
-                          }}
-                          controls
-                          autoPlay
-                          loop
-                          playsInline
-                          preload="auto"
-                        />
-                      ) : (
-                        <img 
-                          src={asset} 
-                          alt={`${project.title} - Image ${index + 1}`}
-                          className={`w-auto h-auto max-w-full object-contain block mx-auto ${
-                            project.type === 'logo' ? 'md:max-w-2xl' : ''
-                          }`}
-                          style={{ 
-                            maxHeight: isMobile ? '50vh' : 'calc(90vh - 300px)',
-                            maxWidth: '100%'
-                          }}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              <UnifiedMediaGallery
+                media={mediaItems}
+                projectType={project.type}
+                isMobile={isMobile}
+              />
             </motion.div>
 
             {/* Project Info - Shown at bottom after all media */}

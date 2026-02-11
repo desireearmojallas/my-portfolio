@@ -13,8 +13,6 @@ interface GraphicMasonryGalleryProps {
 export default function GraphicMasonryGallery({
   className = "",
 }: GraphicMasonryGalleryProps) {
-  console.log('🎨 GraphicMasonryGallery component rendering');
-  
   const [columns, setColumns] = useState(3);
   const [selectedProject, setSelectedProject] = useState<GraphicProject | null>(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
@@ -26,9 +24,6 @@ export default function GraphicMasonryGallery({
   // Create projects array with all work
   const projects = useMemo<GraphicProject[]>(() => {
     try {
-      console.log('GraphicMasonryGallery - COMPONENT RENDERING');
-      console.log('GraphicMasonryGallery - graphicDesign:', graphicDesign);
-      console.log('GraphicMasonryGallery - videoProduction:', videoProduction);
       const projectsList: GraphicProject[] = [];
 
       // Video Projects
@@ -356,8 +351,6 @@ export default function GraphicMasonryGallery({
         });
       }
 
-      console.log('GraphicMasonryGallery - Total projects created:', projectsList.length);
-      console.log('GraphicMasonryGallery - Projects:', projectsList);
       return projectsList;
     } catch (error) {
       console.error('Error creating projects:', error);
@@ -437,7 +430,6 @@ export default function GraphicMasonryGallery({
       columnArrays[shortestColumnIndex].push(project);
     });
     
-    console.log('GraphicMasonryGallery - Distributed into columns:', columnArrays.map(col => col.length));
     return columnArrays;
   };
 
@@ -458,13 +450,6 @@ export default function GraphicMasonryGallery({
       setIsModalClosing(false);
     }, 300);
   };
-
-  console.log('🔍 Final render state:', {
-    projectsLength: projects.length,
-    filteredProjectsLength: filteredProjects.length,
-    distributedColumns: distributedProjects.length,
-    distributedSizes: distributedProjects.map(col => col.length),
-  });
 
   return (
     <>

@@ -73,11 +73,12 @@ export default function GraphicProjectCard({
             window.videoThumbnails[videoUrl] = thumbnailUrl;
           }
         } catch (e) {
-          console.error('Failed to create video thumbnail:', e);
+          // Silently handle CORS and other canvas errors - fallback to video URL is acceptable
+          // This is expected for cross-origin videos
         }
       });
     } catch (e) {
-      console.error('Error setting up video thumbnail:', e);
+      // Silently handle errors - fallback to original URL
     }
     
     // Return original URL initially (will be replaced when thumb is ready)
@@ -122,8 +123,8 @@ export default function GraphicProjectCard({
         if (canAutoPlay) {
           const playPromise = videoRef.current.play();
           if (playPromise !== undefined) {
-            playPromise.catch(err => {
-              console.log('Autoplay prevented:', err);
+            playPromise.catch(() => {
+              // Autoplay prevention is expected and handled gracefully
             });
           }
         }

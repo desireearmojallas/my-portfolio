@@ -13,8 +13,6 @@ export default function LandingSection({ onRoleSelect }: LandingSectionProps) {
   // State for font animation
   const [currentFontIndex, setCurrentFontIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
-  // Debug component renders and role selection
-  console.log('LandingSection rendered, current role:', selectedRole);
   
   // Ensure scrolling is always available
   useEffect(() => {

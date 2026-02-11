@@ -99,8 +99,8 @@ export default function AboutSection({ role }: AboutSectionProps) {
     { title: "Travel", description: "Experiencing global design and culture", emoji: "✈️" }
   ];
 
-  // Suppress unused parameter warning
-  console.log('About section for role:', role);
+  // NoticeablyuseEffect with role parameter
+  const _unused = role; // Explicitly mark role as intentionally unused for type safety
 
   return (
     <section className="section-padding bg-gradient-to-br from-white via-pink-50/30 to-purple-50/20 relative overflow-hidden">

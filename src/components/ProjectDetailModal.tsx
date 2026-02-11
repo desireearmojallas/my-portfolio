@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import type { Project } from './ProjectCard';
+import UnifiedMediaGallery from './UnifiedMediaGallery';
+import './UnifiedMediaGallery.css';
 
 interface ProjectDetailModalProps {
   project: Project | null;
@@ -10,6 +12,18 @@ interface ProjectDetailModalProps {
 
 export default function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Close on Escape key press
   useEffect(() => {
@@ -69,18 +83,18 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
 
   if (!project) return null;
 
-  // Use project images if available, otherwise use the main image or placeholders
+  // Convert project images to media items for the unified gallery
   const projectImages = project.images && project.images.length > 0
-    ? project.images.map((src, index) => ({
-        id: index + 1,
+    ? project.images.map((src) => ({
         src,
-        alt: `${project.title} preview ${index + 1}`
+        type: 'image' as const,
+        alt: `${project.title} preview`
       }))
-    : [
-        { id: 1, src: project.image || '/placeholder.jpg', alt: `${project.title} preview 1` },
-        { id: 2, src: '/placeholder-2.jpg', alt: `${project.title} preview 2` },
-        { id: 3, src: '/placeholder-3.jpg', alt: `${project.title} preview 3` },
-      ];
+    : project.image ? [{
+        src: project.image,
+        type: 'image' as const,
+        alt: `${project.title} preview`
+      }] : [];
 
   return (
     <AnimatePresence>
@@ -177,37 +191,22 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
               </div>
             </motion.div>
 
-            {/* Project Images Gallery - Behance-style seamless vertical layout */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mb-10 -mx-6 md:-mx-8 lg:-mx-10"
-            >
-              <h3 className="text-xl font-semibold text-gray-800 mb-6 px-6 md:px-8 lg:px-10">
-                Project Gallery
-              </h3>
-              <div className="flex flex-col">
-                {projectImages.map((image, index) => (
-                  <motion.div
-                    key={image.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="w-full bg-white"
-                  >
-                    <img 
-                      src={image.src} 
-                      alt={image.alt}
-                      className="w-full h-auto object-contain block"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            {/* Project Images Gallery - Using Unified Media Gallery */}
+            {projectImages.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mb-10 -mx-6 md:-mx-8 lg:-mx-10"
+              >
+                <UnifiedMediaGallery
+                  media={projectImages}
+                  title="Project Gallery"
+                  projectType="default"
+                  isMobile={isMobile}
+                />
+              </motion.div>
+            )}
           </div>
         </motion.div>
       </motion.div>

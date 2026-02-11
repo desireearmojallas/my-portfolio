@@ -6,7 +6,8 @@ import {
   Code,
   Sparkles,
   Search,
-  X
+  X,
+  ChevronDown
 } from 'lucide-react';
 import {
   SiAdobephotoshop,
@@ -56,37 +57,131 @@ interface TechStackSectionProps {
 interface Tool {
   name: string;
   level: string;
-  desc: string;
   icon?: React.ComponentType<{ className?: string }>;
 }
 
+interface CategoryGroup {
+  id: string;
+  title: string;
+  subtitle?: string;
+  icon: React.ComponentType<{ className?: string }>;
+  gradient: string;
+  borderColor: string;
+  tools: Tool[];
+}
+
 export default function TechStackSection({ role }: TechStackSectionProps) {
-  const [showCompleteStack, setShowCompleteStack] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [expertiseFilter, setExpertiseFilter] = useState<string>('All');
   const [stackView, setStackView] = useState<'designer' | 'developer' | 'all'>(role);
+  const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({
+    'design': false,
+    'development': false,
+    'platforms': false
+  });
 
   useEffect(() => {
     setStackView(role);
   }, [role]);
 
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [categoryId]: !prev[categoryId]
+    }));
+  };
+
   const filterTools = (tools: Tool[]) => {
     let filteredTools = tools;
-
-    if (expertiseFilter !== 'All') {
-      filteredTools = filteredTools.filter(tool => tool.level === expertiseFilter);
-    }
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filteredTools = filteredTools.filter(tool =>
-        tool.name.toLowerCase().includes(query) ||
-        tool.desc.toLowerCase().includes(query)
+        tool.name.toLowerCase().includes(query)
       );
     }
 
     return filteredTools;
   };
+
+  // Design tools
+  const designTools: Tool[] = [
+    { name: 'Adobe Photoshop', level: 'Expert', icon: SiAdobephotoshop },
+    { name: 'Adobe Illustrator', level: 'Expert', icon: SiAdobeillustrator },
+    { name: 'Figma', level: 'Expert', icon: SiFigma },
+    { name: 'Canva', level: 'Expert', icon: SiCanva },
+    { name: 'Adobe InDesign', level: 'Advanced', icon: SiAdobeindesign },
+    { name: 'Adobe Premiere Pro', level: 'Advanced', icon: SiAdobepremierepro },
+    { name: 'Adobe After Effects', level: 'Intermediate', icon: SiAdobeaftereffects },
+    { name: 'Framer', level: 'Intermediate', icon: SiFramer },
+    { name: 'Sketch', level: 'Intermediate', icon: SiSketch },
+  ];
+
+  // Development tools
+  const developmentTools: Tool[] = [
+    { name: 'React', level: 'Expert', icon: SiReact },
+    { name: 'TypeScript', level: 'Expert', icon: SiTypescript },
+    { name: 'Flutter', level: 'Expert', icon: SiFlutter },
+    { name: 'JavaScript', level: 'Expert', icon: SiJavascript },
+    { name: 'HTML5 & CSS3', level: 'Expert', icon: SiHtml5 },
+    { name: 'Tailwind CSS', level: 'Expert', icon: SiTailwindcss },
+    { name: 'VS Code', level: 'Expert', icon: VscVscode },
+    { name: 'Next.js', level: 'Advanced', icon: SiNextdotjs },
+    { name: 'Vite', level: 'Advanced', icon: SiVite },
+    { name: 'Framer Motion', level: 'Advanced', icon: SiFramer },
+    { name: 'Dart', level: 'Advanced', icon: SiDart },
+    { name: 'Node.js', level: 'Intermediate', icon: SiNodedotjs },
+    { name: 'Python', level: 'Intermediate', icon: SiPython },
+  ];
+
+  // Platform & DevOps tools
+  const platformTools: Tool[] = [
+    { name: 'Firebase', level: 'Advanced', icon: SiFirebase },
+    { name: 'MongoDB', level: 'Advanced', icon: SiMongodb },
+    { name: 'Git & GitHub', level: 'Advanced', icon: SiGithub },
+    { name: 'MySQL', level: 'Advanced', icon: SiMysql },
+    { name: 'Vercel', level: 'Advanced', icon: SiVercel },
+    { name: 'Netlify', level: 'Advanced', icon: SiNetlify },
+    { name: 'ESLint & Prettier', level: 'Advanced', icon: SiEslint },
+    { name: 'Shopify', level: 'Advanced', icon: SiShopify },
+    { name: 'Cloudinary', level: 'Advanced', icon: SiCloudinary },
+    { name: 'WordPress', level: 'Advanced', icon: SiWordpress },
+    { name: 'Replit', level: 'Advanced', icon: SiReplit },
+    { name: 'Postman', level: 'Intermediate', icon: SiPostman },
+    { name: 'Webpack', level: 'Intermediate', icon: SiWebpack },
+    { name: 'Android Studio', level: 'Intermediate', icon: SiAndroidstudio },
+    { name: 'Xcode', level: 'Intermediate', icon: SiXcode },
+    { name: 'Wix', level: 'Intermediate', icon: SiWix },
+  ];
+
+  const categoryGroups: CategoryGroup[] = [
+    {
+      id: 'design',
+      title: 'Design Tools',
+      subtitle: 'Adobe Creative Professional',
+      icon: Palette,
+      gradient: 'from-pink-500/20 to-rose-500/20',
+      borderColor: 'border-pink-200/50',
+      tools: designTools
+    },
+    {
+      id: 'development',
+      title: 'Development',
+      subtitle: 'Modern Frameworks & Languages',
+      icon: Code,
+      gradient: 'from-purple-500/20 to-indigo-500/20',
+      borderColor: 'border-purple-200/50',
+      tools: developmentTools
+    },
+    {
+      id: 'platforms',
+      title: 'Platforms & Tools',
+      subtitle: 'Deployment & Collaboration',
+      icon: Sparkles,
+      gradient: 'from-emerald-500/20 to-teal-500/20',
+      borderColor: 'border-emerald-200/50',
+      tools: platformTools
+    }
+  ];
 
   return (
     <motion.div
@@ -96,7 +191,7 @@ export default function TechStackSection({ role }: TechStackSectionProps) {
       viewport={{ once: true }}
       className="mb-24"
     >
-      <div className="text-center mb-20">
+      <div className="text-center mb-12 md:mb-16">
         <motion.h2
           className="text-4xl md:text-5xl font-outfit font-light text-gray-800 mb-6"
           initial={{ opacity: 0, y: 20 }}
@@ -110,499 +205,239 @@ export default function TechStackSection({ role }: TechStackSectionProps) {
           </span>
         </motion.h2>
         <motion.p
-          className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light"
+          className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           viewport={{ once: true }}
         >
-          Every project leverages industry-leading tools and cutting-edge technologies
-          to deliver experiences that are both beautiful and performant.
+          Industry-leading tools and cutting-edge technologies to deliver beautiful, performant experiences.
         </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
-        {[
-          {
-            title: 'Design',
-            description: 'Adobe Creative Suite professional & modern tools',
-            icon: '🎨',
-            gradient: 'from-pink-500/10 to-rose-500/10',
-            border: 'border-pink-200/30',
-            highlight: 'group-hover:border-[rgb(251,108,133)]/40'
-          },
-          {
-            title: 'Development',
-            description: 'Modern frameworks for robust applications',
-            icon: '⚡',
-            gradient: 'from-purple-500/10 to-indigo-500/10',
-            border: 'border-purple-200/30',
-            highlight: 'group-hover:border-purple-400/40'
-          },
-          {
-            title: 'Platform',
-            description: 'Deployment and collaboration ecosystems',
-            icon: '🚀',
-            gradient: 'from-emerald-500/10 to-teal-500/10',
-            border: 'border-emerald-200/30',
-            highlight: 'group-hover:border-emerald-400/40'
-          }
-        ].map((category, index) => (
-          <motion.div
-            key={category.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 + index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            viewport={{ once: true }}
-            whileHover={{ y: -8, scale: 1.02 }}
-            className={`group relative bg-white/60 backdrop-blur-sm rounded-2xl border ${category.border}
-                      ${category.highlight} transition-all duration-500 p-8 text-center h-full
-                      hover:shadow-xl hover:shadow-gray-500/10`}
-          >
-            <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient} rounded-2xl opacity-0
-                           group-hover:opacity-100 transition-opacity duration-500`} />
-
-            <div className="relative z-10">
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                {category.icon}
-              </div>
-              <h3 className="text-xl font-outfit font-semibold text-gray-800 mb-3">
-                {category.title}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                {category.description}
-              </p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {showCompleteStack && (
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-br from-white via-gray-50/30 to-pink-50/20 rounded-3xl
-                   border border-gray-200/50 p-8 md:p-12 max-w-6xl mx-auto"
-        >
-          <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-3xl font-outfit font-light text-gray-800 mb-4">
-              Complete Tech Stack
-            </h3>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)]
-                          mx-auto rounded-full" />
-            <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-              Every tool and technology I use to create exceptional digital experiences
-            </p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="mt-8 max-w-md mx-auto"
+      {/* Search Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        viewport={{ once: true }}
+        className="max-w-6xl mx-auto mb-8 md:mb-12"
+      >
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[rgb(251,108,133)] transition-colors z-10">
+            <Search className="w-5 h-5" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search tools..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-12 py-3 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50
+                     focus:border-[rgb(251,108,133)]/50 focus:outline-none focus:ring-2 focus:ring-[rgb(251,108,133)]/20
+                     transition-all duration-300 text-sm placeholder-gray-400"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors z-10"
+              title="Clear search"
+              aria-label="Clear search"
             >
-              <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[rgb(251,108,133)] transition-colors">
-                  <Search className="w-5 h-5" />
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Tech Stack Categories Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        viewport={{ once: true }}
+        className="bg-gradient-to-br from-white via-gray-50/30 to-pink-50/20 rounded-3xl
+                 border border-gray-200/50 p-6 md:p-8 lg:p-10 max-w-6xl mx-auto"
+      >
+        {/* Category Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        {categoryGroups.map((category, catIndex) => {
+          const filteredTools = filterTools(category.tools);
+          const isExpanded = expandedCategories[category.id];
+          const displayedTools = isExpanded ? filteredTools : filteredTools.slice(0, 4);
+          const hasMore = filteredTools.length > 4;
+
+          return (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 + catIndex * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+              className={`rounded-2xl border ${category.borderColor} bg-white/60 backdrop-blur-sm
+                        p-6 md:p-8 hover:shadow-lg transition-all duration-300 space-y-6`}
+            >
+              {/* Category Header */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-4">
+                  <div className={`w-12 h-12 bg-gradient-to-br ${category.gradient} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                    <category.icon className="w-6 h-6 text-gray-700" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg md:text-xl font-outfit font-semibold text-gray-800">
+                      {category.title}
+                    </h3>
+                    {category.subtitle && (
+                      <p className="text-xs md:text-sm text-gray-500 mt-1">
+                        {category.subtitle}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  placeholder="Search tools and platforms..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50
-                           focus:border-[rgb(251,108,133)]/50 focus:outline-none focus:ring-2 focus:ring-[rgb(251,108,133)]/20
-                           transition-all duration-300 text-sm placeholder-gray-400"
-                />
-                {searchQuery && (
+                {hasMore && filteredTools.length > 0 && (
                   <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    title="Clear search"
-                    aria-label="Clear search"
+                    onClick={() => toggleCategory(category.id)}
+                    className="p-2 hover:bg-white/50 rounded-lg transition-colors ml-2 flex-shrink-0"
+                    title={isExpanded ? 'Show less' : 'Show more'}
+                    aria-label={isExpanded ? 'Show less' : 'Show more'}
                   >
-                    <X className="w-5 h-5" />
+                    <motion.div
+                      animate={{ rotate: isExpanded ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown className="w-5 h-5 text-gray-600" />
+                    </motion.div>
                   </button>
                 )}
               </div>
-            </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="mt-6 flex flex-wrap justify-center gap-3"
-            >
-              {['All', 'Expert', 'Advanced', 'Intermediate'].map((level) => (
-                <motion.button
-                  key={level}
-                  onClick={() => setExpertiseFilter(level)}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 cursor-pointer ${
-                    expertiseFilter === level
-                      ? level === 'Expert'
-                        ? 'bg-green-500 text-white shadow-md shadow-green-200'
-                        : level === 'Advanced'
-                        ? 'bg-blue-500 text-white shadow-md shadow-blue-200'
-                        : level === 'Intermediate'
-                        ? 'bg-purple-500 text-white shadow-md shadow-purple-200'
-                        : 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white shadow-md shadow-pink-200'
-                      : 'bg-white/70 text-gray-600 border border-gray-200/50 hover:border-gray-300 hover:bg-white'
-                  }`}
+              {/* Tools Grid - Icon + label format */}
+              {displayedTools.length > 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.7 + catIndex * 0.1 + 0.05 }}
+                  viewport={{ once: true }}
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
                 >
-                  {level}
-                </motion.button>
-              ))}
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
-            viewport={{ once: true }}
-            className="mt-6 flex flex-wrap justify-center gap-3"
-          >
-            {[
-              { key: 'designer', label: 'Designer' },
-              { key: 'developer', label: 'Developer' },
-              { key: 'all', label: 'Full stack' }
-            ].map((view) => (
-              <motion.button
-                key={view.key}
-                onClick={() => setStackView(view.key as 'designer' | 'developer' | 'all')}
-                whileHover={{ scale: 1.04, y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 cursor-pointer ${
-                  stackView === view.key
-                    ? 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white shadow-md shadow-pink-200'
-                    : 'bg-white/70 text-gray-600 border border-gray-200/50 hover:border-gray-300 hover:bg-white'
-                }`}
-              >
-                {view.label}
-              </motion.button>
-            ))}
-          </motion.div>
-
-          <div className={`grid grid-cols-1 ${stackView === 'all' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8`}>
-            {(stackView === 'designer' || stackView === 'all') && (
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true }}
-                className="space-y-6"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-pink-500/20 to-rose-500/20 rounded-xl flex items-center justify-center">
-                    <Palette className="w-5 h-5 text-pink-600" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-outfit font-semibold text-gray-800">Design Tools</h4>
-                    <p className="text-xs text-pink-600 font-medium">Adobe Creative Professional</p>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  {filterTools([
-                    { name: 'Adobe Photoshop', level: 'Expert', desc: 'Photo Editing & Digital Art', icon: SiAdobephotoshop },
-                    { name: 'Adobe Illustrator', level: 'Expert', desc: 'Vector Graphics & Logo Design', icon: SiAdobeillustrator },
-                    { name: 'Adobe InDesign', level: 'Advanced', desc: 'Layout & Publication Design', icon: SiAdobeindesign },
-                    { name: 'Adobe Premiere Pro', level: 'Advanced', desc: 'Video Editing & Production', icon: SiAdobepremierepro },
-                    { name: 'Adobe After Effects', level: 'Intermediate', desc: 'Motion Graphics & Animation', icon: SiAdobeaftereffects },
-                    { name: 'Figma', level: 'Expert', desc: 'UI/UX Design & Prototyping', icon: SiFigma },
-                    { name: 'Canva', level: 'Expert', desc: 'Quick Design & Social Media', icon: SiCanva },
-                    { name: 'Framer', level: 'Intermediate', desc: 'Advanced Prototyping', icon: SiFramer },
-                    { name: 'Sketch', level: 'Intermediate', desc: 'Vector Design & UI', icon: SiSketch },
-                    { name: 'Principle', level: 'Intermediate', desc: 'Interaction Design', icon: FiTool }
-                  ]).map((tool, index) => (
+                  {displayedTools.map((tool, toolIndex) => (
                     <motion.div
                       key={tool.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.8 + index * 0.03 }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3, delay: 0.75 + catIndex * 0.1 + toolIndex * 0.04 }}
                       viewport={{ once: true }}
-                      className={`group flex items-center justify-between p-3 bg-white/50 backdrop-blur-sm
-                               rounded-xl border transition-all duration-300 ${
-                        tool.name.includes('Adobe')
-                          ? 'border-pink-200/70 hover:border-pink-300/70 hover:bg-pink-50/50 shadow-sm'
-                          : 'border-pink-100/50 hover:border-pink-200/50 hover:bg-white/70'
-                      }`}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      className="group flex flex-col items-center p-4 bg-white/50 rounded-2xl
+                               border border-gray-100/50 hover:border-current/20 hover:bg-white/70
+                               transition-all duration-300 cursor-default"
                     >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-2">
-                            {tool.icon && (
-                              <tool.icon className="w-5 h-5 text-gray-700 flex-shrink-0" />
-                            )}
-                            <h5 className={`font-outfit font-medium text-sm ${
-                              tool.name.includes('Adobe') ? 'text-gray-900' : 'text-gray-800'
-                            }`}>
-                              {tool.name}
-                            </h5>
-                          </div>
-                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            tool.level === 'Expert'
-                              ? 'bg-green-100 text-green-700'
-                              : tool.level === 'Advanced'
-                              ? 'bg-blue-100 text-blue-700'
-                              : 'bg-purple-100 text-purple-700'
-                          }`}>
-                            {tool.level}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">{tool.desc}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {(stackView === 'developer' || stackView === 'all') && (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true }}
-                className="space-y-6"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 rounded-xl flex items-center justify-center">
-                    <Code className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <h4 className="text-lg font-outfit font-semibold text-gray-800">Development</h4>
-                </div>
-
-                <div className="space-y-3">
-                  {filterTools([
-                    { name: 'React', level: 'Expert', desc: 'Frontend Framework', icon: SiReact },
-                    { name: 'TypeScript', level: 'Expert', desc: 'Type-Safe JavaScript', icon: SiTypescript },
-                    { name: 'Flutter', level: 'Expert', desc: 'Cross-Platform Mobile', icon: SiFlutter },
-                    { name: 'JavaScript (ES6+)', level: 'Expert', desc: 'Modern Web Development', icon: SiJavascript },
-                    { name: 'Dart', level: 'Advanced', desc: 'Flutter Programming Language', icon: SiDart },
-                    { name: 'HTML5 & CSS3', level: 'Expert', desc: 'Web Fundamentals', icon: SiHtml5 },
-                    { name: 'Next.js', level: 'Advanced', desc: 'React Meta-Framework', icon: SiNextdotjs },
-                    { name: 'Vite', level: 'Advanced', desc: 'Build Tool & Dev Server', icon: SiVite },
-                    { name: 'Tailwind CSS', level: 'Expert', desc: 'Utility-First CSS', icon: SiTailwindcss },
-                    { name: 'Framer Motion', level: 'Advanced', desc: 'React Animation Library', icon: SiFramer },
-                    { name: 'Node.js', level: 'Intermediate', desc: 'Backend Runtime', icon: SiNodedotjs },
-                    { name: 'Python', level: 'Intermediate', desc: 'General Purpose Language', icon: SiPython }
-                  ]).map((tech, index) => (
-                    <motion.div
-                      key={tech.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.9 + index * 0.03 }}
-                      viewport={{ once: true }}
-                      className="group flex items-center justify-between p-3 bg-white/50 backdrop-blur-sm
-                               rounded-xl border border-purple-100/50 hover:border-purple-200/50
-                               hover:bg-white/70 transition-all duration-300"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3">
-                          {tech.icon && (
-                            <tech.icon className="w-5 h-5 text-gray-700 flex-shrink-0" />
-                          )}
-                          <h5 className="font-outfit font-medium text-gray-800 text-sm">{tech.name}</h5>
-                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            tech.level === 'Expert'
-                              ? 'bg-green-100 text-green-700'
-                              : tech.level === 'Advanced'
-                              ? 'bg-blue-100 text-blue-700'
-                              : 'bg-purple-100 text-purple-700'
-                          }`}>
-                            {tech.level}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">{tech.desc}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-xl flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-emerald-600" />
-                </div>
-                <h4 className="text-lg font-outfit font-semibold text-gray-800">Tools & Platforms</h4>
-              </div>
-
-              <div className="space-y-3">
-                {filterTools([
-                  { name: 'Firebase', level: 'Advanced', desc: 'Backend-as-a-Service', icon: SiFirebase },
-                  { name: 'MongoDB', level: 'Advanced', desc: 'NoSQL Database', icon: SiMongodb },
-                  { name: 'MySQL', level: 'Advanced', desc: 'Relational Database', icon: SiMysql },
-                  { name: 'Cloudinary', level: 'Advanced', desc: 'Media Management & CDN', icon: SiCloudinary },
-                  { name: 'Git & GitHub', level: 'Advanced', desc: 'Version Control & Collaboration', icon: SiGithub },
-                  { name: 'VS Code', level: 'Expert', desc: 'Code Editor & IDE', icon: VscVscode },
-                  { name: 'Vercel', level: 'Advanced', desc: 'Frontend Deployment', icon: SiVercel },
-                  { name: 'Netlify', level: 'Advanced', desc: 'Static Site Hosting', icon: SiNetlify },
-                  { name: 'Replit', level: 'Advanced', desc: 'Cloud Development Environment', icon: SiReplit },
-                  { name: 'Android Studio', level: 'Intermediate', desc: 'Android Development', icon: SiAndroidstudio },
-                  { name: 'Xcode', level: 'Intermediate', desc: 'iOS Development', icon: SiXcode },
-                  { name: 'Postman', level: 'Intermediate', desc: 'API Testing & Development', icon: SiPostman },
-                  { name: 'Webpack', level: 'Intermediate', desc: 'Module Bundler', icon: SiWebpack },
-                  { name: 'ESLint & Prettier', level: 'Advanced', desc: 'Code Quality & Formatting', icon: SiEslint },
-                  { name: 'Flutter Flow', level: 'Intermediate', desc: 'Low-Code Flutter App Builder', icon: SiFlutter },
-                  { name: 'MCP', level: 'Advanced', desc: 'Model Context Protocol', icon: FiTool },
-                  { name: 'Chrome DevTools', level: 'Advanced', desc: 'Browser Debugging', icon: SiReact },
-                  { name: 'Wix', level: 'Intermediate', desc: 'Website Builder Platform', icon: SiWix },
-                  { name: 'Shopify', level: 'Advanced', desc: 'E-commerce Platform', icon: SiShopify },
-                  { name: 'WordPress', level: 'Advanced', desc: 'Content Management System', icon: SiWordpress }
-                ]).map((platform, index) => (
-                  <motion.div
-                    key={platform.name}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 1.0 + index * 0.03 }}
-                    viewport={{ once: true }}
-                    className="group flex items-center justify-between p-3 bg-white/50 backdrop-blur-sm
-                             rounded-xl border border-emerald-100/50 hover:border-emerald-200/50
-                             hover:bg-white/70 transition-all duration-300"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        {platform.icon && (
-                          <platform.icon className="w-5 h-5 text-gray-700 flex-shrink-0" />
+                      {/* Icon */}
+                      <div className="mb-3">
+                        {tool.icon && (
+                          <tool.icon className="w-7 h-7 md:w-8 md:h-8 text-gray-700 group-hover:scale-110 transition-transform" />
                         )}
-                        <h5 className="font-outfit font-medium text-gray-800 text-sm">{platform.name}</h5>
-                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          platform.level === 'Expert'
-                            ? 'bg-green-100 text-green-700'
-                            : platform.level === 'Advanced'
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'bg-purple-100 text-purple-700'
-                        }`}>
-                          {platform.level}
-                        </span>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">{platform.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
+                      
+                      {/* Tool Name */}
+                      <p className="text-xs md:text-sm font-medium text-gray-800 text-center line-clamp-2">
+                        {tool.name}
+                      </p>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-sm text-gray-500">
+                    {searchQuery
+                      ? 'No tools match your search'
+                      : 'No tools available'}
+                  </p>
+                </div>
+              )}
+
+              {/* Show More / Show Less Button */}
+              {hasMore && filteredTools.length > 0 && (
+                <motion.button
+                  onClick={() => toggleCategory(category.id)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-2 text-sm font-medium text-gray-600 hover:text-[rgb(251,108,133)]
+                           bg-white/30 hover:bg-white/50 rounded-lg border border-gray-200/50
+                           hover:border-gray-300/50 transition-all duration-300"
+                >
+                  {isExpanded ? `Show Less (${filteredTools.length - 4} hidden)` : `Show More (${filteredTools.length - 4} more)`}
+                </motion.button>
+              )}
+
+              {/* Tool Count */}
+              <div className="text-xs text-gray-500 text-center border-t border-gray-200/50 pt-4">
+                {displayedTools.length} of {filteredTools.length} tools
               </div>
             </motion.div>
-          </div>
+          );
+        })}
+        </div>
+      </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-            viewport={{ once: true }}
-            className="border-t border-gray-200/50 pt-12 mt-12"
-          >
-            <div className="text-center mb-8">
-              <h4 className="text-lg font-outfit font-semibold text-gray-700 mb-6">
-                Areas of Specialization
-              </h4>
-              <p className="text-sm text-gray-500 max-w-2xl mx-auto">
-                Core competencies where I deliver exceptional results
-              </p>
-            </div>
+      {/* Specialization Skills Section - Bottom summary */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.0, ease: [0.25, 0.46, 0.45, 0.94] }}
+        viewport={{ once: true }}
+        className="max-w-6xl mx-auto mt-12 md:mt-16 text-center"
+      >
+        <h3 className="text-2xl md:text-3xl font-outfit font-light text-gray-800 mb-8">
+          Core Specializations
+        </h3>
+        <div className="flex flex-wrap justify-center gap-3">
+          {[
+            'Mobile Development',
+            'UI/UX Design',
+            'Frontend Development',
+            'Cross-Platform',
+            'Design Systems',
+            'Motion Graphics',
+            'API Integration',
+            'Responsive Design',
+            'Database Design',
+            'Performance Optimization',
+            'Brand Identity',
+            'Component Libraries'
+          ].map((skill, index) => (
+            <motion.div
+              key={skill}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 1.1 + index * 0.03, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              className="px-4 py-2.5 bg-white/70 border border-gray-200/50 rounded-full text-sm font-medium text-gray-700
+                       hover:border-[rgb(251,108,133)]/30 hover:text-[rgb(251,108,133)]
+                       hover:shadow-md hover:bg-white transition-all duration-300 backdrop-blur-sm
+                       cursor-default"
+            >
+              {skill}
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
 
-            <div className="flex flex-wrap justify-center gap-3">
-              {[
-                'Mobile App Development',
-                'UI/UX Design',
-                'Frontend Development',
-                'Cross-Platform Solutions',
-                'Design Systems',
-                'Motion Graphics',
-                'Video Production',
-                'Brand Identity',
-                'Database Design',
-                'API Integration',
-                'Responsive Design',
-                'Performance Optimization'
-              ].map((skill, index) => (
-                <motion.div
-                  key={skill}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 1.2 + index * 0.03, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  className="px-4 py-2.5 bg-gradient-to-r from-gray-100/80 to-white/80
-                           border border-gray-200/50 rounded-full text-sm font-medium text-gray-700
-                           hover:border-[rgb(251,108,133)]/30 hover:text-[rgb(251,108,133)]
-                           hover:shadow-md hover:bg-white transition-all duration-300 backdrop-blur-sm
-                           cursor-pointer"
-                >
-                  {skill}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-
+      {/* Footer Message */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.8, delay: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
         viewport={{ once: true }}
-        className="text-center mt-16"
+        className="text-center mt-12 md:mt-16"
       >
-        <motion.button
-          onClick={() => setShowCompleteStack(!showCompleteStack)}
-          whileHover={{ scale: 1.02, y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          className="group px-10 py-5 bg-white/90 hover:bg-white text-gray-700
-                   rounded-2xl font-outfit font-medium text-base border border-gray-200/50
-                   hover:border-[rgb(251,108,133)]/30 hover:text-[rgb(251,108,133)]
-                   transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-200/50
-                   flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl
-                   cursor-pointer backdrop-blur-sm"
-        >
-          <span>
-            {showCompleteStack ? 'Hide' : 'View'} Complete Tech Stack
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Every tool, every framework, every choice is made with one goal:{' '}
+          <span className="text-gray-800 font-medium">
+            creating experiences that users love and businesses value.
           </span>
-          <motion.div
-            animate={{ rotate: showCompleteStack ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ArrowRight className="w-5 h-5 rotate-90" />
-          </motion.div>
-        </motion.button>
-
-        <p className="text-sm text-gray-500 mt-4 max-w-md mx-auto">
-          {showCompleteStack
-            ? 'Showing all tools and technologies I use professionally'
-            : 'Click to see my complete toolkit including Adobe Creative Suite details'
-          }
         </p>
       </motion.div>
-
-      {!showCompleteStack && (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Every tool, every framework, every choice is made with one goal:{' '}
-            <span className="text-gray-800 font-medium">
-              creating experiences that users love and businesses value.
-            </span>
-          </p>
-        </motion.div>
-      )}
     </motion.div>
   );
 }
