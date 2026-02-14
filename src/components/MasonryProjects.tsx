@@ -15,10 +15,9 @@ export default function MasonryProjects({ projects, onProjectClick }: MasonryPro
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
-      if (width < 640) setColumns(1);
-      else if (width < 1024) setColumns(2);
-      else if (width < 1536) setColumns(3);
-      else setColumns(4);
+      // Limit to 1–2 columns so cards stay wide and visuals feel prominent
+      if (width < 768) setColumns(1);
+      else setColumns(2);
     };
 
     updateColumns();
@@ -74,7 +73,7 @@ export default function MasonryProjects({ projects, onProjectClick }: MasonryPro
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           viewport={{ once: true }}
-          className="mb-20"
+          className="mb-16"
         >
           <ProjectCardApple
             project={projects.find(p => p.featured)!}
@@ -85,14 +84,17 @@ export default function MasonryProjects({ projects, onProjectClick }: MasonryPro
         </motion.div>
       )}
 
+      {projects.find(p => p.featured) && (
+        <div className="mb-12">
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-200/80 to-transparent" />
+        </div>
+      )}
+
       {/* Masonry grid - Fixed layout */}
       <div 
         ref={containerRef}
-        className={`grid gap-6 ${
-          columns === 1 ? 'grid-cols-1' :
-          columns === 2 ? 'grid-cols-1 md:grid-cols-2' :
-          columns === 3 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' :
-          'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+        className={`grid gap-8 ${
+          columns === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
         }`}
       >
         {distributedProjects.map((column, columnIndex) => (

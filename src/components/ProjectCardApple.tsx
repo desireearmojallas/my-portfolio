@@ -92,13 +92,20 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
 
   // Get card height based on content and size
   const getCardHeight = () => {
-    if (layout === 'hero') return 'h-[600px]';
-    if (layout === 'featured') return 'h-[400px]';
-    
-    // Use responsive heights for masonry to ensure proper content flow
-    if (project.size === 'large') return 'min-h-[420px] h-auto';
-    if (project.size === 'medium') return 'min-h-[360px] h-auto';
-    return 'min-h-[320px] h-auto';
+    if (layout === 'hero') return 'h-[620px]';
+    if (layout === 'featured') return 'h-[440px]';
+
+    // Taller cards to let thumbnails drive the visual focus
+    if (project.size === 'large') return 'min-h-[480px] h-auto';
+    if (project.size === 'medium') return 'min-h-[440px] h-auto';
+    return 'min-h-[400px] h-auto';
+  };
+
+  const getThumbnailHeight = () => {
+    if (layout === 'hero') return 'h-[240px] md:h-[280px] lg:h-[320px]';
+    if (project.size === 'large') return 'aspect-[16/10] min-h-[280px] md:min-h-[320px]';
+    if (project.size === 'medium') return 'aspect-[4/3] min-h-[250px] md:min-h-[280px]';
+    return 'aspect-[4/3] min-h-[230px] md:min-h-[260px]';
   };
 
   // Hero layout for showcase projects
@@ -119,7 +126,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
           onHoverStart={() => {}}
           onHoverEnd={() => {}}
           className="group relative w-full h-[600px] bg-white rounded-[32px] border border-gray-200/60
-                   shadow-2xl hover:shadow-3xl transition-shadow duration-500 overflow-hidden cursor-pointer"
+                   shadow-lg hover:shadow-xl transition-shadow duration-500 overflow-hidden cursor-pointer"
           onClick={handleCardClick}
         >
           {/* Apple-style gradient overlay */}
@@ -127,6 +134,19 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
           
           {/* Main content area */}
           <div className="relative z-20 h-full flex flex-col">
+            {/* Floating thumbnail */}
+            <div className="pointer-events-none absolute top-8 right-8 w-44 md:w-56 lg:w-64 hidden sm:block">
+              <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-white/60 shadow-2xl">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10" />
+              </div>
+            </div>
+
             {/* Header section */}
             <div className="p-12 flex-1 flex flex-col justify-center">
               {/* Client badge */}
@@ -252,17 +272,28 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
         onHoverStart={() => {}}
         onHoverEnd={() => {}}
         className={`group relative w-full ${getCardHeight()} bg-white rounded-2xl border border-gray-200/60
-                   shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer
-                   hover:border-[rgb(251,108,133)]/30`}
+             shadow-sm hover:shadow-xl transition-all duration-300 ease-out overflow-hidden cursor-pointer
+             hover:border-[rgb(251,108,133)]/30`}
         onClick={handleCardClick}
       >
         {/* Simple gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/20 to-white" />
         
         {/* Content container */}
-        <div className="relative z-10 h-full flex flex-col p-6">
+        <div className="relative z-10 h-full flex flex-col p-6 md:p-7 gap-4 md:gap-5">
+          {/* Thumbnail */}
+          <div className={`relative w-full ${getThumbnailHeight()} rounded-2xl overflow-hidden border border-gray-100 mb-5 bg-gray-50`}>
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
+          </div>
+
           {/* Header with role badge and year */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
                            rounded-lg flex items-center justify-center text-white text-sm">
@@ -279,26 +310,26 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
 
           {/* Client info */}
           {project.client && (
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-[rgb(251,108,133)] rounded-full" />
               <span className="text-xs text-gray-500 font-medium">{project.client}</span>
             </div>
           )}
 
           {/* Title */}
-          <h3 className="text-lg font-outfit font-semibold text-gray-900 mb-3 leading-tight 
+          <h3 className="text-lg md:text-xl font-outfit font-semibold text-gray-900 leading-snug 
                        group-hover:text-[rgb(251,108,133)] transition-colors duration-300">
             {project.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm text-gray-600 leading-relaxed mb-4 flex-1">
+          <p className="text-sm md:text-base text-gray-600 leading-relaxed flex-1 line-clamp-3 md:line-clamp-4">
             {project.description}
           </p>
 
           {/* Achievement highlight */}
           {project.achievements && project.achievements[0] && (
-            <div className="flex items-start gap-2 mb-4 p-3 bg-gray-50/80 rounded-lg">
+            <div className="flex items-start gap-2 p-3 bg-gray-50/80 rounded-lg">
               <div className="w-1 h-1 bg-[rgb(251,108,133)] rounded-full mt-2 flex-shrink-0" />
               <span className="text-xs text-gray-600">{project.achievements[0]}</span>
             </div>
@@ -306,7 +337,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
 
           {/* Tags */}
           {project.tags && project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-4">
+            <div className="flex flex-wrap gap-2">
               {project.tags.slice(0, 3).map((tag, i) => (
                 <span
                   key={i}
@@ -325,7 +356,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
           )}
 
           {/* Action buttons */}
-          <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100">
+          <div className="flex gap-3 mt-auto pt-3 md:pt-4 border-t border-gray-100">
             {project.link && (
               <motion.a
                 href={project.link}

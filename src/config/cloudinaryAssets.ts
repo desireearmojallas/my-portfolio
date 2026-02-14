@@ -322,6 +322,48 @@ export const cloudinaryAssets: CloudinaryAssets = {
       demo: 'https://your-portfolio.com',
       github: 'https://github.com/yourname/portfolio',
     },
+    clymbiq: {
+      thumbnail: 'https://placehold.co/1200x800/667EEA/FFFFFF?text=Clymbiq+Corporate+Website',
+      images: [
+        'https://placehold.co/1200x800/667EEA/FFFFFF?text=Clymbiq+Corporate+Website',
+      ],
+      demo: 'https://www.clymbiq.com',
+    },
+    freehillCapital: {
+      thumbnail: 'https://placehold.co/1200x800/48BB78/FFFFFF?text=Freehill+Capital',
+      images: [
+        'https://placehold.co/1200x800/48BB78/FFFFFF?text=Freehill+Capital',
+      ],
+      demo: 'https://www.freehillcapital.com',
+    },
+    a1crm: {
+      thumbnail: 'https://placehold.co/1200x800/F6AD55/FFFFFF?text=A1+CRM+Web+App',
+      images: [
+        'https://placehold.co/1200x800/F6AD55/FFFFFF?text=A1+CRM+Web+App',
+      ],
+      demo: 'https://www.a1crm.clymbiq.com',
+    },
+    a1canvasser: {
+      thumbnail: 'https://placehold.co/1200x800/FC8181/FFFFFF?text=A1+Canvasser+Tool',
+      images: [
+        'https://placehold.co/1200x800/FC8181/FFFFFF?text=A1+Canvasser+Tool',
+      ],
+      demo: 'https://www.a1canvasser.clymbiq.com',
+    },
+    a1production: {
+      thumbnail: 'https://placehold.co/1200x800/9F7AEA/FFFFFF?text=A1+Production+Dashboard',
+      images: [
+        'https://placehold.co/1200x800/9F7AEA/FFFFFF?text=A1+Production+Dashboard',
+      ],
+      demo: 'https://www.a1production.clymbiq.com',
+    },
+    a1billing: {
+      thumbnail: 'https://placehold.co/1200x800/38B2AC/FFFFFF?text=A1+Billing+Web+App',
+      images: [
+        'https://placehold.co/1200x800/38B2AC/FFFFFF?text=A1+Billing+Web+App',
+      ],
+      demo: 'https://www.a1billing.clymbiq.com',
+    },
   },
 
   mobileApps: {},

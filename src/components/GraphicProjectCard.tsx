@@ -24,6 +24,7 @@ interface GraphicProjectCardProps {
   project: GraphicProject;
   index: number;
   onClick: (project: GraphicProject) => void;
+  onHover?: (project: GraphicProject) => void;
   style?: React.CSSProperties;
   variant?: 'default' | 'masonry';
 }
@@ -32,6 +33,7 @@ export default function GraphicProjectCard({
   project,
   index,
   onClick,
+  onHover,
   style,
   variant = 'default'
 }: GraphicProjectCardProps) {
@@ -40,6 +42,17 @@ export default function GraphicProjectCard({
     return url.toLowerCase().endsWith('.mp4') || 
            url.toLowerCase().endsWith('.webm') || 
            url.toLowerCase().endsWith('.mov');
+  };
+
+  // Generate a low-quality blurred placeholder for Cloudinary images
+  const getBlurPlaceholder = (src: string): string => {
+    // Only apply to Cloudinary URLs
+    if (!src.includes('cloudinary.com')) {
+      return src;
+    }
+    
+    // Insert blur transformation into Cloudinary URL
+    return src.replace('/upload/', '/upload/e_blur:2000,q_auto:low,w_100/');
   };
 
   // Function to create optimized video thumbnails
@@ -86,7 +99,7 @@ export default function GraphicProjectCard({
   };
 
   // Index is used for staggered animations in the inline style
-  const [, setImageLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
@@ -185,9 +198,15 @@ export default function GraphicProjectCard({
           e.stopPropagation();
           onClick(project);
         }}
-        onMouseEnter={() => isVideoProject && handleVideoHover(true)}
+        onMouseEnter={() => {
+          if (isVideoProject) handleVideoHover(true);
+          if (onHover) onHover(project);
+        }}
         onMouseLeave={() => isVideoProject && handleVideoHover(false)}
-        onPointerEnter={() => isVideoProject && handleVideoHover(true)}
+        onPointerEnter={() => {
+          if (isVideoProject) handleVideoHover(true);
+          if (onHover) onHover(project);
+        }}
         onPointerLeave={() => isVideoProject && handleVideoHover(false)}
         className="group cursor-pointer relative overflow-hidden bg-white flex flex-col
                    transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 
@@ -196,7 +215,8 @@ export default function GraphicProjectCard({
           ...style,
           opacity: 0,
           animation: `fadeInSimple 0.5s ease-out ${0.1 + (index % 6) * 0.05}s forwards`,
-          height: project.featured ? '400px' : '280px', // Use height instead of minHeight
+          aspectRatio: project.featured ? '16 / 9' : '4 / 3',
+          height: 'auto',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)'
         }}
         aria-label={`View ${project.title}`}
@@ -273,12 +293,26 @@ export default function GraphicProjectCard({
             </div>
           ) : (
             <>
+              {/* Blur placeholder - loads instantly for smoother experience */}
+              {!imageLoaded && project.thumbnail.includes('cloudinary.com') && (
+                <img
+                  src={getBlurPlaceholder(project.thumbnail)}
+                  alt=""
+                  className={`w-full h-full object-cover absolute inset-0 ${
+                    isMobile ? '' : 'grayscale'
+                  }`}
+                  style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }}
+                  loading="eager"
+                />
+              )}
+              
+              {/* Full quality thumbnail */}
               <img
                 src={project.thumbnail}
                 alt={project.title}
                 className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
                   isMobile ? '' : 'grayscale group-hover:grayscale-0'
-                }`}
+                } ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
@@ -323,6 +357,8 @@ export default function GraphicProjectCard({
         e.stopPropagation();
         onClick(project);
       }}
+      onMouseEnter={() => onHover && onHover(project)}
+      onPointerEnter={() => onHover && onHover(project)}
       className={`project-card group cursor-pointer relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 ${project.type === 'video' ? 'mb-4' : ''}`}
       style={{
         ...style,
@@ -383,21 +419,37 @@ export default function GraphicProjectCard({
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60"></div>
           </div>
         ) : (
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
-            loading="lazy"
-            onLoad={() => setImageLoaded(true)}
-            onError={() => {
-              setImageError(true);
-              // Fallback to placeholder if image fails to load
-              console.error(`Failed to load image: ${project.thumbnail}`);
-            }}
-            style={{ 
-              visibility: imageError ? 'hidden' : 'visible' 
-            }}
-          />
+          <>
+            {/* Blur placeholder - loads instantly for smoother experience */}
+            {!imageLoaded && project.thumbnail.includes('cloudinary.com') && (
+              <img
+                src={getBlurPlaceholder(project.thumbnail)}
+                alt=""
+                className="w-full h-full object-cover absolute inset-0"
+                style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }}
+                loading="eager"
+              />
+            )}
+            
+            {/* Full quality thumbnail */}
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              onError={() => {
+                setImageError(true);
+                // Fallback to placeholder if image fails to load
+                console.error(`Failed to load image: ${project.thumbnail}`);
+              }}
+              style={{ 
+                visibility: imageError ? 'hidden' : 'visible' 
+              }}
+            />
+          </>
         )}
 
         {/* Fallback for failed images - enhanced */}

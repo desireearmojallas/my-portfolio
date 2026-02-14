@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import GraphicProjectCard, { type GraphicProject, type GraphicProjectType } from './GraphicProjectCard';
 import GraphicProjectModal from './GraphicProjectModal';
 import { graphicDesign, videoProduction } from '../config/cloudinaryAssets';
+import { useImagePreloader } from '../hooks/useImagePreloader';
 import './GalleryStyles.css';
 
 interface GraphicMasonryGalleryProps {
@@ -358,16 +359,18 @@ export default function GraphicMasonryGallery({
     }
   }, [graphicDesign, videoProduction]);
 
+  // Initialize image preloader
+  const { preloadAssets, preloadAssetsWithDelay } = useImagePreloader();
+
   // Responsive column calculation
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth;
       const mobile = width < 768;
       setIsMobile(mobile);
-      if (width < 640) setColumns(1);
-      else if (width < 1024) setColumns(2);
-      else if (width < 1536) setColumns(3);
-      else setColumns(4);
+      // Limit to max 2 columns for wider, more prominent cards
+      if (width < 768) setColumns(1);
+      else setColumns(2);
     };
 
     updateColumns();
@@ -389,6 +392,47 @@ export default function GraphicMasonryGallery({
     }
     return filteredProjects;
   }, [filteredProjects, isMobile, currentPage, startIndex, endIndex]);
+
+  // Preload all project assets in the background
+  useEffect(() => {
+    if (!projects.length) return;
+
+    // Collect all assets from all projects
+    const allAssets: string[] = [];
+    projects.forEach(project => {
+      if (project.thumbnail) allAssets.push(project.thumbnail);
+      if (project.assets) allAssets.push(...project.assets);
+    });
+
+    // Preload with a delay to not interfere with initial page load
+    // Prioritize visible projects first (thumbnails), then all assets
+    const thumbnails = projects.map(p => p.thumbnail).filter(Boolean);
+    
+    // Preload thumbnails immediately with high priority
+    preloadAssets(thumbnails, { priority: 'high', loading: 'eager' });
+    
+    // Preload all other assets after 2 seconds with low priority
+    preloadAssetsWithDelay(allAssets, 2000);
+  }, [projects, preloadAssets, preloadAssetsWithDelay]);
+
+  // Preload assets when page changes
+  useEffect(() => {
+    if (!isMobile || !displayedProjects.length) return;
+
+    const assetsToPreload: string[] = [];
+    displayedProjects.forEach(project => {
+      if (project.assets) assetsToPreload.push(...project.assets);
+    });
+
+    // Preload current page assets
+    preloadAssets(assetsToPreload, { priority: 'high' });
+  }, [currentPage, displayedProjects, isMobile, preloadAssets]);
+
+  // Function to preload a specific project's assets (called on hover)
+  const preloadProjectAssets = (project: GraphicProject) => {
+    const assetsToPreload = [project.thumbnail, ...(project.assets || [])];
+    preloadAssets(assetsToPreload, { priority: 'high' });
+  };
 
   // Pagination handlers
   const handleNextPage = () => {
@@ -420,11 +464,12 @@ export default function GraphicMasonryGallery({
     });
     
     // Then fill in with regular items, balancing column heights
-    // Featured items are taller (400px) vs regular (280px)
-    // Add 8px gap to height calculations
+    // Featured items use a ~16:9 ratio, others ~4:3; use relative units for comparison
+    const featuredUnit = 1.78;
+    const regularUnit = 1.33;
     regularItems.forEach((project) => {
       const columnHeights = columnArrays.map(col => 
-        col.reduce((height, item) => height + (item.featured ? 400 : 280) + 8, 0)
+        col.reduce((height, item) => height + (item.featured ? featuredUnit : regularUnit) + 0.1, 0)
       );
       const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
       columnArrays[shortestColumnIndex].push(project);
@@ -489,6 +534,7 @@ export default function GraphicMasonryGallery({
                       window._lastScrollPosition = window.scrollY;
                       setSelectedProject(project);
                     }}
+                    onHover={preloadProjectAssets}
                     variant="masonry"
                   />
                   

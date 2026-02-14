@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Filter,
   Grid,
@@ -14,6 +14,7 @@ import GraphicProjectCard from "./GraphicProjectCard";
 import GraphicProjectModal from "./GraphicProjectModal";
 import type { GraphicProject, GraphicProjectType } from "./GraphicProjectCard";
 import CollapsibleSection from "./CollapsibleSection";
+import { useImagePreloader } from '../hooks/useImagePreloader';
 import "./GraphicGalleryStyles.css";
 import "./GraphicProjectInteractions.css";
 import { graphicDesign, videoProduction } from '../config/cloudinaryAssets';
@@ -360,6 +361,36 @@ export default function GraphicDesignGallery({
     ];
   }, []);
 
+  // Initialize image preloader
+  const { preloadAssets, preloadAssetsWithDelay } = useImagePreloader();
+
+  // Preload all project assets in the background
+  useEffect(() => {
+    if (!projects.length) return;
+
+    // Collect all assets from all projects
+    const allAssets: string[] = [];
+    projects.forEach(project => {
+      if (project.thumbnail) allAssets.push(project.thumbnail);
+      if (project.assets) allAssets.push(...project.assets);
+    });
+
+    // Prioritize visible projects first (thumbnails), then all assets
+    const thumbnails = projects.map(p => p.thumbnail).filter(Boolean);
+    
+    // Preload thumbnails immediately with high priority
+    preloadAssets(thumbnails, { priority: 'high', loading: 'eager' });
+    
+    // Preload all other assets after 2 seconds with low priority
+    preloadAssetsWithDelay(allAssets, 2000);
+  }, [projects, preloadAssets, preloadAssetsWithDelay]);
+
+  // Function to preload a specific project's assets (called on hover)
+  const preloadProjectAssets = (project: GraphicProject) => {
+    const assetsToPreload = [project.thumbnail, ...(project.assets || [])];
+    preloadAssets(assetsToPreload, { priority: 'high' });
+  };
+
   // Generate unique categories and types for filtering
   const categories = useMemo(() => {
     return [...new Set(projects.map((p) => p.category))];
@@ -615,6 +646,7 @@ export default function GraphicDesignGallery({
                             // Prevent default browser behavior and set modal state
                             setSelectedProject(project);
                           }}
+                          onHover={preloadProjectAssets}
                           style={{ "--index": index } as React.CSSProperties}
                         />
                       ))}

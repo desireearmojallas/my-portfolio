@@ -4,6 +4,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative; /* allow absolute children without escaping */
+  overflow: hidden;   /* prevent stray backgrounds/scroll bleed */
+  background: transparent;
 }
 
 .gallery-title {
@@ -18,6 +21,7 @@
   width: 100%;
   gap: 0;
   overflow: hidden;
+  background: transparent;
 }
 
 /* Gallery Item - Individual media wrapper */
@@ -26,10 +30,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: transparent;
   position: relative;
   overflow: hidden;
   animation: fadeInUp 0.6s ease-out;
+  box-shadow: none;
 }
 
 /* Media elements */

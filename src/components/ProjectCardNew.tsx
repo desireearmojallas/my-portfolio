@@ -11,6 +11,8 @@ export interface Project {
   images?: string[]; // For graphic design projects with multiple images
   link?: string;
   github?: string;
+  caseStudyLink?: string;
+  outcomes?: string[];
   role: 'designer' | 'developer' | 'both';
   type?: 'uiux' | 'graphic' | 'development'; // Project type for different layouts
   category?: string; // For filtering and categorization
@@ -55,8 +57,8 @@ export default function ProjectCard({ project, index, onClick }: ProjectCardProp
       className="group h-full"
     >
       <div className="relative h-full bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50
-                    shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden
-                    hover:border-[rgb(251,108,133)]/30 hover:-translate-y-2">
+            shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden
+            hover:-translate-y-2">
         
         {/* Glass reflection effect - Apple style */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent 
