@@ -14,7 +14,6 @@ interface GraphicMasonryGalleryProps {
 export default function GraphicMasonryGallery({
   className = "",
 }: GraphicMasonryGalleryProps) {
-  const [columns, setColumns] = useState(3);
   const [selectedProject, setSelectedProject] = useState<GraphicProject | null>(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -27,185 +26,66 @@ export default function GraphicMasonryGallery({
     try {
       const projectsList: GraphicProject[] = [];
 
-      // Video Projects
-      if (videoProduction?.delishDeli?.thumbnail) {
-        projectsList.push({
-          id: "ig-video-1",
-          title: "Delish Deli - 1Nito Tower",
-          description: "Short-form Instagram video created for Purple Cow's client, Delish Deli at 1Nito Tower.",
-          category: "Social Media",
-          subcategory: "Instagram Video",
-          type: "video",
-          client: "Purple Cow Agency",
-          tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-          thumbnail: videoProduction.delishDeli.thumbnail,
-          assets: videoProduction.delishDeli.videos || [],
-          date: "2023",
-          featured: true, // Wide card
-        });
-      }
+      // Video Projects - Xeleqt AVP Bundle
+      const xeleqtBundle = [
+        videoProduction?.xeleqtAgility,
+        videoProduction?.xeleqtAware,
+        videoProduction?.xeleqtMobility,
+      ].filter(Boolean);
 
-      if (videoProduction?.purpleCowAgency?.thumbnail) {
-        projectsList.push({
-          id: "ig-video-2",
-          title: "Purple Cow Agency",
-          description: "Promotional video showcasing Purple Cow Agency's brand and services.",
-          category: "Social Media",
-          subcategory: "Instagram Video",
-          type: "video",
-          client: "Purple Cow Agency",
-          tools: ["Premiere Pro", "CapCut", "After Effects"],
-          thumbnail: videoProduction.purpleCowAgency.thumbnail,
-          assets: videoProduction.purpleCowAgency.videos || [],
-          date: "2023",
-        });
-      }
+      if (xeleqtBundle.length) {
+        const xeleqtAssets = xeleqtBundle.flatMap(item => item?.videos || []);
+        const xeleqtThumb =
+          videoProduction.xeleqtAgility?.thumbnail ||
+          videoProduction.xeleqtAware?.thumbnail ||
+          videoProduction.xeleqtMobility?.thumbnail ||
+          xeleqtAssets[0];
 
-      if (videoProduction?.synergy?.thumbnail) {
         projectsList.push({
-          id: "ig-video-4",
-          title: "Synergy768",
-          description: "Promotional video created for Synergy768, highlighting their services and benefits.",
-          category: "Social Media",
-          subcategory: "Instagram Video",
-          type: "video",
-          client: "Purple Cow Agency",
-          tools: ["Premiere Pro", "Adobe Audition", "CapCut"],
-          thumbnail: videoProduction.synergy.thumbnail,
-          assets: videoProduction.synergy.videos || [],
-          date: "2023",
-        });
-      }
-
-      if (videoProduction?.xeleqtAgility?.thumbnail) {
-        projectsList.push({
-          id: "xeleqt-video-1",
-          title: "Xeleqt Agility AVP",
-          description: "Audio-visual presentation showcasing Xeleqt's agility products and services.",
+          id: "xeleqt-avp-suite",
+          title: "Xeleqt AVP Collection",
+          description: "Unified AVP series covering Xeleqt's Agility, Aware, and Mobility product lines.",
           category: "Video Production",
           subcategory: "AVP",
           type: "video",
           client: "Xeleqt",
-          tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-          thumbnail: videoProduction.xeleqtAgility.thumbnail,
-          assets: videoProduction.xeleqtAgility.videos || [],
+          tools: ["Premiere Pro", "Adobe Audition", "After Effects", "CapCut"],
+          thumbnail: xeleqtThumb,
+          assets: xeleqtAssets,
           date: "2022",
-          featured: true, // Wide card
+          featured: true,
         });
       }
 
-      if (videoProduction?.xeleqtAware?.thumbnail) {
-        projectsList.push({
-          id: "xeleqt-video-2",
-          title: "Xeleqt Aware AVP",
-          description: "Audio-visual presentation for Xeleqt's Aware product line.",
-          category: "Video Production",
-          subcategory: "AVP",
-          type: "video",
-          client: "Xeleqt",
-          tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-          thumbnail: videoProduction.xeleqtAware.thumbnail,
-          assets: videoProduction.xeleqtAware.videos || [],
-          date: "2022",
-        });
-      }
+      const purpleCowBundle = [
+        videoProduction?.delishDeli,
+        videoProduction?.purpleCowAgency,
+        videoProduction?.synergy,
+        videoProduction?.purpleCowPhilippines,
+      ].filter(Boolean);
 
-      if (videoProduction?.xeleqtMobility?.thumbnail) {
-        projectsList.push({
-          id: "xeleqt-video-3",
-          title: "Xeleqt Mobility",
-          description: "Product showcase video highlighting Xeleqt's mobility solutions.",
-          category: "Video Production",
-          subcategory: "Product Video",
-          type: "video",
-          client: "Xeleqt",
-          tools: ["Premiere Pro", "After Effects", "CapCut"],
-          thumbnail: videoProduction.xeleqtMobility.thumbnail,
-          assets: videoProduction.xeleqtMobility.videos || [],
-          date: "2022",
-        });
-      }
+      if (purpleCowBundle.length) {
+        const bundleAssets = purpleCowBundle.flatMap(item => item?.videos || []);
+        const bundleThumb =
+          videoProduction.purpleCowAgency?.thumbnail ||
+          videoProduction.delishDeli?.thumbnail ||
+          videoProduction.synergy?.thumbnail ||
+          videoProduction.purpleCowPhilippines?.thumbnail ||
+          bundleAssets[0];
 
-      // Place Purple Cow Philippines here - separated from Purple Cow Agency by multiple projects
-      if (videoProduction?.purpleCowPhilippines?.thumbnail) {
         projectsList.push({
-          id: "ig-video-3",
-          title: "Purple Cow Philippines",
-          description: "Brand highlight video for Purple Cow Philippines' social media presence.",
+          id: "purple-cow-campaigns",
+          title: "Purple Cow Social Campaigns",
+          description: "Cross-brand social video set (Delish Deli, Synergy768, Purple Cow Agency, Purple Cow Philippines).",
           category: "Social Media",
           subcategory: "Instagram Video",
           type: "video",
           client: "Purple Cow Agency",
-          tools: ["Premiere Pro", "CapCut", "After Effects"],
-          thumbnail: videoProduction.purpleCowPhilippines.thumbnail,
-          assets: videoProduction.purpleCowPhilippines.videos || [],
+          tools: ["Premiere Pro", "CapCut", "After Effects", "Adobe Audition"],
+          thumbnail: bundleThumb,
+          assets: bundleAssets,
           date: "2023",
-        });
-      }
-
-      if (videoProduction?.boligcenterGarden?.thumbnail) {
-        projectsList.push({
-          id: "boligcenter-1",
-          title: "Boligcenter.dk Garden Video",
-          description: "Video created for Boligcenter.dk showcasing garden products and design.",
-          category: "Video Production",
-          subcategory: "Commercial",
-          type: "video",
-          client: "Boligcenter.dk",
-          tools: ["Premiere Pro", "After Effects", "Color Grading"],
-          thumbnail: videoProduction.boligcenterGarden.thumbnail,
-          assets: videoProduction.boligcenterGarden.videos || [],
-          date: "2022",
-          featured: true, // Wide card
-        });
-      }
-
-      if (videoProduction?.queenPoblacion?.thumbnail) {
-        projectsList.push({
-          id: "queen-poblacion-1",
-          title: "Queen of Poblacion Intro",
-          description: "Video introduction created for a local beauty pageant in Poblacion.",
-          category: "Video Production",
-          subcategory: "Event Intro",
-          type: "video",
-          client: "Queen of Poblacion Pageant",
-          tools: ["Premiere Pro", "After Effects", "Motion Graphics"],
-          thumbnail: videoProduction.queenPoblacion.thumbnail,
-          assets: videoProduction.queenPoblacion.videos || [],
-          date: "2023",
-        });
-      }
-
-      if (videoProduction?.returnZero?.thumbnail) {
-        projectsList.push({
-          id: "return-zero-1",
-          title: "Return Zero Band VTR",
-          description: "Video presentation for Return Zero, a school band from the SCS Department.",
-          category: "Video Production",
-          subcategory: "Band Promo",
-          type: "video",
-          client: "Return Zero Band",
-          tools: ["Premiere Pro", "After Effects", "Audio Editing"],
-          thumbnail: videoProduction.returnZero.thumbnail,
-          assets: videoProduction.returnZero.videos || [],
-          date: "2023",
-          featured: true, // Wide card
-        });
-      }
-
-      // Graphic Design Projects
-      if (graphicDesign?.businessCards?.thumbnail) {
-        projectsList.push({
-          id: "business-cards-1",
-          title: "Modern Business Card Collection",
-          description: "A collection of modern business card designs created for various clients.",
-          category: "Print Design",
-          subcategory: "Business Cards",
-          type: "card",
-          tools: ["Adobe Illustrator", "Photoshop", "InDesign"],
-          thumbnail: graphicDesign.businessCards.thumbnail,
-          assets: graphicDesign.businessCards.images || [],
-          date: "2021-2023",
+          featured: true,
         });
       }
 
@@ -225,50 +105,31 @@ export default function GraphicMasonryGallery({
         });
       }
 
-      if (graphicDesign?.coffeescapePackaging?.thumbnail) {
-        projectsList.push({
-          id: "coffeescape-packaging-1",
-          title: "Coffeescape Cup Design",
-          description: "Hot cup packaging design for Coffeescape, featuring their branding and aesthetic.",
-          category: "Packaging",
-          subcategory: "Cup Design",
-          type: "packaging",
-          client: "Coffeescape",
-          tools: ["Adobe Illustrator", "Photoshop", "Mockup Design"],
-          thumbnail: graphicDesign.coffeescapePackaging.thumbnail,
-          assets: graphicDesign.coffeescapePackaging.images || [],
-          date: "2021",
-        });
-      }
+      const coffeescapeExists = graphicDesign?.coffeescapeLogo || graphicDesign?.coffeescapeCards || graphicDesign?.coffeescapePackaging;
+      if (coffeescapeExists) {
+        const coffeescapeAssets = [
+          ...(graphicDesign.coffeescapeLogo?.images || []),
+          ...(graphicDesign.coffeescapeCards?.images || []),
+          ...(graphicDesign.coffeescapePackaging?.images || []),
+        ].filter(Boolean);
 
-      if (graphicDesign?.coffeescapeLogo?.thumbnail) {
+        const coffeescapeThumb =
+          graphicDesign.coffeescapeCards?.thumbnail ||
+          graphicDesign.coffeescapeLogo?.images?.[4] || // Use the 'w_ph' version
+          graphicDesign.coffeescapePackaging?.thumbnail ||
+          coffeescapeAssets[0];
+
         projectsList.push({
-          id: "coffeescape-logo-1",
-          title: "Coffeescape Logo Design",
-          description: "Logo design for Coffeescape, featuring various versions and applications.",
-          category: "Branding",
-          subcategory: "Logo Design",
+          id: "coffeescape-brand-kit",
+          title: "Coffeescape Brand Kit",
+          description: "Unified brand system covering logo suite, packaging, and printed collateral for Coffeescape.",
+          category: "Branding & Packaging",
+          subcategory: "Brand Kit",
           type: "logo",
           client: "Coffeescape",
-          tools: ["Adobe Illustrator", "Brand Strategy"],
-          thumbnail: graphicDesign.coffeescapeLogo.thumbnail,
-          assets: graphicDesign.coffeescapeLogo.images || [],
-          date: "2021",
-        });
-      }
-
-      if (graphicDesign?.coffeescapeCards?.thumbnail) {
-        projectsList.push({
-          id: "coffeescape-cards-1",
-          title: "Coffeescape Business Cards & Brochure",
-          description: "Business card and brochure designs for Coffeescape, featuring their brand identity and logo.",
-          category: "Print Design",
-          subcategory: "Business Cards",
-          type: "card",
-          client: "Coffeescape",
-          tools: ["Adobe Illustrator", "InDesign", "Photoshop"],
-          thumbnail: graphicDesign.coffeescapeCards.thumbnail,
-          assets: graphicDesign.coffeescapeCards.images || [],
+          tools: ["Adobe Illustrator", "Photoshop", "InDesign", "Brand Strategy"],
+          thumbnail: coffeescapeThumb,
+          assets: coffeescapeAssets,
           date: "2021",
         });
       }
@@ -362,20 +223,16 @@ export default function GraphicMasonryGallery({
   // Initialize image preloader
   const { preloadAssets, preloadAssetsWithDelay } = useImagePreloader();
 
-  // Responsive column calculation
+  // Responsive flags (preserve mobile pagination behavior)
   useEffect(() => {
-    const updateColumns = () => {
+    const updateFlags = () => {
       const width = window.innerWidth;
-      const mobile = width < 768;
-      setIsMobile(mobile);
-      // Limit to max 2 columns for wider, more prominent cards
-      if (width < 768) setColumns(1);
-      else setColumns(2);
+      setIsMobile(width < 768);
     };
 
-    updateColumns();
-    window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
+    updateFlags();
+    window.addEventListener('resize', updateFlags);
+    return () => window.removeEventListener('resize', updateFlags);
   }, []);
 
   const filteredProjects = useMemo(() => projects, [projects]);
@@ -449,36 +306,32 @@ export default function GraphicMasonryGallery({
     }
   };
 
-  // Smart distribution: Place featured items strategically across columns
-  const distributeProjects = () => {
-    const columnArrays: GraphicProject[][] = Array.from({ length: columns }, () => []);
-    
-    // Separate featured and regular items
-    const featuredItems = displayedProjects.filter(p => p.featured);
-    const regularItems = displayedProjects.filter(p => !p.featured);
-    
-    // First, distribute featured items evenly across columns
-    featuredItems.forEach((project, index) => {
-      const targetColumn = index % columns;
-      columnArrays[targetColumn].push(project);
-    });
-    
-    // Then fill in with regular items, balancing column heights
-    // Featured items use a ~16:9 ratio, others ~4:3; use relative units for comparison
-    const featuredUnit = 1.78;
-    const regularUnit = 1.33;
-    regularItems.forEach((project) => {
-      const columnHeights = columnArrays.map(col => 
-        col.reduce((height, item) => height + (item.featured ? featuredUnit : regularUnit) + 0.1, 0)
-      );
-      const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
-      columnArrays[shortestColumnIndex].push(project);
-    });
-    
-    return columnArrays;
-  };
+  // Enforce a repeating 2–1–2–1 rhythm: two supporting tiles then one hero
+  const patternedProjects = useMemo(() => {
+    const heroQueue = [...displayedProjects.filter(p => p.featured)];
+    const supportingQueue = [...displayedProjects.filter(p => !p.featured)];
+    const sequence: Array<{ project: GraphicProject; layout: 'hero' | 'masonry' }> = [];
 
-  const distributedProjects = distributeProjects();
+    while (heroQueue.length > 0 || supportingQueue.length > 0) {
+      // Two supporting tiles
+      for (let i = 0; i < 2; i++) {
+        if (supportingQueue.length > 0) {
+          sequence.push({ project: supportingQueue.shift()!, layout: 'masonry' });
+        } else if (heroQueue.length > 0) {
+          sequence.push({ project: heroQueue.shift()!, layout: 'masonry' });
+        }
+      }
+
+      // One hero tile
+      if (heroQueue.length > 0) {
+        sequence.push({ project: heroQueue.shift()!, layout: 'hero' });
+      } else if (supportingQueue.length > 0) {
+        sequence.push({ project: supportingQueue.shift()!, layout: 'hero' });
+      }
+    }
+
+    return sequence;
+  }, [displayedProjects]);
 
   const handleCloseModal = () => {
     setIsModalClosing(true);
@@ -498,92 +351,58 @@ export default function GraphicMasonryGallery({
 
   return (
     <>
-      <div className={`relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-8 px-2 ${className}`}>
+      <div className={`relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-2 md:py-4 px-2 ${className}`}>
         <div
           ref={containerRef}
-          className={`flex w-full ${
-            columns === 1 ? 'flex-col' : 'flex-row'
-          }`}
-          style={{
-            gap: '8px' // Small aesthetic gap between columns
-          }}
+          className="grid grid-cols-1 md:grid-cols-2 auto-rows-auto gap-0"
         >
-          {distributedProjects.map((column, columnIndex) => (
-            <div 
-              key={columnIndex} 
-              className="flex flex-col"
-              style={{
-                flex: '1 1 0',
-                minWidth: 0,
-                gap: '8px' // Small aesthetic gap between items in column
-              }}
+          {patternedProjects.map(({ project, layout }, index) => (
+            <motion.div
+              key={project.id}
+              className={`w-full h-full ${layout === 'hero' ? 'md:col-span-2' : ''}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: Math.min(index * 0.03, 0.25) }}
+              viewport={{ once: true }}
             >
-              {column.map((project, projectIndex) => (
-                <motion.div
-                  key={project.id}
-                  className={`w-full ${isMobile ? 'mb-6 rounded-lg overflow-hidden shadow-md' : ''}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: projectIndex * 0.08 }}
-                  viewport={{ once: true }}
-                >
-                  <GraphicProjectCard
-                    project={project}
-                    index={columnIndex * 10 + projectIndex}
-                    onClick={(project) => {
-                      window._lastScrollPosition = window.scrollY;
-                      setSelectedProject(project);
-                    }}
-                    onHover={preloadProjectAssets}
-                    variant="masonry"
-                  />
-                  
-                  {/* Mobile: Show project info under card */}
-                  {isMobile && (
-                    <div className="bg-white px-4 py-3 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 bg-[#FBD1D9]/20 text-[#E27396] rounded-full text-xs font-medium">
-                          {project.subcategory || project.category}
-                        </span>
-                        {project.date && (
-                          <span className="text-xs text-gray-500">{project.date}</span>
-                        )}
-                      </div>
-                      <h4 className="text-base font-semibold text-gray-800 leading-tight">
-                        {project.title}
-                      </h4>
-                      {project.client && (
-                        <p className="text-xs text-gray-500">
-                          {project.client}
-                        </p>
-                      )}
-                      {project.description && (
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                          {project.description}
-                        </p>
-                      )}
-                      {project.tools && project.tools.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {project.tools.slice(0, 3).map((tool, toolIdx) => (
-                            <span
-                              key={toolIdx}
-                              className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"
-                            >
-                              {tool}
-                            </span>
-                          ))}
-                          {project.tools.length > 3 && (
-                            <span className="px-2 py-1 bg-[#fb6c85]/10 text-[#fb6c85] rounded-full text-xs font-medium">
-                              +{project.tools.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
+              <GraphicProjectCard
+                project={project}
+                index={index}
+                onClick={(p) => {
+                  window._lastScrollPosition = window.scrollY;
+                  setSelectedProject(p);
+                }}
+                onHover={preloadProjectAssets}
+                variant="masonry"
+              />
+
+              {/* Mobile: Show project info under card */}
+              {isMobile && (
+                <div className="bg-white px-4 py-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 bg-[#FBD1D9]/20 text-[#E27396] rounded-full text-xs font-medium">
+                      {project.subcategory || project.category}
+                    </span>
+                    {project.date && (
+                      <span className="text-xs text-gray-500">{project.date}</span>
+                    )}
+                  </div>
+                  <h4 className="text-base font-semibold text-gray-800 leading-tight">
+                    {project.title}
+                  </h4>
+                  {project.client && (
+                    <p className="text-xs text-gray-500">
+                      {project.client}
+                    </p>
                   )}
-                </motion.div>
-              ))}
-            </div>
+                  {project.description && (
+                    <p className="text-xs text-gray-600 line-clamp-3">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
+              )}
+            </motion.div>
           ))}
         </div>
         

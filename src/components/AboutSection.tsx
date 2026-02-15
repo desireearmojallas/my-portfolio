@@ -356,38 +356,49 @@ export default function AboutSection({ role }: AboutSectionProps) {
             viewport={{ once: true }}
             className="max-w-4xl mx-auto"
           >
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 border border-gray-200/50 
-                          shadow-xl hover:shadow-2xl transition-all duration-300">
-              
-              {/* LinkedIn Header */}
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-[#0077B5] rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">in</span>
+              <div className="bg-white/85 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-gray-200/60 shadow-xl hover:shadow-2xl transition-all duration-300">
+                {/* LinkedIn Header */}
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-[#0A66C2] rounded-xl flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">in</span>
+                    </div>
+                    <div>
+                      <h3 className="font-outfit font-semibold text-gray-800 text-base md:text-lg">LinkedIn Recommendation</h3>
+                      <p className="text-gray-500 text-xs md:text-sm">From a partner I've collaborated with closely</p>
+                    </div>
+                  </div>
+                  <a
+                    href="https://www.linkedin.com/in/desireearmojallas"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-semibold text-[#0A66C2] hover:text-[#084e9a]"
+                  >
+                    View on LinkedIn
+                  </a>
                 </div>
-                <div>
-                  <h3 className="font-outfit font-semibold text-gray-800 text-lg">LinkedIn Recommendation</h3>
-                  <p className="text-gray-500 text-sm">Professional endorsement</p>
+
+                {/* Quote */}
+                <div className="relative rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white px-4 py-5 md:px-6 md:py-6">
+                  <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-[#0A66C2] via-[#0A66C2]/60 to-transparent rounded-l-2xl" />
+                  <blockquote className="text-gray-700 text-base md:text-lg leading-relaxed italic pl-2">
+                    "She takes my rough concepts and turns them into clear, functional designs that speak to our audience. Collaborative, fast, and attentive to detail."
+                  </blockquote>
+                </div>
+
+                {/* Author Info */}
+                <div className="flex items-center gap-4 pt-6">
+                  <img 
+                    src={clientFeedback.jochelleTumulak} 
+                    alt="Jochelle Tumulak"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-outfit font-semibold text-gray-800">Jochelle Tumulak</p>
+                    <p className="text-gray-600 text-sm">Naval Architect and Marine Engineer</p>
+                  </div>
                 </div>
               </div>
-
-              {/* Quote */}
-              <blockquote className="text-gray-700 text-xl leading-relaxed mb-8 italic">
-                "It gives me the utmost pleasure to recommend Desiree because we have worked together on the social media content for our company. She is able to take my concepts and turn them into creative, functional designs that speak to our intended audience."
-              </blockquote>
-
-              {/* Author Info */}
-              <div className="flex items-center gap-4 pt-6 border-t border-gray-200/50">
-                <img 
-                  src={clientFeedback.jochelleTumulak} 
-                  alt="Jochelle Tumulak"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <p className="font-outfit font-semibold text-gray-800">Jochelle Tumulak</p>
-                  <p className="text-gray-600 text-sm">Naval Architect and Marine Engineer</p>
-                </div>
-              </div>
-            </div>
           </motion.div>
         </motion.div>
 

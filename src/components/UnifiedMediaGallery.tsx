@@ -63,14 +63,14 @@ export default function UnifiedMediaGallery({
   // Determine padding based on project type
   const getPadding = (): string => {
     if (projectType === 'logo') {
-      return isMobile ? 'p-6 md:p-12 lg:p-16' : 'p-8 md:p-12 lg:p-16';
+      return isMobile ? 'px-4 py-6 md:px-8 md:py-10 lg:px-12 lg:py-12' : 'px-8 py-10 md:px-10 md:py-12 lg:px-12 lg:py-14';
     }
-    return isMobile ? 'py-1 md:py-2' : 'py-2 md:py-4';
+    return isMobile ? 'px-4 py-4 md:px-6 md:py-6' : 'px-6 py-6 md:px-8 md:py-8';
   };
 
   // Get max height for media
   const getMaxHeight = (): string => {
-    return isMobile ? 'max-h-[50vh]' : 'max-h-[calc(90vh-300px)]';
+    return isMobile ? 'max-h-[70vh]' : 'max-h-[calc(100vh-260px)]';
   };
 
   return (
@@ -79,7 +79,7 @@ export default function UnifiedMediaGallery({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5 }}
-      className="gallery-container w-full"
+      className="gallery-container w-full flex flex-col gap-4"
     >
       {title && (
         <h3 className="gallery-title text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6 px-4 md:px-6 lg:px-8">
@@ -88,7 +88,7 @@ export default function UnifiedMediaGallery({
       )}
 
       {/* Media Grid - Seamless vertical stack */}
-      <div className="gallery-grid flex flex-col w-full bg-white gap-0">
+      <div className="gallery-grid flex flex-col w-full bg-white gap-6 md:gap-8 max-w-5xl mx-auto">
         {media.map((item, index) => {
           const hasError = videoErrorStates.get(item.src);
           const isLoaded = loadedImages.has(item.src);
@@ -101,7 +101,7 @@ export default function UnifiedMediaGallery({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
-              className={`gallery-item w-full flex items-center justify-center bg-white ${getPadding()} relative`}
+              className={`gallery-item w-full flex items-center justify-center bg-white ${getPadding()} relative overflow-hidden`}
             >
               {/* Loading skeleton while media loads */}
               {!isLoaded && !isVideo && (

@@ -196,13 +196,13 @@ export const cloudinaryAssets: CloudinaryAssets = {
       ],
     },
     coffeescapePackaging: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/image/upload/v1769918733/mockup_zwhnuh.jpg',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/image/upload/q_auto:best/v1769918733/mockup_zwhnuh.jpg',
       images: [
-        'https://res.cloudinary.com/du4nug3uk/image/upload/v1769918733/mockup_zwhnuh.jpg',
+        'https://res.cloudinary.com/du4nug3uk/image/upload/q_auto:best/v1769918733/mockup_zwhnuh.jpg',
       ],
     },
     ferryeasyLogo: {
-      thumbnail: 'https://res.cloudinary.com/du4nug3uk/image/upload/v1769918769/ferryeasy-logo-01_x2pepz.png',
+      thumbnail: 'https://res.cloudinary.com/du4nug3uk/image/upload/v1769918779/ferryeasy-logo-06_tgvuqh.png',
       images: [
         'https://res.cloudinary.com/du4nug3uk/image/upload/v1769918769/ferryeasy-logo-01_x2pepz.png',
         'https://res.cloudinary.com/du4nug3uk/image/upload/v1769918770/ferryeasy-logo-02_lsgnb6.png',

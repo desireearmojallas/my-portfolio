@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import type { Project } from './ProjectCard';
@@ -96,120 +97,72 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
         alt: `${project.title} preview`
       }] : [];
 
-  return (
+  return createPortal(
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-50 flex items-start justify-center p-4 md:p-6 overflow-hidden bg-black/60 backdrop-blur-sm project-modal-overlay modal-layer"
-        onClick={handleClickOutside}
-        onMouseDown={(e) => e.preventDefault()} // Prevent mousedown events
-      >
+      {project && (
         <motion.div
-          ref={modalRef}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="bg-white rounded-3xl shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative my-auto project-modal-content modal-layer modal-content-scroll"
-          style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
+          key="project-modal"
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 md:p-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          onClick={handleClickOutside}
         >
-          {/* Close button - repositioned for better placement */}
-          <button
-            onClick={handleCloseClick}
-            className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-gray-100 transition-colors"
-            aria-label="Close modal"
+          <motion.div
+            ref={modalRef}
+            className="relative w-full max-w-5xl max-h-[calc(100vh-96px)] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
           >
-            <X className="w-5 h-5 text-gray-700" />
-          </button>
-
-          {/* Project content */}
-          <div className="p-6 md:p-8 lg:p-10">
-            {/* Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mb-8"
-            >
-              <h2 className="text-3xl md:text-4xl font-outfit font-bold text-gray-800 mb-2">
-                {project.title}
-              </h2>
-              <p className="text-xl text-gray-600">
-                {project.role === 'designer' ? 'Design Project' : 'Development Project'}
-              </p>
-            </motion.div>
-
-            {/* Tools/Tags */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-8"
-            >
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                Tools & Technologies
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-4 py-2 bg-[#FBD1D9]/20 text-[#E27396] rounded-full text-sm font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
+            <div className="sticky top-0 z-10 flex-shrink-0 px-6 md:px-8 py-5 bg-white/90 backdrop-blur-sm border-b border-gray-200 flex flex-wrap items-start gap-4">
+              <div className="flex-1 min-w-[240px]">
+                <p className="text-xs uppercase tracking-[0.24em] text-pink-500 font-semibold mb-1">{project.category || 'Design Project'}</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 font-outfit leading-tight">{project.title}</h2>
               </div>
-            </motion.div>
-
-            {/* Description */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mb-10"
-            >
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                Project Overview
-              </h3>
-              <div className="prose prose-lg max-w-none text-gray-600">
-                {project.overview ? (
-                  project.overview.split('\n\n').map((paragraph: string, index: number) => (
-                    <p key={index} className={index > 0 ? 'mt-4' : ''}>
-                      {paragraph}
-                    </p>
-                  ))
-                ) : (
-                  <p>{project.description}</p>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Project Images Gallery - Using Unified Media Gallery */}
-            {projectImages.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mb-10 -mx-6 md:-mx-8 lg:-mx-10"
+              <button
+                onClick={handleCloseClick}
+                className="p-2 rounded-full text-gray-500 hover:bg-gray-200/70 hover:text-gray-800 transition-colors"
+                aria-label="Close project details"
               >
-                <UnifiedMediaGallery
-                  media={projectImages}
-                  title="Project Gallery"
-                  projectType="default"
-                  isMobile={isMobile}
-                />
-              </motion.div>
-            )}
-          </div>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="overflow-y-auto px-6 md:px-10 pb-12 pt-6 space-y-10">
+              {project.overview && (
+                <div className="space-y-3 text-left">
+                  <h3 className="text-lg font-semibold text-gray-800">Project Overview</h3>
+                  <p className="text-gray-600 whitespace-pre-wrap leading-relaxed">{project.overview}</p>
+                </div>
+              )}
+
+              {project.tags && project.tags.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-gray-800">Tools & Technologies</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="px-3 py-1.5 text-sm font-medium text-pink-600 bg-pink-100/70 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {projectImages.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Project Gallery</h3>
+                  <UnifiedMediaGallery media={projectImages} />
+                </div>
+              )}
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </AnimatePresence>
+      )}
+    </AnimatePresence>,
+    document.body
   );
 }

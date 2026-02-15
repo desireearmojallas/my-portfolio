@@ -4,7 +4,9 @@ import {
   Grid,
   Filter,
   Mail,
-  FileText
+  FileText,
+  Linkedin,
+  Quote
 } from 'lucide-react';
 import { type Project } from './ProjectCardNew';
 import ProjectDetailModal from './ProjectDetailModal';
@@ -12,7 +14,7 @@ import UIUXProjectsGallery from './UIUXProjectsGallery';
 import MasonryProjects from './MasonryProjects';
 import GraphicMasonryGallery from './GraphicMasonryGallery';
 import { useAssets, getAssetUrl } from '../Assets';
-import { webDevelopment } from '../config/cloudinaryAssets';
+import { webDevelopment, clientFeedback } from '../config/cloudinaryAssets';
 
 interface ProjectsCarouselProps {
   role: 'designer' | 'developer';
@@ -221,19 +223,19 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
   };
 
   return (
-    <section className="section-padding bg-gradient-to-br from-white via-pink-50/30 to-purple-50/20 relative overflow-visible">
+    <section className="section-padding bg-gradient-to-br from-white via-pink-50/30 to-purple-50/20 relative overflow-visible pb-0">
       <div className="absolute inset-0 overflow-x-hidden pointer-events-none">
         <div className="absolute top-32 right-32 w-80 h-80 bg-gradient-to-r from-pink-100/30 to-rose-100/30 rounded-full blur-3xl animate-pulse-soft"></div>
         <div className="absolute bottom-32 left-32 w-96 h-96 bg-gradient-to-r from-purple-100/20 to-pink-100/20 rounded-full blur-3xl animate-float"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 pt-8 pb-2 md:pt-10 md:pb-3 lg:pt-12 lg:pb-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+            className="text-center mb-12 md:mb-14"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -429,32 +431,23 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
 
         {role === 'designer' && (
           <motion.div
+            key="designer-gallery"
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-16"
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="w-full"
           >
-            <div className="relative">
-              <div className="flex items-center gap-3 mb-8">
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgb(251,108,133)]/50 to-transparent" />
-                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-[0.14em] bg-white/80 border border-pink-100 text-[rgb(251,108,133)] shadow-sm">
-                  Graphic & Video Gallery
-                </span>
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgb(251,108,133)]/50 to-transparent" />
-              </div>
-              <GraphicMasonryGallery className="mb-4" />
-            </div>
-
-            <div className="relative">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgb(251,108,133)]/50 to-transparent" />
-                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-[0.14em] bg-white/80 border border-pink-100 text-[rgb(251,108,133)] shadow-sm">
-                  UI/UX Case Studies
-                </span>
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgb(251,108,133)]/50 to-transparent" />
-              </div>
-              <div className="rounded-3xl border border-gray-200/70 bg-white/60 backdrop-blur-sm shadow-sm p-8">
+            {/* Full-width UI/UX Section */}
+            <div className="relative w-screen left-1/2 -translate-x-1/2 mb-16">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-pink-300/50 to-transparent" />
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-[0.14em] bg-white/80 border border-pink-100 text-pink-500 shadow-sm">
+                    UI/UX Case Studies
+                  </span>
+                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-pink-300/50 to-transparent" />
+                </div>
                 <div className="text-center mb-10">
                   <h2 className="text-3xl md:text-4xl font-outfit font-semibold text-gray-800 mb-3">
                     UI/UX Projects
@@ -463,8 +456,77 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
                     Product design explorations, flows, and visuals focused on real user outcomes.
                   </p>
                 </div>
-                <UIUXProjectsGallery projects={uiuxProjects} />
               </div>
+              <div className="bg-white/60 backdrop-blur-sm">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                  <UIUXProjectsGallery projects={uiuxProjects} />
+                </div>
+              </div>
+            </div>
+
+            {/* Graphic & Video Gallery Section */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-pink-300/50 to-transparent" />
+                <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-[0.14em] bg-white/80 border border-pink-100 text-pink-500 shadow-sm">
+                  Graphic & Video Gallery
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-pink-300/50 to-transparent" />
+              </div>
+            </div>
+            <GraphicMasonryGallery />
+
+            {/* LinkedIn recommendation strip */}
+            <div className="mt-10 mb-6 px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+                className="rounded-2xl bg-white/90 backdrop-blur-sm border border-gray-200/70 shadow-lg px-6 py-6 md:px-8 md:py-8"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#0A66C2] flex items-center justify-center text-white shadow-sm">
+                      <Linkedin className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">LinkedIn Recommendation</p>
+                      <p className="text-base md:text-lg font-semibold text-gray-800 leading-tight">Jochelle Tumulak</p>
+                      <p className="text-sm text-gray-600 leading-tight">Naval Architect and Marine Engineer</p>
+                    </div>
+                  </div>
+                  <a
+                    href="https://www.linkedin.com/in/desireearmojallas"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#0A66C2] hover:text-[#084e9a]"
+                  >
+                    View on LinkedIn
+                    <span aria-hidden>→</span>
+                  </a>
+                </div>
+
+                <div className="relative overflow-hidden rounded-xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white px-4 py-5 md:px-6 md:py-6">
+                  <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#0A66C2] via-[#0A66C2]/60 to-transparent" />
+                  <Quote className="w-8 h-8 text-[#0A66C2] opacity-70" />
+                  <p className="mt-3 text-gray-700 text-base md:text-lg leading-relaxed italic">
+                    "It gives me the utmost pleasure to recommend Desiree because we have worked together on the social media content for our company. She is able to take my concepts and turn them into creative, functional designs that speak to our intended audience."
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-4 mt-6">
+                  <img
+                    src={clientFeedback.jochelleTumulak}
+                    alt="Jochelle Tumulak"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-outfit font-semibold text-gray-800 text-base">Jochelle Tumulak</p>
+                    <p className="text-gray-600 text-sm">Naval Architect and Marine Engineer</p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
@@ -472,12 +534,13 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
         {role === 'designer' && uiuxProjects.length === 0 && (
           <p className="text-center text-gray-600">UI/UX projects are coming soon.</p>
         )}
-
-        <ProjectDetailModal
-          project={selectedProject}
-          onClose={handleCloseModal}
-        />
       </div>
+
+      {/* Modal is now outside the main container to avoid clipping issues */}
+      <ProjectDetailModal
+        project={selectedProject}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }

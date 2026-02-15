@@ -59,107 +59,71 @@ export default function GraphicDesignGallery({
 
   const projects = useMemo<GraphicProject[]>(() => {
     return [
-      // Instagram Videos - Purple Cow
-      {
-        id: "ig-video-1",
-        title: "Delish Deli - 1Nito Tower",
-        description:
-          "Short-form Instagram video created for Purple Cow's client, Delish Deli at 1Nito Tower.",
-        category: "Social Media",
-        subcategory: "Instagram Video",
-        type: "video",
-        client: "Purple Cow Agency",
-        tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-        thumbnail: videoProduction.delishDeli.thumbnail,
-        assets: videoProduction.delishDeli.videos || [],
-        date: "2023",
-      },
-      {
-        id: "ig-video-2",
-        title: "Purple Cow Agency",
-        description:
-          "Promotional video showcasing Purple Cow Agency's brand and services.",
-        category: "Social Media",
-        subcategory: "Instagram Video",
-        type: "video",
-        client: "Purple Cow Agency",
-        tools: ["Premiere Pro", "CapCut", "After Effects"],
-        thumbnail: videoProduction.purpleCowAgency.thumbnail,
-        assets: videoProduction.purpleCowAgency.videos || [],
-        date: "2023",
-      },
-      {
-        id: "ig-video-3",
-        title: "Purple Cow Philippines",
-        description:
-          "Brand highlight video for Purple Cow Philippines' social media presence.",
-        category: "Social Media",
-        subcategory: "Instagram Video",
-        type: "video",
-        client: "Purple Cow Agency",
-        tools: ["Premiere Pro", "CapCut", "After Effects"],
-        thumbnail: videoProduction.purpleCowPhilippines.thumbnail,
-        assets: videoProduction.purpleCowPhilippines.videos || [],
-        date: "2023",
-      },
-      {
-        id: "ig-video-4",
-        title: "Synergy768",
-        description:
-          "Promotional video created for Synergy768, highlighting their services and benefits.",
-        category: "Social Media",
-        subcategory: "Instagram Video",
-        type: "video",
-        client: "Purple Cow Agency",
-        tools: ["Premiere Pro", "Adobe Audition", "CapCut"],
-        thumbnail: videoProduction.synergy.thumbnail,
-        assets: videoProduction.synergy.videos || [],
-        date: "2023",
-      },
+      // Instagram Videos - Purple Cow (bundled)
+      (() => {
+        const items = [
+          videoProduction.delishDeli,
+          videoProduction.purpleCowAgency,
+          videoProduction.purpleCowPhilippines,
+          videoProduction.synergy,
+        ].filter(Boolean);
 
-      // Xeleqt Videos
-      {
-        id: "xeleqt-video-1",
-        title: "Xeleqt Agility AVP",
-        description:
-          "Audio-visual presentation showcasing Xeleqt's agility products and services.",
-        category: "Video Production",
-        subcategory: "AVP",
-        type: "video",
-        client: "Xeleqt",
-        tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-        thumbnail: videoProduction.xeleqtAgility.thumbnail,
-        assets: videoProduction.xeleqtAgility.videos || [],
-        date: "2022",
-      },
-      {
-        id: "xeleqt-video-2",
-        title: "Xeleqt Aware AVP",
-        description:
-          "Audio-visual presentation for Xeleqt's Aware product line.",
-        category: "Video Production",
-        subcategory: "AVP",
-        type: "video",
-        client: "Xeleqt",
-        tools: ["Premiere Pro", "Adobe Audition", "After Effects"],
-        thumbnail: videoProduction.xeleqtAware.thumbnail,
-        assets: videoProduction.xeleqtAware.videos || [],
-        date: "2022",
-      },
-      {
-        id: "xeleqt-video-3",
-        title: "Xeleqt Mobility",
-        description:
-          "Product showcase video highlighting Xeleqt's mobility solutions.",
-        category: "Video Production",
-        subcategory: "Product Video",
-        type: "video",
-        client: "Xeleqt",
-        tools: ["Premiere Pro", "After Effects", "CapCut"],
-        thumbnail: videoProduction.xeleqtMobility.thumbnail,
-        assets: videoProduction.xeleqtMobility.videos || [],
-        date: "2022",
-      },
+        const assets = items.flatMap(item => item?.videos || []);
+        const thumb =
+          videoProduction.purpleCowAgency?.thumbnail ||
+          videoProduction.delishDeli?.thumbnail ||
+          videoProduction.synergy?.thumbnail ||
+          videoProduction.purpleCowPhilippines?.thumbnail ||
+          assets[0];
+
+        return {
+          id: "purple-cow-campaigns",
+          title: "Purple Cow Social Campaigns",
+          description:
+            "Cross-brand social video set (Delish Deli, Synergy768, Purple Cow Agency, Purple Cow Philippines).",
+          category: "Social Media",
+          subcategory: "Instagram Video",
+          type: "video",
+          client: "Purple Cow Agency",
+          tools: ["Premiere Pro", "CapCut", "After Effects", "Adobe Audition"],
+          thumbnail: thumb,
+          assets,
+          date: "2023",
+          featured: true,
+        } as const;
+      })(),
+
+      // Xeleqt AVP Bundle
+      (() => {
+        const items = [
+          videoProduction.xeleqtAgility,
+          videoProduction.xeleqtAware,
+          videoProduction.xeleqtMobility,
+        ].filter(Boolean);
+
+        const assets = items.flatMap(item => item?.videos || []);
+        const thumb =
+          videoProduction.xeleqtAgility?.thumbnail ||
+          videoProduction.xeleqtAware?.thumbnail ||
+          videoProduction.xeleqtMobility?.thumbnail ||
+          assets[0];
+
+        return {
+          id: "xeleqt-avp-suite",
+          title: "Xeleqt AVP Collection",
+          description:
+            "Unified AVP series covering Xeleqt's Agility, Aware, and Mobility product lines.",
+          category: "Video Production",
+          subcategory: "AVP",
+          type: "video",
+          client: "Xeleqt",
+          tools: ["Premiere Pro", "Adobe Audition", "After Effects", "CapCut"],
+          thumbnail: thumb,
+          assets,
+          date: "2022",
+          featured: true,
+        } as const;
+      })(),
 
       // Business Cards
       {

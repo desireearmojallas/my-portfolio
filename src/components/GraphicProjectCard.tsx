@@ -209,8 +209,8 @@ export default function GraphicProjectCard({
         }}
         onPointerLeave={() => isVideoProject && handleVideoHover(false)}
         className="group cursor-pointer relative overflow-hidden bg-white flex flex-col
-                   transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 
-                   hover:z-10 hover:-translate-y-1 rounded-lg"
+             transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/20 
+             hover:z-10 hover:-translate-y-1"
         style={{
           ...style,
           opacity: 0,
@@ -221,7 +221,7 @@ export default function GraphicProjectCard({
         }}
         aria-label={`View ${project.title}`}
       >
-        <div className="relative w-full h-full overflow-hidden rounded-lg flex-1">
+        <div className="relative w-full h-full overflow-hidden flex-1">
           {isVideoProject ? (
             <div className="w-full h-full flex items-stretch">
               <video
