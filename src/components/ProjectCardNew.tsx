@@ -16,6 +16,7 @@ export interface Project {
   role: 'designer' | 'developer' | 'both';
   type?: 'uiux' | 'graphic' | 'development'; // Project type for different layouts
   category?: string; // For filtering and categorization
+  featured?: boolean; // Marks projects highlighted in hero sections
 }
 
 interface ProjectCardProps {
