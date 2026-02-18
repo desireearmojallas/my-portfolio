@@ -154,7 +154,6 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
 
               {projectImages.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Project Gallery</h3>
                   <UnifiedMediaGallery media={projectImages} />
                 </div>
               )}

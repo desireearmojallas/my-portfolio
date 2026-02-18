@@ -9,7 +9,8 @@ import {
   Sparkles,
   Heart,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 import useResponsive from '../hooks/useResponsive';
 
@@ -697,22 +698,23 @@ export default function AboutSection({ role }: AboutSectionProps) {
             viewport={{ once: true }}
             className="mt-12 max-w-6xl mx-auto"
           >
-            <button
-              onClick={() => setShowMoreServices(!showMoreServices)}
-              className="w-full flex items-center justify-center gap-3 py-4 px-6 
-                       border border-gray-300 rounded-xl hover:bg-gray-50 
-                       transition-all duration-300 group"
-            >
-              <span className="text-gray-700 font-medium">
-                {showMoreServices ? 'Show Less Services' : 'View All Services'}
-              </span>
-              <motion.span
-                animate={{ rotate: showMoreServices ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
+            <div className="flex flex-col items-center gap-3">
+              <button
+                onClick={() => setShowMoreServices(!showMoreServices)}
+                className="group p-3 hover:bg-gray-100 rounded-full transition-all duration-300"
+                aria-label={showMoreServices ? 'Show less services' : 'Show more services'}
               >
-                ▼
-              </motion.span>
-            </button>
+                <motion.div
+                  animate={{ rotate: showMoreServices ? 180 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                </motion.div>
+              </button>
+              <span className="text-xs uppercase tracking-wider text-gray-400 font-medium">
+                {showMoreServices ? 'Show less' : 'More services'}
+              </span>
+            </div>
 
             {showMoreServices && (
               <motion.div

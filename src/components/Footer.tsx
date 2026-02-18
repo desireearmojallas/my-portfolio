@@ -139,10 +139,7 @@ export default function Footer() {
           {/* Copyright - Responsive */}
           <div className="border-t border-gray-700/50 pt-6 sm:pt-8">
             <p className="text-gray-400 text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 flex-wrap px-2">
-              © 2025 Desiree Armojallas. Made with
-              <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-[rgb(251,108,133)] fill-current animate-pulse-soft" />
-              and lots of
-              <Coffee className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
+              © 2025 Desiree Armojallas. Des Studios. All rights reserved.
             </p>
           </div>
         </motion.div>

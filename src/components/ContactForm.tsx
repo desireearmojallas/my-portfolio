@@ -1,6 +1,6 @@
 import { useState, useRef, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { Send, X, Loader, CheckCircle, AlertCircle, Phone } from 'lucide-react';
+import { Send, X, Loader, CheckCircle, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
 // Types for form data
@@ -108,31 +108,41 @@ export default function ContactForm({ onClose }: ContactFormProps) {
           <X className="w-5 h-5" />
         </button>
 
-        <div className="text-center mb-6">
+        <div className="text-center mb-8">
           <div
             className="w-14 h-14 mx-auto bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
             rounded-2xl flex items-center justify-center mb-4 shadow-lg"
           >
             <Send className="w-6 h-6 text-white" />
           </div>
-          <h3 className="text-2xl font-outfit font-bold text-gray-800 mb-2">
-            Let's Build Something Amazing
+          <h3 className="text-2xl font-outfit font-bold text-gray-800 mb-3">
+            Let's Work Together
           </h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            Ready to transform your ideas into reality? Let's discuss your project and see how I can help you achieve your goals.
+          <p className="text-gray-600 text-sm leading-relaxed mb-4">
+            I'm Des—a designer and developer who helps turn ideas into polished digital solutions that look right and work right.
           </p>
           
-          {/* Quick value props */}
-          <div className="flex flex-wrap justify-center gap-2 mt-4">
-            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-              Quick Response
-            </span>
-            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-              Free Consultation
-            </span>
-            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-              Professional Service
-            </span>
+          {/* Services callout */}
+          <div className="bg-gray-50 rounded-lg p-4 text-left mb-6">
+            <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">I can help you with:</p>
+            <ul className="space-y-1.5 text-sm text-gray-600">
+              <li className="flex items-start gap-2">
+                <span className="text-[rgb(251,108,133)] font-bold mt-0.5">•</span>
+                <span>Brand visuals that elevate your identity</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[rgb(251,108,133)] font-bold mt-0.5">•</span>
+                <span>UI and UX designed for clarity and ease of use</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[rgb(251,108,133)] font-bold mt-0.5">•</span>
+                <span>Multimedia content that supports your communication</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[rgb(251,108,133)] font-bold mt-0.5">•</span>
+                <span>Mobile and web applications built for usability</span>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -146,13 +156,10 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mb-2">
-              Message Sent Successfully!
+              Message sent
             </h4>
             <p className="text-gray-600 mb-2">
-              Thank you for reaching out! I've received your inquiry and will get back to you within 24 hours.
-            </p>
-            <p className="text-sm text-gray-500">
-              I'm excited to learn more about your project!
+              Thanks for reaching out. I’ll reply within 24 hours.
             </p>
           </motion.div>
         ) : formStatus === 'error' ? (
@@ -165,10 +172,10 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               <AlertCircle className="w-8 h-8 text-red-500" />
             </div>
             <h4 className="text-xl font-semibold text-gray-800 mb-2">
-              Oops!
+              Message not sent
             </h4>
             <p className="text-gray-600 mb-4">
-              Something went wrong sending your message. Please try again or email me directly at hello@desireearmojallas.com
+              Please try again, or email me at hello@desireearmojallas.com.
             </p>
             <button
               onClick={() => setFormStatus('idle')}
@@ -185,7 +192,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 htmlFor="inquiryType"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                What can I help you with? <span className="text-red-500">*</span>
+                Project Type <span className="text-red-500">*</span>
               </label>
               <select
                 id="inquiryType"
@@ -195,14 +202,14 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition text-gray-800 bg-white"
               >
-                <option value="">Select your project type...</option>
-                <option value="design-project">Design Project (Branding, Graphics, UI/UX)</option>
+                <option value="">Select project type...</option>
+                <option value="design-project">Design (Branding, Graphics, UI/UX)</option>
                 <option value="web-development">Web Development (Website, Web App)</option>
                 <option value="mobile-app">Mobile App Development</option>
-                <option value="full-project">Complete Project (Design + Development)</option>
-                <option value="consultation">Free Consultation</option>
-                <option value="interview">Interview Opportunity</option>
-                <option value="other">Other (Please specify in message)</option>
+                <option value="full-project">Design + Development</option>
+                <option value="consultation">Consultation</option>
+                <option value="interview">Interview</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
@@ -212,7 +219,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 htmlFor="name"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                Your Name <span className="text-red-500">*</span>
+                Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -222,7 +229,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition text-gray-800"
-                placeholder="John Smith"
+                placeholder="Your name"
               />
             </div>
 
@@ -232,7 +239,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                Email Address <span className="text-red-500">*</span>
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -242,77 +249,13 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition text-gray-800"
-                placeholder="john@company.com"
-              />
-            </div>
-            
-            {/* Phone Number */}
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Phone Number <span className="text-gray-500 text-xs">(Optional)</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-4 w-4 text-gray-400" />
-                </div>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition text-gray-800"
-                  placeholder="(123) 456-7890"
-                />
-              </div>
-            </div>
-
-            {/* Company */}
-            <div>
-              <label
-                htmlFor="company"
-                className="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Company/Organization <span className="text-gray-500 text-xs">(Optional)</span>
-              </label>
-              <input
-                type="text"
-                id="company"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition text-gray-800"
-                placeholder="Your Company Name"
+                placeholder="you@email.com"
               />
             </div>
 
-            {/* Project Timeline */}
-            <div>
-              <label
-                htmlFor="projectTimeline"
-                className="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Project Timeline <span className="text-gray-500 text-xs">(Optional)</span>
-              </label>
-              <select
-                id="projectTimeline"
-                name="projectTimeline"
-                value={formData.projectTimeline}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition text-gray-800 bg-white"
-              >
-                <option value="">Select timeline...</option>
-                <option value="asap">ASAP (Rush project)</option>
-                <option value="1-2weeks">1-2 weeks</option>
-                <option value="1month">Within 1 month</option>
-                <option value="2-3months">2-3 months</option>
-                <option value="flexible">Flexible timeline</option>
-                <option value="just-exploring">Just exploring options</option>
-              </select>
-            </div>
+            <input type="hidden" name="phone" value={formData.phone} />
+            <input type="hidden" name="company" value={formData.company} />
+            <input type="hidden" name="projectTimeline" value={formData.projectTimeline} />
 
             {/* Message */}
             <div>
@@ -320,7 +263,7 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 htmlFor="message"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                Project Details <span className="text-red-500">*</span>
+                Message <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="message"
@@ -330,25 +273,8 @@ export default function ContactForm({ onClose }: ContactFormProps) {
                 required
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(251,108,133)] focus:border-[rgb(251,108,133)] outline-none transition resize-none text-gray-800"
-                placeholder="Tell me about your project goals, requirements, budget range, or any questions you have. The more details you provide, the better I can help!"
+                placeholder="Briefly describe what you need and your goals."
               ></textarea>
-              <p className="text-xs text-gray-500 mt-1">
-                Tip: Include your budget range, specific requirements, and any inspiration or examples
-              </p>
-            </div>
-
-            {/* Trust indicators */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  Usually responds within 24 hours
-                </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  Free initial consultation
-                </span>
-              </div>
             </div>
 
             <button
@@ -364,12 +290,12 @@ export default function ContactForm({ onClose }: ContactFormProps) {
               {isSubmitting ? (
                 <>
                   <Loader className="w-5 h-5 animate-spin" />
-                  Sending Your Message...
+                  Sending...
                 </>
               ) : (
                 <>
                   <Send className="w-5 h-5" />
-                  Start Your Project Today
+                  Send Message
                 </>
               )}
             </button>

@@ -24,7 +24,7 @@ interface UnifiedMediaGalleryProps {
  */
 export default function UnifiedMediaGallery({
   media,
-  title = 'Project Gallery',
+  title = '',
   projectType = 'default',
   isMobile = false,
 }: UnifiedMediaGalleryProps) {
