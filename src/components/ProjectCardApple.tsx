@@ -51,25 +51,6 @@ const cardVariants = {
   }
 };
 
-const hoverVariants = {
-  rest: { 
-    scale: 1, 
-    y: 0,
-    rotateX: 0,
-    transition: {
-      duration: 0.3
-    }
-  },
-  hover: { 
-    scale: 1.02, 
-    y: -8,
-    rotateX: 5,
-    transition: {
-      duration: 0.3
-    }
-  }
-};
-
 
 export default function ProjectCardApple({ project, index, onClick, layout = 'masonry' }: ProjectCardAppleProps) {
   const shouldReduceMotion = useReducedMotion();
@@ -96,16 +77,16 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
     if (layout === 'featured') return 'h-[440px]';
 
     // Taller cards to let thumbnails drive the visual focus
-    if (project.size === 'large') return 'min-h-[480px] h-auto';
-    if (project.size === 'medium') return 'min-h-[440px] h-auto';
-    return 'min-h-[400px] h-auto';
+    if (project.size === 'large') return 'min-h-[420px] sm:min-h-[460px] lg:min-h-[500px] h-auto';
+    if (project.size === 'medium') return 'min-h-[390px] sm:min-h-[430px] lg:min-h-[460px] h-auto';
+    return 'min-h-[360px] sm:min-h-[400px] lg:min-h-[430px] h-auto';
   };
 
   const getThumbnailHeight = () => {
     if (layout === 'hero') return 'h-[240px] md:h-[280px] lg:h-[320px]';
-    if (project.size === 'large') return 'aspect-[16/10] min-h-[280px] md:min-h-[320px]';
-    if (project.size === 'medium') return 'aspect-[4/3] min-h-[250px] md:min-h-[280px]';
-    return 'aspect-[4/3] min-h-[230px] md:min-h-[260px]';
+    if (project.size === 'large') return 'aspect-[16/10] min-h-[220px] sm:min-h-[260px] lg:min-h-[300px]';
+    if (project.size === 'medium') return 'aspect-[4/3] min-h-[200px] sm:min-h-[230px] lg:min-h-[260px]';
+    return 'aspect-[4/3] min-h-[190px] sm:min-h-[220px] lg:min-h-[240px]';
   };
 
   // Hero layout for showcase projects
@@ -120,13 +101,9 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
         className="w-full"
       >
         <motion.div
-          variants={hoverVariants}
-          initial="rest"
-          whileHover={shouldReduceMotion ? "rest" : "hover"}
-          onHoverStart={() => {}}
-          onHoverEnd={() => {}}
           className="group relative w-full h-[600px] bg-white rounded-[32px] border border-gray-200/60
-                   shadow-lg hover:shadow-xl transition-shadow duration-500 overflow-hidden cursor-pointer"
+                   shadow-md hover:shadow-2xl hover:shadow-pink-500/10 transform-gpu transition-transform transition-shadow duration-500 ease-out
+                   hover:scale-[1.01] overflow-hidden cursor-pointer"
           onClick={handleCardClick}
         >
           {/* Apple-style gradient overlay */}
@@ -266,23 +243,18 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
       className="w-full"
     >
       <motion.div
-        variants={hoverVariants}
-        initial="rest"
-        whileHover={shouldReduceMotion ? "rest" : "hover"}
-        onHoverStart={() => {}}
-        onHoverEnd={() => {}}
         className={`group relative w-full ${getCardHeight()} bg-white rounded-2xl border border-gray-200/60
-             shadow-sm hover:shadow-xl transition-all duration-300 ease-out overflow-hidden cursor-pointer
-             hover:border-[rgb(251,108,133)]/30`}
+             shadow-sm hover:shadow-xl hover:shadow-pink-500/10 transform-gpu transition-transform transition-shadow duration-300 ease-out
+             overflow-hidden cursor-pointer hover:border-[rgb(251,108,133)]/30 hover:scale-[1.015] hover:z-20`}
         onClick={handleCardClick}
       >
         {/* Simple gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/20 to-white" />
         
         {/* Content container */}
-        <div className="relative z-10 h-full flex flex-col p-6 md:p-7 gap-4 md:gap-5">
+        <div className="relative z-10 h-full flex flex-col p-5 sm:p-6 lg:p-7 gap-3 sm:gap-4 lg:gap-5">
           {/* Thumbnail */}
-          <div className={`relative w-full ${getThumbnailHeight()} rounded-2xl overflow-hidden border border-gray-100 mb-5 bg-gray-50`}>
+          <div className={`relative w-full ${getThumbnailHeight()} rounded-2xl overflow-hidden border border-gray-100 mb-3 sm:mb-4 lg:mb-5 bg-gray-50`}>
             <img
               src={project.image}
               alt={project.title}
@@ -356,7 +328,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
           )}
 
           {/* Action buttons */}
-          <div className="flex gap-3 mt-auto pt-3 md:pt-4 border-t border-gray-100">
+          <div className="flex gap-2 sm:gap-3 mt-auto pt-3 sm:pt-4 border-t border-gray-100">
             {project.link && (
               <motion.a
                 href={project.link}
@@ -365,8 +337,8 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
                 onClick={(e) => e.stopPropagation()}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 px-3 py-2 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                         text-white rounded-lg font-medium text-xs shadow-sm hover:shadow-md
+                className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                         text-white rounded-lg font-medium text-xs sm:text-sm shadow-sm hover:shadow-md
                          flex items-center justify-center gap-2 transition-all duration-200"
               >
                 <span>View</span>
@@ -382,7 +354,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
                 onClick={(e) => e.stopPropagation()}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-3 py-2 bg-gray-100/80 text-gray-700 rounded-lg font-medium text-xs
+                className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100/80 text-gray-700 rounded-lg font-medium text-xs sm:text-sm
                          hover:bg-gray-200/80 flex items-center gap-2 transition-colors duration-200"
               >
                 <Github className="w-3 h-3" />

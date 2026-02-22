@@ -38,14 +38,14 @@ export default function MasonryProjects({ projects, onProjectClick }: MasonryPro
   }, [projects]);
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-visible px-1 sm:px-0">
       <div
-        className="grid grid-cols-1 md:grid-cols-2 auto-rows-auto gap-0 md:gap-0"
+        className="grid grid-cols-1 auto-rows-auto gap-4 sm:gap-5 lg:gap-6"
       >
         {patternedProjects.map(({ project, layout }, index) => (
           <motion.div
             key={project.id}
-            className={`w-full h-full ${layout === 'hero' ? 'md:col-span-2' : ''}`}
+            className="relative w-full h-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: Math.min(index * 0.03, 0.3) }}
@@ -67,7 +67,7 @@ export default function MasonryProjects({ projects, onProjectClick }: MasonryPro
         whileInView={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
         viewport={{ once: true }}
-        className="flex justify-center mt-16"
+        className="flex justify-center mt-12 sm:mt-14 lg:mt-16"
       >
         <div className="px-8 py-3 bg-gray-100/80 backdrop-blur-sm rounded-full 
                       text-sm font-medium text-gray-600 border border-gray-200/50">
