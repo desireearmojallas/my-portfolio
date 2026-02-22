@@ -229,9 +229,19 @@
   
   /* Glass Effect */
   .glass-nav {
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(251, 108, 133, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.75);
+    border-bottom: 1px solid rgba(251, 108, 133, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(251, 108, 133, 0.1);
+  }
+  
+  .glass-mobile-menu {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.85);
+    border-left: 1px solid rgba(251, 108, 133, 0.1);
+    box-shadow: -8px 0 32px 0 rgba(251, 108, 133, 0.15);
   }
   
   /* Button Effects */

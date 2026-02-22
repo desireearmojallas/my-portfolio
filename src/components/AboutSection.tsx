@@ -781,6 +781,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
         </motion.div>
 
         {/* Closing Section - Apple-inspired CTA */}
+        {/* Commented out for now - not needed
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -837,6 +838,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
             </motion.button>
           </div>
         </motion.div>
+        */}
       </div>
     </section>
   );
