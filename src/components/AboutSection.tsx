@@ -445,7 +445,8 @@ export default function AboutSection({ role }: AboutSectionProps) {
                 tagline: "Elevate your brand with designs that convert and captivate.",
                 categories: "Branding • Social Media • Print • Marketing",
                 perfect_for: "Brands seeking cohesive visual identity that drives recognition and trust",
-                highlight: role === 'designer'
+                highlight: true,
+                mostPopular: true
               },
               {
                 title: "Design + Code Combo",
@@ -510,9 +511,9 @@ export default function AboutSection({ role }: AboutSectionProps) {
                     >
                       {service.highlight && (
                         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                          <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                          <span className="bg-[rgb(251,108,133)] 
                                          text-white px-4 py-1 rounded-full text-xs font-medium shadow-md">
-                            Popular Choice
+                            {service.mostPopular ? 'Most Popular' : 'Popular Choice'}
                           </span>
                         </div>
                       )}
@@ -595,9 +596,9 @@ export default function AboutSection({ role }: AboutSectionProps) {
                         >
                           {service.highlight && (
                             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
-                              <span className="bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                              <span className="bg-[rgb(251,108,133)] 
                                              text-white px-4 py-1 rounded-full text-xs font-medium shadow-md">
-                                Popular Choice
+                                {service.mostPopular ? 'Most Popular' : 'Popular Choice'}
                               </span>
                             </div>
                           )}
