@@ -414,18 +414,18 @@ export default function AboutSection({ role }: AboutSectionProps) {
           <div className="text-center mb-16">
             <motion.h2 
               className="text-4xl md:text-5xl font-outfit font-light text-gray-800 mb-4"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 0.4 }}
               viewport={{ once: true }}
             >
               What I Deliver
             </motion.h2>
             <motion.p 
               className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 0.4, delay: 0.1 }}
               viewport={{ once: true }}
             >
               {role === 'designer' 
@@ -585,9 +585,9 @@ export default function AboutSection({ role }: AboutSectionProps) {
                         className="w-full flex-shrink-0 px-3 sm:px-4 py-2"
                       >
                         <motion.div
-                          initial={{ opacity: 0, y: 30 }}
+                          initial={{ opacity: 0, y: 10 }}
                           whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.6 }}
+                          transition={{ duration: 0.3 }}
                           viewport={{ once: true }}
                           onClick={() => toggleExpanded(index)}
                           className={`relative rounded-2xl p-5 sm:p-6 border transition-all duration-300 flex flex-col overflow-visible ${
@@ -622,7 +622,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.3 }}
+                                transition={{ duration: 0.2 }}
                                 className="overflow-visible"
                               >
                                 <div className="mb-4 pb-4 border-b border-gray-200/50">
