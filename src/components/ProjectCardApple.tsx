@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { Github, Palette, Code, Star, Image, ArrowUpRight, Award } from 'lucide-react';
+import { Github, Palette, Code, Star, Image, ArrowUpRight, Award, Smartphone, Globe, Layers, Database, Zap } from 'lucide-react';
 import { useCallback } from 'react';
 
 export interface Project {
@@ -51,9 +51,60 @@ const cardVariants = {
   }
 };
 
+// Category-based styling
+const getCategoryStyles = (category?: string) => {
+  switch(category) {
+    case 'Mobile Applications':
+      return {
+        gradient: 'from-purple-500 to-pink-500',
+        bgLight: 'bg-purple-50',
+        textColor: 'text-purple-700',
+        borderColor: 'border-purple-200',
+        icon: <Smartphone className="w-5 h-5" />,
+        badgeBg: 'bg-gradient-to-r from-purple-500 to-pink-500'
+      };
+    case 'Web Development':
+      return {
+        gradient: 'from-blue-500 to-cyan-500',
+        bgLight: 'bg-blue-50',
+        textColor: 'text-blue-700',
+        borderColor: 'border-blue-200',
+        icon: <Globe className="w-5 h-5" />,
+        badgeBg: 'bg-gradient-to-r from-blue-500 to-cyan-500'
+      };
+    case 'Web Applications':
+      return {
+        gradient: 'from-emerald-500 to-teal-500',
+        bgLight: 'bg-emerald-50',
+        textColor: 'text-emerald-700',
+        borderColor: 'border-emerald-200',
+        icon: <Layers className="w-5 h-5" />,
+        badgeBg: 'bg-gradient-to-r from-emerald-500 to-teal-500'
+      };
+    case 'Full Stack':
+      return {
+        gradient: 'from-orange-500 to-red-500',
+        bgLight: 'bg-orange-50',
+        textColor: 'text-orange-700',
+        borderColor: 'border-orange-200',
+        icon: <Database className="w-5 h-5" />,
+        badgeBg: 'bg-gradient-to-r from-orange-500 to-red-500'
+      };
+    default:
+      return {
+        gradient: 'from-[rgb(251,108,133)] to-[rgb(245,89,119)]',
+        bgLight: 'bg-pink-50',
+        textColor: 'text-pink-700',
+        borderColor: 'border-pink-200',
+        icon: <Code className="w-5 h-5" />,
+        badgeBg: 'bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)]'
+      };
+  }
+};
 
 export default function ProjectCardApple({ project, index, onClick, layout = 'masonry' }: ProjectCardAppleProps) {
   const shouldReduceMotion = useReducedMotion();
+  const categoryStyles = getCategoryStyles(project.category);
 
   const getRoleIcon = useCallback(() => {
     if (project.role === 'designer') {
@@ -243,106 +294,112 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
       className="w-full"
     >
       <motion.div
-        className={`group relative w-full ${getCardHeight()} bg-white rounded-2xl border border-gray-200/60
-             shadow-sm hover:shadow-xl hover:shadow-pink-500/10 transform-gpu transition-transform transition-shadow duration-300 ease-out
-             overflow-hidden cursor-pointer hover:border-[rgb(251,108,133)]/30 hover:scale-[1.015] hover:z-20`}
+        className={`group relative w-full ${getCardHeight()} bg-white rounded-3xl border-2 ${categoryStyles.borderColor}
+             shadow-lg hover:shadow-2xl transform-gpu transition-all duration-300 ease-out
+             overflow-hidden cursor-pointer hover:scale-[1.015] hover:z-20`}
         onClick={handleCardClick}
       >
-        {/* Simple gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/20 to-white" />
+        {/* Category Ribbon - Prominent at top */}
+        <div className={`absolute top-0 left-0 right-0 h-2 ${categoryStyles.badgeBg} z-20`} />
+        
+        {/* Category Badge with Icon */}
+        <div className="absolute top-6 right-6 z-20">
+          <div className={`${categoryStyles.badgeBg} text-white px-4 py-2 rounded-full shadow-lg
+                         flex items-center gap-2 text-xs font-bold uppercase tracking-wider backdrop-blur-sm`}>
+            {categoryStyles.icon}
+            <span className="hidden sm:inline">{project.category}</span>
+          </div>
+        </div>
+
+        {/* Featured Badge */}
+        {project.featured && (
+          <div className="absolute top-6 left-6 z-20">
+            <div className="bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-full shadow-lg
+                         flex items-center gap-1.5 text-xs font-bold uppercase">
+              <Star className="w-3 h-3 fill-current" />
+              <span>Featured</span>
+            </div>
+          </div>
+        )}
+        
+        {/* Gradient background overlay */}
+        <div className={`absolute inset-0 bg-gradient-to-br from-white via-${categoryStyles.bgLight}/30 to-white`} />
         
         {/* Content container */}
-        <div className="relative z-10 h-full flex flex-col p-5 sm:p-6 lg:p-7 gap-3 sm:gap-4 lg:gap-5">
-          {/* Thumbnail */}
-          <div className={`relative w-full ${getThumbnailHeight()} rounded-2xl overflow-hidden border border-gray-100 mb-3 sm:mb-4 lg:mb-5 bg-gray-50`}>
+        <div className="relative z-10 h-full flex flex-col p-6 sm:p-7 lg:p-8 gap-4 sm:gap-5">
+          {/* Thumbnail with overlay */}
+          <div className={`relative w-full ${getThumbnailHeight()} rounded-2xl overflow-hidden border-2 ${categoryStyles.borderColor} shadow-md bg-gray-50 mt-8`}>
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
-          </div>
-
-          {/* Header with role badge and year */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                           rounded-lg flex items-center justify-center text-white text-sm">
-                {getRoleIcon()}
+            {/* Gradient overlay matching category */}
+            <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity pointer-events-none`} />
+            
+            {/* Floating Tech Stack Pills on Image */}
+            {project.tags && project.tags.length > 0 && (
+              <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-2">
+                {project.tags.slice(0, 4).map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-gray-800 rounded-full text-xs font-semibold shadow-lg"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {project.tags.length > 4 && (
+                  <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-gray-600 rounded-full text-xs font-semibold shadow-lg">
+                    +{project.tags.length - 4}
+                  </span>
+                )}
               </div>
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                {project.role === 'both' ? 'Full-Stack' : project.role}
-              </span>
-            </div>
-            {project.year && (
-              <span className="text-xs text-gray-400 font-medium">{project.year}</span>
             )}
           </div>
 
-          {/* Client info */}
-          {project.client && (
-            <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-[rgb(251,108,133)] rounded-full" />
-              <span className="text-xs text-gray-500 font-medium">{project.client}</span>
+          {/* Project Info Section */}
+          <div className="flex-1 flex flex-col gap-3">
+            {/* Title with gradient underline */}
+            <div className="space-y-2">
+              <h3 className="text-xl sm:text-2xl font-outfit font-bold text-gray-900 leading-tight 
+                           group-hover:bg-gradient-to-r group-hover:from-[rgb(251,108,133)] group-hover:to-[rgb(245,89,119)] 
+                           group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                {project.title}
+              </h3>
+              <div className={`h-1 w-16 ${categoryStyles.badgeBg} rounded-full opacity-0 group-hover:opacity-100 group-hover:w-24 transition-all duration-500`} />
             </div>
-          )}
 
-          {/* Title */}
-          <h3 className="text-lg md:text-xl font-outfit font-semibold text-gray-900 leading-snug 
-                       group-hover:text-[rgb(251,108,133)] transition-colors duration-300">
-            {project.title}
-          </h3>
+            {/* Description */}
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-3">
+              {project.description}
+            </p>
 
-          {/* Description */}
-          <p className="text-sm md:text-base text-gray-600 leading-relaxed flex-1 line-clamp-3 md:line-clamp-4">
-            {project.description}
-          </p>
+            {/* Outcomes/Achievement highlight with icon */}
+            {project.achievements && project.achievements[0] && (
+              <div className={`flex items-start gap-3 p-4 ${categoryStyles.bgLight} ${categoryStyles.borderColor} border-l-4 rounded-lg`}>
+                <Zap className={`w-5 h-5 ${categoryStyles.textColor} flex-shrink-0 mt-0.5`} />
+                <span className="text-sm text-gray-700 font-medium leading-snug">{project.achievements[0]}</span>
+              </div>
+            )}
+          </div>
 
-          {/* Achievement highlight */}
-          {project.achievements && project.achievements[0] && (
-            <div className="flex items-start gap-2 p-3 bg-gray-50/80 rounded-lg">
-              <div className="w-1 h-1 bg-[rgb(251,108,133)] rounded-full mt-2 flex-shrink-0" />
-              <span className="text-xs text-gray-600">{project.achievements[0]}</span>
-            </div>
-          )}
-
-          {/* Tags */}
-          {project.tags && project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {project.tags.slice(0, 3).map((tag, i) => (
-                <span
-                  key={i}
-                  className="px-2 py-1 bg-gray-100/80 text-gray-600 rounded-lg text-xs font-medium
-                           hover:bg-[rgb(251,108,133)]/10 hover:text-[rgb(251,108,133)] transition-colors duration-200"
-                >
-                  {tag}
-                </span>
-              ))}
-              {project.tags.length > 3 && (
-                <span className="px-2 py-1 bg-gray-100/80 text-gray-500 rounded-lg text-xs">
-                  +{project.tags.length - 3}
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* Action buttons */}
-          <div className="flex gap-2 sm:gap-3 mt-auto pt-3 sm:pt-4 border-t border-gray-100">
+          {/* Action buttons with category colors */}
+          <div className="flex gap-3 pt-4 border-t-2 border-gray-100">
             {project.link && (
               <motion.a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
-                         text-white rounded-lg font-medium text-xs sm:text-sm shadow-sm hover:shadow-md
-                         flex items-center justify-center gap-2 transition-all duration-200"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`flex-1 ${categoryStyles.badgeBg} text-white rounded-xl font-semibold text-sm sm:text-base
+                         px-4 sm:px-6 py-3 shadow-md hover:shadow-xl transition-all duration-300
+                         flex items-center justify-center gap-2`}
               >
-                <span>View</span>
-                <ArrowUpRight className="w-3 h-3" />
+                <span>View Live</span>
+                <ArrowUpRight className="w-4 h-4" />
               </motion.a>
             )}
             
@@ -352,22 +409,20 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100/80 text-gray-700 rounded-lg font-medium text-xs sm:text-sm
-                         hover:bg-gray-200/80 flex items-center gap-2 transition-colors duration-200"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-4 sm:px-5 py-3 bg-gray-900 text-white rounded-xl font-semibold text-sm
+                         hover:bg-gray-800 flex items-center gap-2 transition-all shadow-md hover:shadow-xl"
               >
-                <Github className="w-3 h-3" />
-                <span>Code</span>
+                <Github className="w-4 h-4" />
+                <span className="hidden sm:inline">Code</span>
               </motion.a>
             )}
           </div>
         </div>
 
-        {/* Bottom accent line */}
-        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r 
-                       from-[rgb(251,108,133)] to-[rgb(245,89,119)] opacity-0 
-                       group-hover:opacity-100 transition-opacity duration-300" />
+        {/* Decorative corner accent */}
+        <div className={`absolute bottom-0 right-0 w-32 h-32 ${categoryStyles.badgeBg} opacity-5 rounded-tl-full blur-2xl pointer-events-none`} />
       </motion.div>
     </motion.div>
   );
