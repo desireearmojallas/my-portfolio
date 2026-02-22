@@ -1,98 +1,89 @@
 
 
-import { useState, useEffect } from 'react';
-import LandingSection from './components/LandingSection';
-import AboutSection from './components/AboutSection';
-import ProjectsCarousel from './components/ProjectsCarousel';
-import Footer from './components/Footer';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import BlogPage from './pages/BlogPage';
+import ContactPage from './pages/ContactPage';
 import Header from './components/Header';
-import ScrollToTop from './components/ScrollToTop';
 import './components/ScrollFix.css';
 import './components/OverflowFix.css';
 import './components/FullWidthFix.css';
-import useResponsive from './hooks/useResponsive';
+import useFaviconSwitcher from './hooks/useFaviconSwitcher';
 
 function App() {
-  const [selectedRole, setSelectedRole] = useState<'designer' | 'developer' | null>(null);
-  const { isMobile, screenSize } = useResponsive();
-
-  // Effect to ensure scrolling is always available
-  useEffect(() => {
-    // Force document to be scrollable
-    document.documentElement.classList.add('force-scrollable');
-    document.body.classList.add('force-scrollable');
-
-    // Cleanup function
-    return () => {
-      document.documentElement.classList.remove('force-scrollable');
-      document.body.classList.remove('force-scrollable');
-    };
-  }, []);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedRole, setSelectedRole] = useState<'designer' | 'developer'>('designer');
   
-  // Log screen size changes for debugging
-  useEffect(() => {
-    console.log(`Screen size changed to: ${screenSize}, isMobile: ${isMobile}`);
-  }, [screenSize, isMobile]);
+  // Initialize favicon switcher
+  useFaviconSwitcher({
+    lightFavicon: '/favicon-white.png',
+    darkFavicon: '/favicon-black.png',
+    brightnessThreshold: 128
+  });
 
+  // Handle role selection from landing page
   const handleRoleSelect = (role: 'designer' | 'developer') => {
     setSelectedRole(role);
-    
-    // Force refresh scrollbars after role selection
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 200);
   };
 
   const handleNavigation = (sectionId: string) => {
-    // If navigating to about or projects without a role selected, default to designer
-    if ((sectionId === 'about' || sectionId === 'projects') && !selectedRole) {
-      setSelectedRole('designer');
-      
-      // Wait for the section to become visible before scrolling
-      setTimeout(() => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth' });
+    // Handle navigation to different pages
+    switch (sectionId) {
+      case 'home':
+        navigate('/');
+        // Scroll to top after navigation
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+        break;
+      case 'projects':
+        if (location.pathname !== '/') {
+          navigate('/');
+          setTimeout(() => {
+            const section = document.getElementById('projects');
+            if (section) {
+              section.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 100);
+        } else {
+          const section = document.getElementById('projects');
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+          }
         }
-      }, 300);
-    } else {
-      // Normal navigation
-      const section = document.getElementById(sectionId);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
+        break;
+      case 'about':
+        navigate('/about');
+        break;
+      case 'blog':
+        navigate('/blog');
+        break;
+      case 'contact':
+        navigate('/contact');
+        break;
+      default:
+        // Handle scroll navigation on home page
+        if (location.pathname === '/') {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
     }
   };
 
   return (
     <div className="force-scrollable w-full overflow-x-hidden" id="root">
+      {/* Show header on all pages */}
       <Header onNavigate={handleNavigation} />
-      <main className="pt-16 overflow-x-hidden force-scrollable w-full">
-        <section id="home">
-          <LandingSection onRoleSelect={handleRoleSelect} />
-        </section>
-        
-        <section id="projects" className="transition-all duration-500 opacity-100">
-          <ProjectsCarousel role={selectedRole || 'designer'} />
-        </section>
-        
-        {/* Render sections - show them when a role is selected or when directly navigated to */}
-        <section 
-          id="about" 
-          className={`transition-all duration-500 ${
-            selectedRole 
-              ? 'opacity-100 block' 
-              : 'opacity-0 hidden'
-          }`}
-        >
-          <AboutSection role={selectedRole || 'designer'} />
-        </section>
-        
-        <section id="contact" className={selectedRole ? '' : 'mt-0'}>
-          <Footer />
-        </section>
-      </main>
-      <ScrollToTop />
+      
+      <Routes>
+        <Route path="/" element={<HomePage onRoleSelect={handleRoleSelect} />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
     </div>
   );
 }

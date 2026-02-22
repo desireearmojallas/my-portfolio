@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   onNavigate: (sectionId: string) => void;
@@ -11,6 +12,18 @@ export default function Header({ onNavigate }: HeaderProps) {
   const [prevScrollY, setPrevScrollY] = useState(0);
   const [visible, setVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  // Determine active page
+  const getActivePage = () => {
+    if (location.pathname === '/') return 'home';
+    if (location.pathname === '/about') return 'about';
+    if (location.pathname === '/blog') return 'blog';
+    if (location.pathname === '/contact') return 'contact';
+    return 'home';
+  };
+
+  const activePage = getActivePage();
 
   // Update scroll position and handle navbar visibility
   useEffect(() => {
@@ -71,20 +84,22 @@ export default function Header({ onNavigate }: HeaderProps) {
       >
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-center">
-            <motion.div 
+            <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="font-outfit font-bold text-2xl text-gray-900"
+              onClick={() => scrollToSection('home')}
+              className="font-outfit font-bold text-2xl text-gray-900 cursor-pointer hover:opacity-80 transition-opacity"
             >
               Des<span className="text-[rgb(251,108,133)]">.</span>
-            </motion.div>
+            </motion.button>
             
             <div className="hidden md:flex space-x-8 items-center">
               {[
                 { id: 'home', label: 'Home' },
                 { id: 'projects', label: 'Projects' },
                 { id: 'about', label: 'About' },
+                { id: 'blog', label: 'Blog' },
                 { id: 'contact', label: 'Contact' }
               ].map((item, index) => (
                 <motion.button 
@@ -93,10 +108,16 @@ export default function Header({ onNavigate }: HeaderProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-gray-600 hover:text-[rgb(251,108,133)] transition-all duration-300 font-medium relative group cursor-pointer"
+                  className={`transition-all duration-300 font-medium relative group cursor-pointer ${
+                    activePage === item.id 
+                      ? 'text-[rgb(251,108,133)]' 
+                      : 'text-gray-600 hover:text-[rgb(251,108,133)]'
+                  }`}
                 >
                   {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[rgb(251,108,133)] transition-all duration-300 group-hover:w-full"></span>
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-[rgb(251,108,133)] transition-all duration-300 ${
+                    activePage === item.id ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}></span>
                 </motion.button>
               ))}
               <motion.a
@@ -149,6 +170,7 @@ export default function Header({ onNavigate }: HeaderProps) {
                 { id: 'home', label: 'Home' },
                 { id: 'projects', label: 'Projects' },
                 { id: 'about', label: 'About' },
+                { id: 'blog', label: 'Blog' },
                 { id: 'contact', label: 'Contact' }
               ].map((item, index) => (
                 <motion.button 
@@ -157,10 +179,16 @@ export default function Header({ onNavigate }: HeaderProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-gray-800 hover:text-[rgb(251,108,133)] transition-all duration-300 relative group"
+                  className={`transition-all duration-300 relative group ${
+                    activePage === item.id 
+                      ? 'text-[rgb(251,108,133)]' 
+                      : 'text-gray-800 hover:text-[rgb(251,108,133)]'
+                  }`}
                 >
                   {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[rgb(251,108,133)] transition-all duration-300 group-hover:w-full"></span>
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-[rgb(251,108,133)] transition-all duration-300 ${
+                    activePage === item.id ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}></span>
                 </motion.button>
               ))}
               <motion.a

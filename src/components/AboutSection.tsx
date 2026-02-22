@@ -34,8 +34,8 @@ export default function AboutSection({ role }: AboutSectionProps) {
   // Dynamic content based on selected role
   const roleContent = {
     designer: {
-      title: "End-to-End Experience Architect",
-      subtitle: "with Deep Design Expertise",
+      title: "Crafting Experiences That",
+      subtitle: "Inspire and Convert",
       description: "...and you can call me Des. I design complete digital experiences that drive real business results. But here's what makes me different: I also build them. This means your designs aren't just beautiful—they're technically feasible and optimized for performance.",
       highlight: "Design-focused, development-informed",
       processEmphasis: "design and user experience",
@@ -44,8 +44,8 @@ export default function AboutSection({ role }: AboutSectionProps) {
       highlightedServices: ['Graphic Design', 'Design + Code Combo']
     },
     developer: {
-      title: "End-to-End Experience Architect", 
-      subtitle: "with Full-Stack Development Power",
+      title: "Transforming Vision Into", 
+      subtitle: "High‑Performance Applications",
       description: "...and you can call me Des. I build scalable, high-performance applications that solve real business problems. But here's my edge: I also design them. This means your applications aren't just functional—they're beautiful, intuitive, and user-centered.",
       highlight: "Development-focused, design-enhanced",
       processEmphasis: "technical architecture and development",
@@ -89,6 +89,60 @@ export default function AboutSection({ role }: AboutSectionProps) {
         : "Deploy complete solutions with beautiful interfaces and ongoing optimization for maximum business impact.",
       icon: Sparkles,
       gradient: "from-purple-50 to-pink-50"
+    }
+  ];
+
+  const designProcess = [
+    {
+      title: "Research & Strategy",
+      description: "Deep user research and competitive analysis to understand the problem and define a clear design direction.",
+      icon: Eye,
+      gradient: "from-pink-50 to-rose-50"
+    },
+    {
+      title: "Design & Prototype",
+      description: "Craft intuitive interfaces and interactive prototypes, ensuring aesthetic excellence meets usability.",
+      icon: Palette,
+      gradient: "from-rose-50 to-pink-50"
+    },
+    {
+      title: "Test & Iterate",
+      description: "Validate designs through user testing and feedback, refining until the experience is pixel-perfect.",
+      icon: Sparkles,
+      gradient: "from-pink-50 to-purple-50"
+    },
+    {
+      title: "Deliver & Handoff",
+      description: "Provide design systems, assets, and specifications for seamless implementation.",
+      icon: ArrowRight,
+      gradient: "from-purple-50 to-pink-50"
+    }
+  ];
+
+  const developmentProcess = [
+    {
+      title: "Plan & Architect",
+      description: "Define technical requirements, choose the right stack, and design scalable architecture.",
+      icon: Eye,
+      gradient: "from-purple-50 to-indigo-50"
+    },
+    {
+      title: "Build & Integrate",
+      description: "Write clean, maintainable code while integrating APIs, databases, and third-party services.",
+      icon: Code,
+      gradient: "from-indigo-50 to-purple-50"
+    },
+    {
+      title: "Test & Optimize",
+      description: "Ensure quality through testing, debugging, and performance optimization for peak efficiency.",
+      icon: Sparkles,
+      gradient: "from-purple-50 to-violet-50"
+    },
+    {
+      title: "Deploy & Support",
+      description: "Launch to production with monitoring, documentation, and ongoing maintenance support.",
+      icon: ArrowRight,
+      gradient: "from-violet-50 to-purple-50"
     }
   ];
 
@@ -177,7 +231,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
                 </span>
               </h2>
               <p className="text-lg md:text-xl lg:text-2xl text-gray-500 font-light tracking-wide">
-                Based in the Philippines PH
+                Based in the Philippines
               </p>
             </motion.div>
           </div>
@@ -203,7 +257,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
 
           
 
-        {/* My Craft Section - Apple card design */}
+        {/* My Process Section - Dual Process Display */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -211,7 +265,7 @@ export default function AboutSection({ role }: AboutSectionProps) {
           viewport={{ once: true }}
           className="mb-24"
         >
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -222,51 +276,112 @@ export default function AboutSection({ role }: AboutSectionProps) {
             >
               <Heart className="w-8 h-8 text-white" />
             </motion.div>
-            <h2 className="text-4xl md:text-5xl font-outfit font-light text-gray-800 mb-4">
+            <h2 className="text-4xl md:text-5xl font-outfit font-bold text-gray-900 mb-4">
               My Process
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              From {currentContent.processEmphasis} to final delivery — a proven approach that delivers results
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+              Different approaches for design and development — both proven to deliver exceptional results
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {craftSteps.map((step, index) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true }}
-                onHoverStart={() => setActiveCard(index)}
-                onHoverEnd={() => setActiveCard(null)}
-                className="group relative h-full cursor-pointer"
-              >
-                <div className={`gradient-card border border-pink-100/50 rounded-2xl p-8 h-full 
-                               transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-pink-500/10 
-                               hover:-translate-y-2 bg-gradient-to-br ${step.gradient}`}>
-                  <div className="w-14 h-14 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center mb-6 
-                                group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                    <step.icon className="w-7 h-7 text-[rgb(251,108,133)]" />
+          {/* Design Process */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8 justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-pink-100 to-pink-50 rounded-lg flex items-center justify-center">
+                <Palette className="w-5 h-5 text-[rgb(251,108,133)]" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-outfit font-bold text-gray-900">
+                Design Process
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {designProcess.map((step, index) => (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                  onHoverStart={() => setActiveCard(index)}
+                  onHoverEnd={() => setActiveCard(null)}
+                  className="group relative h-full cursor-pointer"
+                >
+                  <div className={`gradient-card border border-pink-100/50 rounded-2xl p-8 h-full 
+                                 transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-pink-500/10 
+                                 hover:-translate-y-2 bg-gradient-to-br ${step.gradient}`}>
+                    <div className="w-14 h-14 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center mb-6 
+                                  group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                      <step.icon className="w-7 h-7 text-[rgb(251,108,133)]" />
+                    </div>
+                    
+                    <h3 className="text-xl font-outfit font-semibold text-gray-800 mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed text-sm">
+                      {step.description}
+                    </p>
+                    
+                    {/* Apple-style hover indicator */}
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: activeCard === index ? "100%" : 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      className="h-0.5 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] mt-4 rounded-full"
+                    />
                   </div>
-                  
-                  <h3 className="text-xl font-outfit font-semibold text-gray-800 mb-3">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {step.description}
-                  </p>
-                  
-                  {/* Apple-style hover indicator */}
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: activeCard === index ? "100%" : 0 }}
-                    transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    className="h-0.5 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] mt-4 rounded-full"
-                  />
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Development Process */}
+          <div>
+            <div className="flex items-center gap-3 mb-8 justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg flex items-center justify-center">
+                <Code className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-outfit font-bold text-gray-900">
+                Development Process
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {developmentProcess.map((step, index) => (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                  onHoverStart={() => setActiveCard(index + 10)}
+                  onHoverEnd={() => setActiveCard(null)}
+                  className="group relative h-full cursor-pointer"
+                >
+                  <div className={`gradient-card border border-purple-100/50 rounded-2xl p-8 h-full 
+                                 transition-all duration-500 ease-out hover:shadow-2xl hover:shadow-purple-500/10 
+                                 hover:-translate-y-2 bg-gradient-to-br ${step.gradient}`}>
+                    <div className="w-14 h-14 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center mb-6 
+                                  group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                      <step.icon className="w-7 h-7 text-purple-600" />
+                    </div>
+                    
+                    <h3 className="text-xl font-outfit font-semibold text-gray-800 mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed text-sm">
+                      {step.description}
+                    </p>
+                    
+                    {/* Apple-style hover indicator */}
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: activeCard === (index + 10) ? "100%" : 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      className="h-0.5 bg-gradient-to-r from-purple-500 to-violet-600 mt-4 rounded-full"
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </motion.div>
 
