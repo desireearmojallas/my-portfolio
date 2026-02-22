@@ -504,15 +504,17 @@ export default function AboutSection({ role }: AboutSectionProps) {
                       onClick={() => toggleExpanded(index)}
                       whileHover={{ y: -8, scale: 1.02 }}
                       className={`relative rounded-2xl p-8 border transition-all duration-300 flex flex-col cursor-pointer ${
-                        service.highlight 
-                          ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl' 
+                        service.mostPopular 
+                          ? 'bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border-amber-500/30 shadow-xl' 
+                          : service.highlight
+                          ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl'
                           : 'bg-white/60 backdrop-blur-sm border-gray-200/50 hover:shadow-2xl'
-                      } ${expandedService === index ? 'shadow-2xl ring-2 ring-[rgb(251,108,133)]/20' : ''}`}
+                      } ${expandedService === index ? service.mostPopular ? 'shadow-2xl ring-2 ring-amber-500/20' : 'shadow-2xl ring-2 ring-[rgb(251,108,133)]/20' : ''}`}
                     >
                       {service.highlight && (
                         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                          <span className="bg-[rgb(251,108,133)] 
-                                         text-white px-4 py-1 rounded-full text-xs font-medium shadow-md">
+                          <span className={`${service.mostPopular ? 'bg-amber-500' : 'bg-[rgb(251,108,133)]'} 
+                                         text-white px-4 py-1 rounded-full text-xs font-medium shadow-md`}>
                             {service.mostPopular ? 'Most Popular' : 'Popular Choice'}
                           </span>
                         </div>
@@ -589,15 +591,17 @@ export default function AboutSection({ role }: AboutSectionProps) {
                           viewport={{ once: true }}
                           onClick={() => toggleExpanded(index)}
                           className={`relative rounded-2xl p-5 sm:p-6 border transition-all duration-300 flex flex-col overflow-visible ${
-                            service.highlight 
-                              ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl' 
+                            service.mostPopular 
+                              ? 'bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border-amber-500/30 shadow-xl' 
+                              : service.highlight
+                              ? 'bg-gradient-to-br from-[rgb(251,108,133)]/5 to-[rgb(245,89,119)]/5 border-[rgb(251,108,133)]/30 shadow-xl'
                               : 'bg-white/60 backdrop-blur-sm border-gray-200/50'
-                          } ${expandedService === index ? 'shadow-2xl ring-2 ring-[rgb(251,108,133)]/20' : ''}`}
+                          } ${expandedService === index ? service.mostPopular ? 'shadow-2xl ring-2 ring-amber-500/20' : 'shadow-2xl ring-2 ring-[rgb(251,108,133)]/20' : ''}`}
                         >
                           {service.highlight && (
                             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
-                              <span className="bg-[rgb(251,108,133)] 
-                                             text-white px-4 py-1 rounded-full text-xs font-medium shadow-md">
+                              <span className={`${service.mostPopular ? 'bg-amber-500' : 'bg-[rgb(251,108,133)]'} 
+                                             text-white px-4 py-1 rounded-full text-xs font-medium shadow-md`}>
                                 {service.mostPopular ? 'Most Popular' : 'Popular Choice'}
                               </span>
                             </div>
