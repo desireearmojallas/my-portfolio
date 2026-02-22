@@ -400,7 +400,7 @@ export default function ProjectsCarousel({ role }: ProjectsCarouselProps) {
                     contactSection.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] text-white px-10 py-5 rounded-2xl font-outfit font-semibold text-lg hover:shadow-2xl hover:shadow-pink-500/30 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-pink-500/20 overflow-hidden"
+                className="group relative inline-flex items-center gap-3 bg-[rgb(251,108,133)] text-white px-10 py-5 rounded-2xl font-outfit font-semibold text-lg hover:shadow-2xl hover:shadow-pink-500/30 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-pink-500/20 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <Mail className="w-6 h-6 group-hover:scale-110 transition-transform relative z-10" />

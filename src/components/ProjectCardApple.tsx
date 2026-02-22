@@ -265,7 +265,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
                       onClick={(e) => e.stopPropagation()}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[rgb(251,108,133)] to-[rgb(245,89,119)] 
+                      className="inline-flex items-center gap-3 px-8 py-4 bg-[rgb(251,108,133)] 
                                text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       <span>View Project</span>
@@ -398,7 +398,7 @@ export default function ProjectCardApple({ project, index, onClick, layout = 'ma
                 onClick={(e) => e.stopPropagation()}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex-1 bg-gradient-to-r from-rose-400 to-pink-400 text-white rounded-xl font-semibold text-sm sm:text-base
+                className="flex-1 bg-[rgb(251,108,133)] text-white rounded-xl font-semibold text-sm sm:text-base
                          px-4 sm:px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300
                          flex items-center justify-center gap-2"
               >
