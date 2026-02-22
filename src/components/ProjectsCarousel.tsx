@@ -22,6 +22,20 @@ interface ProjectsCarouselProps {
 
 const sampleProjects: Array<Project & { techStack?: string[] }> = [
   {
+    id: 'mobile-1',
+    title: 'GINA - Period Tracking & OBGYNE Appointment System',
+    description: 'Comprehensive mobile health app that empowers women to track their menstrual cycles, manage symptoms, and seamlessly book appointments with OBGYNE doctors.',
+    outcomes: ['Intuitive cycle tracking with predictive insights', 'Streamlined doctor appointment booking', 'Secure health data management and reminders'],
+    tags: ['React Native', 'Mobile App', 'Healthcare', 'Appointment System'],
+    image: 'https://placehold.co/600x800/FB6C85/FFFFFF?text=GINA+App',
+    link: '#',
+    role: 'developer',
+    type: 'development',
+    category: 'Mobile Applications',
+    techStack: ['React Native', 'Firebase', 'Node.js', 'Express', 'MongoDB'],
+    featured: true,
+  },
+  {
     id: 'web-1',
     title: 'Clymbiq Corporate Website',
     description: "Built a corporate presence that elevates credibility, clarifies services, and drives inbound inquiries.",
@@ -33,7 +47,6 @@ const sampleProjects: Array<Project & { techStack?: string[] }> = [
     type: 'development',
     category: 'Web Development',
     techStack: ['React', 'TypeScript', 'Tailwind', 'Vite'],
-    featured: true,
   },
   {
     id: 'web-2',

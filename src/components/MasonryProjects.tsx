@@ -8,32 +8,24 @@ interface MasonryProjectsProps {
 }
 
 export default function MasonryProjects({ projects, onProjectClick }: MasonryProjectsProps) {
-  // Build a strict 2–1–2–1 rhythm: two supporting tiles, then one hero tile.
+  // Build layout sequence: Mobile apps always go first as hero, then alternate pattern
   const patternedProjects = useMemo(() => {
-    const heroQueue = [...projects.filter(p => p.featured)];
-    const supportingQueue = [...projects.filter(p => !p.featured)];
+    // Separate mobile apps (always hero) from other projects
+    const mobileApps = projects.filter(p => p.category === 'Mobile Applications');
+    const otherProjects = projects.filter(p => p.category !== 'Mobile Applications');
+    
     const sequence: Array<{ project: Project; layout: 'hero' | 'masonry' }> = [];
 
-    // Keep sequencing until both queues are empty
-    while (heroQueue.length > 0 || supportingQueue.length > 0) {
-      // Add two supporting tiles (fallback to heroes if we run out)
-      for (let i = 0; i < 2; i++) {
-        if (supportingQueue.length > 0) {
-          sequence.push({ project: supportingQueue.shift()!, layout: 'masonry' });
-        } else if (heroQueue.length > 0) {
-          sequence.push({ project: heroQueue.shift()!, layout: 'masonry' });
-        }
-      }
+    // Add mobile apps first as heroes
+    mobileApps.forEach(app => {
+      sequence.push({ project: app, layout: 'hero' });
+    });
 
-      // Add a hero tile (fallback to supporting if no heroes left)
-      if (heroQueue.length > 0) {
-        sequence.push({ project: heroQueue.shift()!, layout: 'hero' });
-      } else if (supportingQueue.length > 0) {
-        sequence.push({ project: supportingQueue.shift()!, layout: 'hero' });
-      }
-    }
+    // Then add other projects as masonry
+    otherProjects.forEach(project => {
+      sequence.push({ project, layout: 'masonry' });
+    });
 
-    // If no projects were provided, keep it empty
     return sequence;
   }, [projects]);
 
